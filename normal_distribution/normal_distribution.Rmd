@@ -41,8 +41,9 @@ useful to create two additional data sets: one with only men and another with
 only women.
 
 ```{r male-female, eval=FALSE}
-mdims <- subset(bdims, sex == 1)
-fdims <- subset(bdims, sex == 0)
+library(dplyr)
+mdims <- filter(bdims, sex == 1)
+fdims <- filter(bdims, sex == 0)
 ```
 
 1.  Make a histogram of men's heights and a histogram of women's heights.  How 
@@ -61,8 +62,8 @@ We'll be working with women's heights, so let's store them as a separate object
 and then calculate some statistics that will be referenced later. 
 
 ```{r female-hgt-mean-sd, eval=FALSE}
-fhgtmean <- mean(fdims$hgt)
-fhgtsd   <- sd(fdims$hgt)
+fhgt <- fdims %>%
+  summarise(meanHgt = mean(hgt), sdHgt = sd(hgt))
 ```
 
 Next we make a density histogram to use as the backdrop and use the `lines` 
@@ -80,7 +81,7 @@ you constructed earlier and the density histogram created by the commands below.
 ```{r hist-height, eval=FALSE}
 hist(fdims$hgt, probability = TRUE)
 x <- 140:190
-y <- dnorm(x = x, mean = fhgtmean, sd = fhgtsd)
+y <- dnorm(x = x, mean = fhgt$mean, sd = fhgt$sd)
 lines(x = x, y = y, col = "blue")
 ```
 
@@ -126,7 +127,7 @@ plots look like for data that I *know* came from a normal distribution?  We can
 answer this by simulating data from a normal distribution using `rnorm`.
 
 ```{r sim-norm, eval=FALSE}
-sim_norm <- rnorm(n = length(fdims$hgt), mean = fhgtmean, sd = fhgtsd)
+sim_norm <- rnorm(n = length(fdims$hgt), mean = fhgt$mean, sd = fhgt$sd)
 ```
 
 The first argument indicates how many numbers you'd like to generate, which we 
@@ -175,7 +176,7 @@ score and consulting a Z table (also called a normal probability table).  In R,
 this is done in one step with the function `pnorm`.
 
 ```{r pnorm, eval=FALSE}
-1 - pnorm(q = 182, mean = fhgtmean, sd = fhgtsd)
+1 - pnorm(q = 182, mean = fhgt$mean, sd = fhgt$sd)
 ```
 
 Note that the function `pnorm` gives the area under the normal curve below a 

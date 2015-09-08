@@ -91,7 +91,9 @@ img {
 <li>What type of plot would you use to display the relationship between <code>runs</code> and one of the other numerical variables? Plot this relationship using the variable <code>at_bats</code> as the predictor. Does the relationship look linear? If you knew a team’s <code>at_bats</code>, would you be comfortable using a linear model to predict the number of runs?</li>
 </ol>
 <p>If the relationship looks linear, we can quantify the strength of the relationship with the correlation coefficient.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(mlb11$runs, mlb11$at_bats)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+mlb11 %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="kw">cor</span>(runs, at_bats))</code></pre>
 </div>
 <div id="sum-of-squared-residuals" class="section level2">
 <h2>Sum of squared residuals</h2>

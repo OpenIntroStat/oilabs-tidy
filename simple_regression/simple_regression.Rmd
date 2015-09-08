@@ -50,7 +50,9 @@ If the relationship looks linear, we can quantify the strength of the
 relationship with the correlation coefficient.
 
 ```{r cor, eval=FALSE}
-cor(mlb11$runs, mlb11$at_bats)
+library(dplyr)
+mlb11 %>%
+  summarise(cor(runs, at_bats))
 ```
 
 ## Sum of squared residuals
