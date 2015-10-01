@@ -121,9 +121,8 @@ img {
 <p>The output of <code>lm</code> is an object that contains all of the information we need about the linear model that was just fit. We can access this information using the summary function.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(m1)</code></pre>
 <p>Let’s consider this output piece by piece. First, the formula used to describe the model is shown at the top. After the formula you find the five-number summary of the residuals. The “Coefficients” table shown next is key; its first column displays the linear model’s y-intercept and the coefficient of <code>at_bats</code>. With this table, we can write down the least squares regression line for the linear model:</p>
-<p><span class="math">\[
-  \hat{y} = -2789.2429 + 0.6305 \times at\_bats
-\]</span></p>
+<p>[  = -2789.2429 + 0.6305 at_bats</p>
+<p> = -2789.2429 + 0.6305 at_bats ]</p>
 <p>One last piece of information we will discuss from the summary output is the Multiple R-squared, or more simply, <span class="math">\(R^2\)</span>. The <span class="math">\(R^2\)</span> value represents the proportion of variability in the response variable that is explained by the explanatory variable. For this model, 37.3% of the variability in runs is explained by at-bats.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>Fit a new model that uses <code>homeruns</code> to predict <code>runs</code>. Using the estimates from the R output, write the equation of the regression line. What does the slope tell us in the context of the relationship between success of a team and its home runs?</li>
@@ -136,7 +135,7 @@ img {
 <span class="kw">abline</span>(m1)</code></pre>
 <p>The function <code>abline</code> plots a line based on its slope and intercept. Here, we used a shortcut by providing the model <code>m1</code>, which contains both parameter estimates. This line can be used to predict <span class="math">\(y\)</span> at any value of <span class="math">\(x\)</span>. When predictions are made for values of <span class="math">\(x\)</span> that are beyond the range of the observed data, it is referred to as <em>extrapolation</em> and is not usually recommended. However, predictions made within the range of the data are more reliable. They’re also used to compute the residuals.</p>
 <ol start="5" style="list-style-type: decimal">
-<li>If a team manager saw the least squares regression line and not the actual data, how many runs would he or she predict for a team with 5,578 at-bats? Is this an overestimate or an underestimate, and by how much? In other words, what is the residual for this prediction?</li>
+<li>If a team manager saw the least squares regression line and not the actual data, how many runs would he or she predict for a team with 5,579 at-bats? Is this an overestimate or an underestimate for the Philadelphia Phillies, and by how much? In other words, what is the residual for this prediction?</li>
 </ol>
 </div>
 <div id="model-diagnostics" class="section level2">

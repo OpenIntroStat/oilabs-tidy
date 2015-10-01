@@ -19,14 +19,19 @@ This week we'll be working with measurements of body dimensions.  This data set
 contains measurements from 247 men and 260 women, most of whom were considered 
 healthy young adults.
 
-```{r load-data, eval=FALSE}
-download.file("http://www.openintro.org/stat/data/bdims.RData", destfile = "bdims.RData")
-load("bdims.RData")
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(eval=FALSE)
+```
+
+```{r load-data}
+require(oilabs)
+data(bdims)
 ```
 
 Let's take a quick peek at the first few rows of the data.
 
-```{r head-data, eval=FALSE}
+```{r head-data}
 head(bdims)
 ```
 
@@ -40,9 +45,12 @@ Since males and females tend to have different body dimensions, it will be
 useful to create two additional data sets: one with only men and another with 
 only women.
 
-```{r male-female, eval=FALSE}
-mdims <- subset(bdims, sex == 1)
-fdims <- subset(bdims, sex == 0)
+```{r male-female}
+require(dplyr)
+mdims <- bdims %>%
+  filter(sex == "m")
+fdims <- bdims %>%
+  filter(sex == "f")
 ```
 
 1.  Make a histogram of men's heights and a histogram of women's heights.  How 
@@ -60,12 +68,12 @@ This normal curve should have the same mean and standard deviation as the data.
 We'll be working with women's heights, so let's store them as a separate object 
 and then calculate some statistics that will be referenced later. 
 
-```{r female-hgt-mean-sd, eval=FALSE}
+```{r female-hgt-mean-sd}
 fhgtmean <- mean(fdims$hgt)
 fhgtsd   <- sd(fdims$hgt)
-```
+``` 
 
-Next we make a density histogram to use as the backdrop and use the `lines` 
+Next we make a density histogram to use as the backdrop and use the `stat_function` 
 function to overlay a normal probability curve. The difference between a 
 frequency histogram and a density histogram is that while in a frequency 
 histogram the *heights* of the bars add up to the total number of observations, 
@@ -77,25 +85,11 @@ Frequency and density histograms both display the same exact shape; they only
 differ in their y-axis. You can verify this by comparing the frequency histogram 
 you constructed earlier and the density histogram created by the commands below.
 
-```{r hist-height, eval=FALSE}
-hist(fdims$hgt, probability = TRUE)
-x <- 140:190
-y <- dnorm(x = x, mean = fhgtmean, sd = fhgtsd)
-lines(x = x, y = y, col = "blue")
+```{r hist-height}
+ggplot(fdims, aes(x=hgt)) + geom_histogram(aes(y=..density..), binwidth=3)+stat_function(fun = dnorm, colour = "red", args=list(mean=fhgtmean, sd=fhgtsd))
 ```
 
-After plotting the density histogram with the first command, we create the x- 
-and y-coordinates for the normal curve.  We chose the `x` range as 140 to 190 in 
-order to span the entire range of `fheight`.  To create `y`, we use `dnorm` to 
-calculate the density of each of those x-values in a distribution that is normal
-with mean `fhgtmean` and standard deviation `fhgtsd`.  The final command draws a
-curve on the existing plot (the density histogram) by connecting each of the 
-points specified by `x` and `y`. The argument `col` simply sets the color for 
-the line to be drawn. If we left it out, the line would be drawn in black.
-
-The top of the curve is cut off because the limits of the x- and y-axes are set 
-to best fit the histogram.  To adjust the y-axis you can add a third argument to
-the histogram function: `ylim = c(0, 0.06)`.
+This is a rather complicated `ggplot` expression. We start by specifying the dataset and the "aesthetics" (variables) of the plot. Because we are doing a plot of one variable, we only have to specify one variable here. Then, we use the "geom" `geom_histogram` like usual. The only change is that we use `..density..` as an argument to `y`, which tells `ggplot2` that we want to see a density histogram rather than a frequency histogram. Then, we add the `stat_function` and tell it we want a normal distribution with mean `fhgtmean` and standard deviation `fhgtsd`. 
 
 2.  Based on the this plot, does it appear that the data follow a nearly normal 
     distribution?
@@ -109,9 +103,8 @@ close the histogram is to the curve. An alternative approach involves
 constructing a normal probability plot, also called a normal Q-Q plot for 
 "quantile-quantile".
 
-```{r qq, eval=FALSE}
-qqnorm(fdims$hgt)
-qqline(fdims$hgt)
+```{r qq}
+ggplot(fdims, aes(sample=hgt))+stat_qq()
 ```
 
 A data set that is nearly normal will result in a probability plot where the 
@@ -125,7 +118,7 @@ A useful way to address this question is to rephrase it as: what do probability
 plots look like for data that I *know* came from a normal distribution?  We can 
 answer this by simulating data from a normal distribution using `rnorm`.
 
-```{r sim-norm, eval=FALSE}
+```{r sim-norm}
 sim_norm <- rnorm(n = length(fdims$hgt), mean = fhgtmean, sd = fhgtsd)
 ```
 
@@ -144,7 +137,7 @@ Even better than comparing the original plot to a single plot generated from a
 normal distribution is to compare it to many more plots using the following 
 function. It may be helpful to click the zoom button in the plot window.
 
-```{r qqnormsim, eval=FALSE}
+```{r qqnormsim}
 qqnormsim(fdims$hgt)
 ```
 
@@ -174,7 +167,7 @@ approximation is also okay), we can find this probability by calculating a Z
 score and consulting a Z table (also called a normal probability table).  In R, 
 this is done in one step with the function `pnorm`.
 
-```{r pnorm, eval=FALSE}
+```{r pnorm}
 1 - pnorm(q = 182, mean = fhgtmean, sd = fhgtsd)
 ```
 
@@ -188,8 +181,10 @@ probability.  If we want to calculate the probability empirically, we simply
 need to determine how many observations fall above 182 then divide this number 
 by the total sample size.
 
-```{r probability, eval=FALSE}
-sum(fdims$hgt > 182) / length(fdims$hgt)
+```{r probability}
+fdims %>% 
+  filter(hgt>182) %>%
+  summarise(percent=n()/nrow(fdims))
 ```
 
 Although the probabilities are not exactly the same, they are reasonably close. 

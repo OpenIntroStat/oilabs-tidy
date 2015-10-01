@@ -34,7 +34,13 @@ work with a small subset.
 We begin by loading the data set of 20,000 observations into the R workspace. 
 After launching RStudio, enter the following command.
 
-```{r load-data, eval=FALSE}
+```{r opts, eval=TRUE, echo=FALSE}
+library(knitr)
+opts_chunk$set(eval=TRUE)
+```
+
+```{r load-data}
+require(oilabs)
 data(cdc)
 ```
 
@@ -45,7 +51,7 @@ the labs.
 
 To view the names of the variables, type the command
 
-```{r names, eval=FALSE}
+```{r names}
 names(cdc)
 ```
 
@@ -66,13 +72,13 @@ as their desired weight, `wtdesire`, `age` in years, and `gender`.
 
 We can have a look at the first few entries (rows) of our data with the command
 
-```{r head, eval=FALSE}
+```{r head}
 head(cdc)
 ```
 
 and similarly we can look at the last few by typing
 
-```{r tail, eval=FALSE}
+```{r tail}
 tail(cdc)
 ```
 
@@ -90,7 +96,7 @@ and graphics. As a simple example, the function `summary` returns a numerical
 summary: minimum, first quartile, median, mean, second quartile, and maximum. 
 For `weight` this is
 
-```{r summary-weight, eval=FALSE}
+```{r summary-weight}
 summary(cdc$weight)
 ```
 
@@ -98,14 +104,14 @@ R also functions like a very fancy calculator. If you wanted to compute the
 interquartile range for the respondents' weight, you could look at the output 
 from the summary command above and then enter
 
-```{r weight-range-arith, eval=FALSE}
+```{r weight-range-arith}
 190 - 140
 ```
 
 R also has built-in functions to compute summary statistics one by one.  For 
 instance, to calculate the mean, median, and variance of `weight`, type 
 
-```{r weight-mean-var-median, eval=FALSE}
+```{r weight-mean-var-median}
 mean(cdc$weight) 
 var(cdc$weight)
 median(cdc$weight)
@@ -117,13 +123,14 @@ sample frequencies.  The function `table` does this for you by counting the numb
 of times each kind of response was given. For example, to see the number of 
 people who have smoked 100 cigarettes in their lifetime, type
 
-```{r table-smoke, eval=FALSE}
+```{r table-smoke}
 table(cdc$smoke100)
 ```
 
 We can visualize these counts by creating a barplot.
 
-```{r smoke-barplot, eval=FALSE}
+```{r smoke-barplot1}
+require(ggplot2)
 qplot(x = smoke100, data = cdc)
 ```
 
@@ -133,7 +140,7 @@ argument. `qplot()` makes a smart guess at the type of plot that you want based
 on the data you've given it. If you want to be more explicit, you can specify
 the geometry that you'd like the data to take.
 
-```{r smoke-barplot, eval=FALSE}
+```{r smoke-barplot}
 qplot(x = smoke100, data = cdc, geom = "bar")
 ```
 
@@ -148,7 +155,7 @@ The `table` command can be used to tabulate any number of variables that you
 provide.  For example, to examine which participants have smoked across each 
 gender, we could use the following.
 
-```{r table-smoke-gender, eval=FALSE}
+```{r table-smoke-gender}
 table(cdc$gender, cdc$smoke100)
 ```
 
@@ -156,7 +163,7 @@ Here, we see column labels of TRUE and FALSE. Recall that TRUE indicates a respo
 smoked at least 100 cigarettes. The rows refer to gender. To create a mosaic 
 plot of this table, we would enter the following command.
 
-```{r mosaic-smoke-gender, eval=FALSE}
+```{r mosaic-smoke-gender}
 qplot(x = gender, fill = smoke100, data = cdc)
 mosaicplot(table(cdc$gender,cdc$smoke100))
 ```
@@ -174,7 +181,7 @@ and each column is a different variable (the first is `genhlth`, the second
 `exerany` and so on). We can see the size of the data frame next to the object 
 name in the workspace or we can type
 
-```{r dim, eval=FALSE}
+```{r dim}
 dim(cdc)
 ```
 
@@ -182,7 +189,7 @@ which will return the number of rows and columns. Now, if we want to access a
 subset of the full data frame, we can use row-and-column notation. For example,
 to see the sixth variable of the 567<sup>th</sup> respondent, use the format
 
-```{r cdc-row567-column6, eval=FALSE}
+```{r cdc-row567-column6}
 cdc[567,6]
 ```
 
@@ -191,13 +198,13 @@ row (meaning the 567<sup>th</sup> person or observation) and the 6<sup>th</sup>
 column (in this case, weight). We know that `weight` is the 6<sup>th</sup> variable
 because it is the 6<sup>th</sup> entry in the list of variable names
 
-```{r names-again, eval=FALSE}
+```{r names-again}
 names(cdc)
 ```
 
 To see the weights for the first 10 respondents we can type
 
-```{r first-10-rows-sixth-column, eval=FALSE}
+```{r first-10-rows-sixth-column}
 cdc[1:10,6]
 ```
 
@@ -205,13 +212,13 @@ In this expression, we have asked just for rows in the range 1 through 10.  R
 uses the `:` to create a range of values, so 1:10 expands to 1, 2, 3, 4, 5, 6, 
 7, 8, 9, 10. You can see this by entering
 
-```{r numbers-1to10, eval=FALSE}
+```{r numbers-1to10}
 1:10
 ```
 
 Finally, if we want all of the data for the first 10 respondents, type
 
-```{r first-10-rows, eval=FALSE}
+```{r first-10-rows}
 cdc[1:10,]
 ```
 
@@ -223,98 +230,117 @@ would access all the observations, not just the 567<sup>th</sup>, or rows 1
 through 10. Try the following to see the weights for all 20,000 respondents fly 
 by on your screen
 
-```{r 6th-column, eval=FALSE}
+```{r 6th-column}
 cdc[,6]
 ```
 
 Recall that column 6 represents respondents' weight, so the command above 
 reported all of the weights in the data set. An alternative method to access the
-weight data is by referring to the name.  Previously, we typed `names(cdc)` to 
-see all the variables contained in the cdc data set. We can use any of the 
-variable names to select items in our data set. 
+weight data is by using the `select` command. `select` is in the [`dplyr` package](https://cran.r-project.org/web/packages/dplyr/index.html), so we need to load it
 
-```{r weight, eval=FALSE}
-cdc$weight
+```{r dplyr-load}
+require(dplyr)
 ```
 
-The dollar-sign tells R to look in data frame `cdc` for the column called 
-`weight`.  Since that's a single vector, we can subset it with just a single 
-index inside square brackets.  We see the weight for the 567<sup>th</sup> 
-respondent by typing
+When we start using `dplyr` with data, it is good coding practice to initialize your data with the function `tbl_df()`, which does nicer data previews, and also helps your code stay consistent when you move further into data science. 
 
-```{r weight-567, eval=FALSE}
-cdc$weight[567]
+```{r tbl-initialization}
+cdc <- tbl_df(cdc)
 ```
 
-Similarly, for just the first 10 respondents
+Once we've done this, we can preview our data by just typing its name in the console, and we won't be subjected to the entire dataset.
 
-```{rweight-first10, eval=FALSE}
-cdc$weight[1:10]
+```{r dplyr-tbl-preview}
+cdc
+```
+
+`dplyr` lets you do many useful data manipulations, and it uses something called the 'pipe' operator, which looks like this: `%>%`. Many languages have pipe operators, and they allow functions to pass things along a chain of commands. This command will do the same thing as the `cdc[,6]` command above:
+
+```{r weight}
+cdc %>% 
+  select(weight)
+```
+
+In R, we often read `%>%` as the English word 'then.' So, we could read this code as saying, 'take the `cdc` data, then select the `weight` variable.' We can add an additional command to our chain to see the weight for the 567<sup>th</sup> observation in the data set,
+
+```{r weight-567}
+cdc %>% 
+  select(weight) %>% 
+  slice(567)
+```
+
+We could also select a range of rows, 
+
+```{r weight-first10}
+cdc %>% 
+  select(weight) %>% 
+  slice(1:10)
 ```
 
 The command above returns the same result as the `cdc[1:10,6]` command. Both 
-row-and-column notation and dollar-sign notation are widely used, which one you 
+row-and-column notation and `select` notation are widely used, which one you 
 choose to use depends on your personal preference.
 
 ## A little more on subsetting
 
 It's often useful to extract all individuals (cases) in a data set that have 
 specific characteristics. We accomplish this through *logical operators*. 
-First, consider expressions like
+Consider this expression:
 
-```{r true-male, eval=FALSE}
-cdc$gender == "m"
+```{r true-male}
+cdc %>% 
+  filter(gender == "m")
 ```
 
-or
+It filters the dataset to only include the rows which have the `gender` variable set to `m`. You could also type something like 
 
-```{r true-over30, eval=FALSE}
-cdc$age > 30
+```{r true-over30}
+cdc %>% 
+  filter(age > 30)
 ```
 
-These commands produce a series of `TRUE` and `FALSE`  values. There is one 
-value for each respondent, where `TRUE` indicates that the person was male (via 
-the first command) or older than 30 (second command).
+If we want to use this data again, we have to save it with a new name so we have access to it. 
 
-Suppose we want to extract just the data for the men in the sample, or just for 
-those over 30. We can use the R function `subset` to do that for us. For example,
-the command
-
-```{r males, eval=FALSE}
-mdata <- subset(cdc, cdc$gender == "m")
+```{r males}
+mdata <- 
+  cdc %>% 
+  filter(gender == "m")
 ```
 
 will create a new data set called `mdata` that contains only the men from the 
 `cdc` data set. In addition to finding it in your workspace alongside its 
 dimensions, you can take a peek at the first several rows as usual
 
-```{r head-males, eval=FALSE}
-head(mdata)
+```{r head-males}
+mdata
 ```
 
 This new data set contains all the same variables but just under half the rows.
-It is also possible to tell R to keep only specific variables, which is a topic
-we'll discuss in a future lab. For now, the important thing is that we can carve
+It is also possible to tell R to keep only specific variables using `select`. 
+For now, the important thing is that we can carve
 up the data based on values of one or more variables.
 
 As an aside, you can use several of these logical operators together with `&` and `|`.
 The `&` is read "and" so that
 
-```{r males-and-over30, eval=FALSE}
-m_and_over30 <- subset(cdc, gender == "m" & age > 30)
+```{r males-and-over30}
+m_and_over30 <- 
+  cdc %>% 
+  filter(gender == "m" & age > 30)
 ```
 
 will give you the data for men over the age of 30. The `|` character is read 
 "or" so that
 
-```{r males-or-over30, eval=FALSE}
-m_or_over30 <- subset(cdc, gender == "m" | age > 30)
+```{r males-or-over30}
+m_and_over30 <- 
+  cdc %>% 
+  filter(gender == "m" | age > 30)
 ```
 
-will take people who are men or over the age of 30 (why that's an interesting 
-group is hard to say, but right now the mechanics of this are the important 
-thing). In principle, you may use as many "and" and "or" clauses as you like 
-when forming a subset.
+can be read as take the cdc dataset, then filter the data for cases who are men or over the age of 30.  (Why that's an interesting group is hard to say, but right now the mechanics of this are the important 
+thing.) In principle, you may use as many "and" and "or" clauses as you like 
+when forming a filter. 
 
 3.  Create a new object called `under23_and_smoke` that contains all observations 
     of respondents under the age of 23 that have smoked 100 cigarettes in their 
@@ -323,21 +349,21 @@ when forming a subset.
 
 ## Quantitative data
 
-With our subsetting tools in hand, we'll now return to the task of the day: 
+With our filtering tools in hand, we'll now return to the task of the day: 
 making basic summaries of the BRFSS questionnaire.  We've already looked at 
 categorical data such as `smoke` and `gender` so now let's turn our attention to
 quantitative data.  Two common ways to visualize quantitative data are with box
 plots and histograms.  We can construct a box plot for a single variable with 
 the following command.
 
-```{r boxplot-height, eval=FALSE}
+```{r boxplot-height}
 boxplot(cdc$height)
 ```
 
 You can compare the locations of the components of the box by examining the 
 summary statistics.
 
-```{r summary-height, eval=FALSE}
+```{r summary-height}
 summary(cdc$height)
 ```
 
@@ -346,7 +372,7 @@ summary match those in the graph. The purpose of a boxplot is to provide a
 thumbnail sketch of a variable for the purpose of comparing across several 
 categories. So we can, for example, compare the heights of men and women with 
 
-```{r boxplot-height-gender, eval=FALSE}
+```{r boxplot-height-gender}
 boxplot(cdc$height ~ cdc$gender)
 ```
 
@@ -359,7 +385,7 @@ set: Body Mass Index (BMI)
 ([http://en.wikipedia.org/wiki/Body_mass_index](http://en.wikipedia.org/wiki/Body_mass_index)). 
 BMI is a weight to height ratio and can be calculated as:
 
-\[ BMI = \frac{weight~(lb)}{height~(in)^2} * 703 \]
+\[ BMI = \frac{weight~(lb)}{height~(in)^2} \cdot 703 \]
 
 703 is the approximate conversion factor to change units from metric (meters and 
 kilograms) to imperial (inches and pounds).
@@ -367,7 +393,7 @@ kilograms) to imperial (inches and pounds).
 The following two lines first make a new object called `bmi` and then creates 
 box plots of these values, defining groups by the variable `cdc$genhlth`.
 
-```{r boxplot-bmi, eval=FALSE}
+```{r boxplot-bmi}
 bmi <- (cdc$weight / cdc$height^2) * 703
 boxplot(bmi ~ cdc$genhlth)
 ```
@@ -387,7 +413,7 @@ very simple expressions.
 Finally, let's make some histograms. We can look at the histogram for the age of
 our respondents with the command
 
-```{r hist-age, eval=FALSE}
+```{r hist-age}
 hist(cdc$age)
 ```
 
@@ -397,7 +423,7 @@ between the different bins.  You can control the number of bins by adding an
 argument to the command. In the next two lines, we first make a default 
 histogram of `bmi` and then one with 50 breaks.
 
-```{r hist-bmi, eval=FALSE}
+```{r hist-bmi}
 hist(bmi)
 hist(bmi, breaks = 50)
 ```
