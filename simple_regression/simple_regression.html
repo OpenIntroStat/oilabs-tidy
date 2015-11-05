@@ -112,7 +112,8 @@ img {
 <li>What type of plot would you use to display the relationship between <code>runs</code> and one of the other numerical variables? Plot this relationship using the variable <code>at_bats</code> as the predictor. Does the relationship look linear? If you knew a team’s <code>at_bats</code>, would you be comfortable using a linear model to predict the number of runs?</li>
 </ol>
 <p>If the relationship looks linear, we can quantify the strength of the relationship with the correlation coefficient.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(mlb11$runs, mlb11$at_bats)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mlb11 %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="kw">cor</span>(runs, at_bats))</code></pre></div>
 </div>
 <div id="sum-of-squared-residuals" class="section level2">
 <h2>Sum of squared residuals</h2>
@@ -164,17 +165,20 @@ img {
 <h2>Model diagnostics</h2>
 <p>To assess whether the linear model is reliable, we need to check for (1) linearity, (2) nearly normal residuals, and (3) constant variability.</p>
 <p><strong>Linearity</strong>: You already checked if the relationship between runs and at-bats is linear using a scatterplot. We should also verify this condition with a plot of the residuals vs. at-bats.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .stdresid, <span class="dt">data =</span> m1)</code></pre></div>
-<p>Notice here that our model object <code>m1</code> can also serve as a data set because stored within it are the fitted values (<span class="math inline">\(\hat{y}\)</span>) and the residuals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid, <span class="dt">data =</span> m1) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Fitted values&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Residuals&quot;</span>)</code></pre></div>
+<p>Notice here that our model object <code>m1</code> can also serve as a data set because stored within it are the fitted values (<span class="math inline">\(\hat{y}\)</span>) and the residuals. Also note that we’re getting fancy with the code here. After creating the scatterplot on the first layer (first line of code), we overlay a horizontal dashed line at <span class="math inline">\(y = 0\)</span> (to help us check whether residuals are distributed around 0), and we also adjust the axis labels to be more informative.</p>
 <ol start="6" style="list-style-type: decimal">
 <li>Is there any apparent pattern in the residuals plot? What does this indicate about the linearity of the relationship between runs and at-bats?</li>
 </ol>
 <p></br></p>
 <p><strong>Nearly normal residuals</strong>: To check this condition, we can look at a histogram</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> .stdresid, <span class="dt">data =</span> m1, <span class="dt">geom =</span> <span class="st">&quot;histogram&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> .resid, <span class="dt">data =</span> m1, <span class="dt">geom =</span> <span class="st">&quot;histogram&quot;</span>, <span class="dt">binwidth =</span> <span class="dv">25</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Residuals&quot;</span>)</code></pre></div>
 <p>or a normal probability plot of the residuals.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">sample =</span> .stdresid, <span class="dt">data =</span> m1, <span class="dt">stat =</span> <span class="st">&quot;qq&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_abline</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">sample =</span> .resid, <span class="dt">data =</span> m1, <span class="dt">stat =</span> <span class="st">&quot;qq&quot;</span>)</code></pre></div>
 <ol start="7" style="list-style-type: decimal">
 <li>Based on the histogram and the normal probability plot, does the nearly normal residuals condition appear to be met?</li>
 </ol>

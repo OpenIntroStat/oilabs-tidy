@@ -57,7 +57,8 @@ If the relationship looks linear, we can quantify the strength of the
 relationship with the correlation coefficient.
 
 ```{r cor}
-cor(mlb11$runs, mlb11$at_bats)
+mlb11 %>%
+  summarise(cor(runs, at_bats))
 ```
 
 ## Sum of squared residuals
@@ -77,7 +78,7 @@ line that best follows their association. Use the following interactive
 function to select the line that you think does the best job of going through 
 the cloud of points.
 
-```{r plotss-atbats-runs}
+```{r plotss-atbats-runs, eval=FALSE}
 plot_ss(x = at_bats, y = runs, data = mlb11)
 ```
 
@@ -95,7 +96,7 @@ The most common way to do linear regression is to select the line that minimizes
 the sum of squared residuals. To visualize the squared residuals, you can rerun 
 the plot command and add the argument `showSquares = TRUE`.
 
-```{r plotss-atbats-runs-squares}
+```{r plotss-atbats-runs-squares, eval=FALSE}
 plot_ss(x = at_bats, y = runs, data = mlb11, showSquares = TRUE)
 ```
 
@@ -186,10 +187,18 @@ is linear using a scatterplot. We should also verify this condition with a plot
 of the residuals vs. at-bats.
 
 ```{r residuals}
-qplot(x = .fitted, y = .stdresid, data = m1)
+qplot(x = .fitted, y = .resid, data = m1) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  xlab("Fitted values") +
+  ylab("Residuals")
 ```
 
-Notice here that our model object `m1` can also serve as a data set because stored within it are the fitted values ($\hat{y}$) and the residuals.
+Notice here that our model object `m1` can also serve as a data set because stored within 
+it are the fitted values ($\hat{y}$) and the residuals. Also note that we're getting 
+fancy with the code here. After creating the scatterplot on the first layer (first line 
+of code), we overlay a horizontal dashed line at $y = 0$ (to help us check whether 
+residuals are distributed around 0), and we also adjust the axis labels to be more 
+informative.
 
 6.  Is there any apparent pattern in the residuals plot? What does this indicate
     about the linearity of the relationship between runs and at-bats?  
@@ -199,14 +208,14 @@ Notice here that our model object `m1` can also serve as a data set because stor
 **Nearly normal residuals**: To check this condition, we can look at a histogram
 
 ```{r hist-res}
-qplot(x = .stdresid, data = m1, geom = "histogram")
+qplot(x = .resid, data = m1, geom = "histogram", binwidth = 25) +
+  xlab("Residuals")
 ```
 
 or a normal probability plot of the residuals.
 
 ```{r qq-res}
-qplot(sample = .stdresid, data = m1, stat = "qq") +
-  geom_abline()
+qplot(sample = .resid, data = m1, stat = "qq")
 ```
 
 7.  Based on the histogram and the normal probability plot, does the nearly 
