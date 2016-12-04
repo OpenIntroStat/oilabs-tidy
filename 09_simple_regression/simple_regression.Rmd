@@ -5,13 +5,13 @@ output:
     css: ../lab.css
     highlight: pygments
     theme: cerulean
+    toc: true
+    toc_float: true
 ---
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 ```
-
-## Batter up 
 
 The movie [*Moneyball*](http://en.wikipedia.org/wiki/Moneyball_(film)) focuses on
 the "quest for the secret of success in baseball". It follows a low-budget team, 
@@ -249,7 +249,7 @@ Note that the syntax for making a normal probability plot is a bit different tha
 
 * * *
 
-## On your own
+## More Practice
 <div class="oyo">
 
 -   Choose another one of the seven traditional variables from `mlb11` besides 
