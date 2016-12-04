@@ -64,7 +64,7 @@ Remember that you can answer this question by viewing the data in the data viewe
 by using the following command:
 
 ```{r str}
-str(nc)
+glimpse(nc)
 ```
 
 ## Exploratory data analysis
@@ -73,7 +73,7 @@ We will first start with analyzing the weight gained by mothers throughout the
 pregnancy: `gained`.
 
 Using visualization and summary statistics, describe the distribution of weight 
-gained by mothers during pregnancy. The `summary` function can also be useful.
+gained by mothers during pregnancy. The `summary` function can be useful.
 
 ```{r summary}
 summary(nc$gained)
@@ -107,8 +107,8 @@ significant? In order to answer this question we will conduct a hypothesis test
 ## Inference
 
 3.  Are all conditions necessary for inference satisfied? Comment on each. You can 
-compute the group sizes with the `summarize` command above but replacing `mean(weight)` 
-with `n()`.
+compute the group sizes with the `summarize` command above by defining a new variable
+with the definition `n()`.
 
 4.  Write the hypotheses for testing if the average weights of babies born to 
 smoking and non-smoking mothers are different.

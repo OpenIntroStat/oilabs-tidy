@@ -245,8 +245,8 @@ div.tocify {
 </div>
 
 
-<div id="hot-hands" class="section level2">
-<h2>Hot Hands</h2>
+<div id="the-hot-hand" class="section level2">
+<h2>The Hot Hand</h2>
 <p>Basketball players who make several baskets in succession are described as having a <em>hot hand</em>. Fans and players have long believed in the hot hand phenomenon, which refutes the assumption that each shot is independent of the next. However, <a href="http://www.sciencedirect.com/science/article/pii/0010028585900106">a 1985 paper</a> by Gilovich, Vallone, and Tversky collected evidence that contradicted this belief and showed that successive shots are independent events. This paper started a great controversy that continues to this day, as you can see by Googling <em>hot hand basketball</em>.</p>
 <p>We do not expect to resolve this controversy today. However, in this lab we’ll apply one approach to answering questions like this. The goals for this lab are to (1) think about the effects of independent and dependent events, (2) learn how to simulate shooting streaks in R, and (3) to compare a simulation to actual data in order to determine if the hot hand phenomenon appears to be real.</p>
 </div>
@@ -266,7 +266,7 @@ div.tocify {
 </div>
 <div id="data" class="section level3">
 <h3>Data</h3>
-<p>Our investigation will focus on the performance of one player: Kobe Bryant of the Los Angeles Lakers. His performance against the Orlando Magic in the 2009 NBA finals earned him the title <em>Most Valuable Player</em> and many spectators commented on how he appeared to show a hot hand. Let’s load some necessary files that we will need for this lab.</p>
+<p>Our investigation will focus on the performance of one player: <a href="https://en.wikipedia.org/wiki/Kobe_Bryant">Kobe Bryant</a> of the Los Angeles Lakers. His performance against the Orlando Magic in the <a href="https://en.wikipedia.org/wiki/2009_NBA_Finals">2009 NBA Finals</a> earned him the title <em>Most Valuable Player</em> and many spectators commented on how he appeared to show a hot hand. Let’s load some necessary files that we will need for this lab.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(kobe_basket)</code></pre></div>
 <p>This data frame contains 133 observations and 6 variables, where every row records a shot taken by Kobe Bryant. The <code>shot</code> variable in this dataset indicates whether the shot was a hit (<code>H</code>) or a miss (<code>M</code>).</p>
 <p>Just looking at the string of hits and misses, it can be difficult to gauge whether or not it seems like Kobe was shooting with a hot hand. One way we can approach this is by considering the belief that hot hand shooters tend to go on shooting streaks. For this lab, we define the length of a shooting streak to be the <em>number of consecutive baskets made until a miss occurs</em>.</p>
@@ -288,7 +288,7 @@ div.tocify {
 </div>
 <div id="compared-to-what" class="section level2">
 <h2>Compared to What?</h2>
-<p>We’ve shown that Kobe had some long shooting streaks, but are they long enough to support the belief that he had hot hands? What can we compare them to?</p>
+<p>We’ve shown that Kobe had some long shooting streaks, but are they long enough to support the belief that he had a hot hand? What can we compare them to?</p>
 <p>To answer these questions, let’s return to the idea of <em>independence</em>. Two processes are independent if the outcome of one process doesn’t effect the outcome of the second. If each shot that a player takes is an independent process, having made or missed your first shot will not affect the probability that you will make or miss your second shot.</p>
 <p>A shooter with a hot hand will have shots that are <em>not</em> independent of one another. Specifically, if the shooter makes his first shot, the hot hand model says he will have a <em>higher</em> probability of making his second shot.</p>
 <p>Let’s suppose for a moment that the hot hand model is valid for Kobe. During his career, the percentage of time Kobe makes a basket (i.e. his shooting percentage) is about 45%, or in probability notation,</p>
@@ -298,21 +298,21 @@ div.tocify {
 <p>As a result of these increased probabilites, you’d expect Kobe to have longer streaks. Compare this to the skeptical perspective where Kobe does <em>not</em> have a hot hand, where each shot is independent of the next. If he hit his first shot, the probability that he makes the second is still 0.45.</p>
 <p><span class="math display">\[ P(\textrm{shot 2 = H} \, | \, \textrm{shot 1 = H}) = 0.45 \]</span></p>
 <p>In other words, making the first shot did nothing to effect the probability that he’d make his second shot. If Kobe’s shots are independent, then he’d have the same probability of hitting every shot regardless of his past shots: 45%.</p>
-<p>Now that we’ve phrased the situation in terms of independent shots, let’s return to the question: how do we tell if Kobe’s shooting streaks are long enough to indicate that he has hot hands? We can compare his streak lengths to someone without hot hands: an independent shooter.</p>
+<p>Now that we’ve phrased the situation in terms of independent shots, let’s return to the question: how do we tell if Kobe’s shooting streaks are long enough to indicate that he has a hot hand? We can compare his streak lengths to someone without a hot hand: an independent shooter.</p>
 </div>
 <div id="simulations-in-r" class="section level2">
 <h2>Simulations in R</h2>
 <p>While we don’t have any data from a shooter we know to have independent shots, that sort of data is very easy to simulate in R. In a simulation, you set the ground rules of a random process and then the computer uses random numbers to generate an outcome that adheres to those rules. As a simple example, you can simulate flipping a fair coin with the following.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coin_outcomes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;heads&quot;</span>, <span class="st">&quot;tails&quot;</span>)
 <span class="kw">sample</span>(coin_outcomes, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>The vector <code>outcomes</code> can be thought of as a hat with two slips of paper in it: one slip says <code>heads</code> and the other says <code>tails</code>. The function <code>sample</code> draws one slip from the hat and tells us if it was a head or a tail.</p>
+<p>The vector <code>coin_outcomes</code> can be thought of as a hat with two slips of paper in it: one slip says <code>heads</code> and the other says <code>tails</code>. The function <code>sample</code> draws one slip from the hat and tells us if it was a head or a tail.</p>
 <p>Run the second command listed above several times. Just like when flipping a coin, sometimes you’ll get a heads, sometimes you’ll get a tails, but in the long run, you’d expect to get roughly equal numbers of each.</p>
 <p>If you wanted to simulate flipping a fair coin 100 times, you could either run the function 100 times or, more simply, adjust the <code>size</code> argument, which governs how many samples to draw (the <code>replace = TRUE</code> argument indicates we put the slip of paper back in the hat before drawing again). Save the resulting vector of heads and tails in a new object called <code>sim_fair_coin</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_fair_coin &lt;-<span class="st"> </span><span class="kw">sample</span>(coin_outcomes, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>To view the results of this simulation, type the name of the object and then use <code>table</code> to count up the number of heads and tails.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_fair_coin
 <span class="kw">table</span>(sim_fair_coin)</code></pre></div>
-<p>Since there are only two elements in <code>outcomes</code>, the probability that we “flip” a coin and it lands heads is 0.5. Say we’re trying to simulate an unfair coin that we know only lands heads 20% of the time. We can adjust for this by adding an argument called <code>prob</code>, which provides a vector of two probability weights.</p>
+<p>Since there are only two elements in <code>coin_outcomes</code>, the probability that we “flip” a coin and it lands heads is 0.5. Say we’re trying to simulate an unfair coin that we know only lands heads 20% of the time. We can adjust for this by adding an argument called <code>prob</code>, which provides a vector of two probability weights.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_unfair_coin &lt;-<span class="st"> </span><span class="kw">sample</span>(coin_outcomes, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, 
                           <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.8</span>))</code></pre></div>
 <p><code>prob=c(0.2, 0.8)</code> indicates that for the two elements in the <code>outcomes</code> vector, we want to select the first one, <code>heads</code>, with probability 0.2 and the second one, <code>tails</code> with probability 0.8. Another way of thinking about this is to think of the outcome space as a bag of 10 chips, where 2 chips are labeled “head” and 8 chips “tail”. Therefore at each draw, the probability of drawing a chip that says “head”&quot; is 20%, and “tail” is 80%.</p>
@@ -352,9 +352,6 @@ sim_basket &lt;-<span class="st"> </span><span class="kw">sample</span>(shot_out
 <li><p>If you were to run the simulation of the independent shooter a second time, how would you expect its streak distribution to compare to the distribution from the question above? Exactly the same? Somewhat similar? Totally different? Explain your reasoning.</p></li>
 <li><p>How does Kobe Bryant’s distribution of streak lengths compare to the distribution of streak lengths for the simulated shooter? Using this comparison, do you have evidence that the hot hand model fits Kobe’s shooting patterns? Explain.</p></li>
 </ol>
-<ul>
-<li>What concepts from the textbook are covered in this lab? What concepts, if any, are not covered in the textbook? Have you seen these concepts elsewhere, e.g. class, videos, textbook, previous labs, or homework problems? Be specific in your answer.</li>
-</ul>
 </div>
 <div id="license">
 <p>This is a product of OpenIntro that is released under a <a href="http://creativecommons.org/licenses/by-sa/3.0">Creative Commons Attribution-ShareAlike 3.0 Unported</a>. This lab was adapted for OpenIntro by Andrew Bray and Mine Çetinkaya-Rundel from a lab written by Mark Hansen of UCLA Statistics.</p>

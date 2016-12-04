@@ -77,12 +77,12 @@ qplot(data = ames, x = area, binwidth = 250, geom = "histogram")
 
 Let's also obtain some summary statistics. Note that we can do this using the
 `summarise` function. We can calculate as many statistics as we want using this
-function, and just string along the results. Some of the functions below should
+function, and just combine the results. Some of the functions below should
 be self explanatory (like `mean`, `median`, `sd`, `IQR`, `min`, and `max`). A
 new function here is the `quantile` function which we can use to calculate 
 values corresponding to specific percentile cutoffs in the distribution. For
 example `quantile(x, 0.25)` will yield the cutoff value for the 25th percentile (Q1)
-in the distribution of x. Finding these values are useful for describing the 
+in the distribution of `x`. Finding these values is useful for describing the 
 distribution, as we can use them for descriptions like *"the middle 50% of the 
 homes have areas between such and such square feet"*.
 
@@ -95,7 +95,7 @@ ames %>%
             pop_q3 = quantile(area, 0.75))  # third quartile, 75th percentile
 ```
 
-1.  Describe this population distribution using the visualization and the summary
+1.  Describe this population distribution using a visualization and these summary
     statistics. You don't have to use all of the summary statistics in your 
     description, you will need to decide which ones are relevant based on the
     shape of the distribution. Make sure to include the plot and the summary
@@ -109,21 +109,21 @@ extremely costly or impossible. Because of this, we often take a sample of
 the population and use that to understand the properties of the population.
 
 If we were interested in estimating the mean living area in Ames based on a 
-sample, we can use the following command to survey the population.
+sample, we can use the `sample_n` command to survey the population.
 
 ```{r samp1}
 samp1 <- ames %>%
   sample_n(50)
 ```
 
-This command collects a simple random sample of size 50 from the `ames` dataset 
-`area`, which is assigned to `samp1`. This is like going into the City 
+This command collects a simple random sample of size 50 from the `ames` dataset, 
+and assigns the result to `samp1`. This is like going into the City 
 Assessor's database and pulling up the files on 50 random home sales. Working 
 with these 50 files would be considerably simpler than working with all 2930 
 home sales.
 
 1.  Describe the distribution of area in this sample. How does it compare to the 
-    distribution of the population? **Hint:** `sample_n` function takes a random
+    distribution of the population? **Hint:** the `sample_n` function takes a random
     sample of observations (i.e. rows) from the dataset, you can still refer to 
     the variables in the dataset with the same names. Code you used in the 
     previous exercise will also be helpful for visualizing and summarizing the sample,
@@ -140,7 +140,7 @@ samp1 %>%
 ```
 
 Depending on which 50 homes you selected, your estimate could be a bit above 
-or a bit below the true population mean of 1499.69 square feet. In general, 
+or a bit below the true population mean of `r round(mean(ames$area),2)` square feet. In general, 
 though, the sample mean turns out to be a pretty good estimate of the average 
 living area, and we were able to get it by sampling less than 3\% of the 
 population.
@@ -158,12 +158,12 @@ population.
 Not surprisingly, every time we take another random sample, we get a different 
 sample mean. It's useful to get a sense of just how much variability we 
 should expect when estimating the population mean this way. The distribution 
-of sample means, called the *sampling distribution*, can help us understand 
+of sample means, called the *sampling distribution (of the mean)*, can help us understand 
 this variability. In this lab, because we have access to the population, we 
 can build up the sampling distribution for the sample mean by repeating the 
 above steps many times. Here we will generate 15,000 samples and compute the 
-sample mean of each. Note that we are sampling with replacement, 
-`replace = TRUE` since sampling distributions are constructed with sampling
+sample mean of each. Note that we specify that  
+`replace = TRUE` since sampling distributions are constructed by sampling
 with replacement.
 
 ```{r loop}
@@ -174,7 +174,7 @@ sample_means50 <- ames %>%
 qplot(data = sample_means50, x = x_bar)
 ```
 
-Here we use R to take 15,000 samples of size 50 from the population, calculate 
+Here we use R to take 15,000 different samples of size 50 from the population, calculate 
 the mean of each sample, and store each result in a vector called 
 `sample_means50`. Next, we review how this set of code works.
 
@@ -190,7 +190,7 @@ this new function we are able to repeat this sampling procedure `rep` times in o
 to build a distribution of a series of sample statistics, which is called the 
 **sampling distribution**. 
 
-Note that in practice one rarely gets to build sampling distributions, 
+Note that in practice one rarely gets to build true sampling distributions, 
 because we rarely have access to data from the entire population. 
 
 Without the `rep_sample_n` function, this would be painful. We would have to 
@@ -206,7 +206,7 @@ Note that for each of the 15,000 times we computed a mean, we did so from a
 **different** sample!
 
 1.  To make sure you understand how sampling distributions are built, and exactly
-    what the `sample_n` and `do` function do, try modifying the code to create a
+    what the `rep_sample_n` function does, try modifying the code to create a
     sampling distribution of **25 sample means** from **samples of size 10**, 
     and put them in a data frame named `sample_means_small`. Print the output. 
     How many observations are there in this object called `sample_means_small`? 
@@ -215,7 +215,8 @@ Note that for each of the 15,000 times we computed a mean, we did so from a
 ## Sample size and the sampling distribution
 
 Mechanics aside, let's return to the reason we used the `rep_sample_n` function: to 
-compute a sampling distribution, specifically, this one.
+compute a sampling distribution, specifically, the sampling distribution of the 
+mean home area for samples of 50 houses. 
 
 ```{r hist}
 qplot(data = sample_means50, x = x_bar, geom = "histogram")
@@ -225,7 +226,7 @@ The sampling distribution that we computed tells us much about estimating
 the average living area in homes in Ames.  Because the sample mean is an 
 unbiased estimator, the sampling distribution is centered at the true average 
 living area of the population, and the spread of the distribution 
-indicates how much variability is induced by sampling only 50 home sales.
+indicates how much variability is incurred by sampling only 50 home sales.
 
 In the remainder of this section we will work on getting a sense of the effect that 
 sample size has on our sampling distribution.
@@ -328,15 +329,16 @@ Ames. Now you'll try to estimate the mean home price.
 
 Note that while you might be able to answer some of these questions using the app
 you are expected to write the required code and produce the necessary plots and
-summary statistics. You are welcomed to use the app for exploration.
+summary statistics. You are welcome to use the app for exploration.
 
 1.  Take a sample of size 15 from the population and calculate the mean `price`
     of the homes in this sample. Using this sample, what is your best point estimate
     of the population mean of prices of homes?
 
 1.  Since you have access to the population, simulate the sampling 
-    distribution for $\bar{x}_{price}$ by taking 2000 samples from the 
-    population of size 15 and computing 2000 sample means. Store these means 
+    distribution of $\overline{price}$ for samples of size 15 by taking 2000 
+    samples from the population of size 15 and computing 2000 sample means. 
+    Store these means 
     in a vector called `sample_means15`. Plot the data, then describe the 
     shape of this sampling distribution. Based on this sampling distribution, 
     what would you guess the mean home price of the population to be? Finally, 

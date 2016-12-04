@@ -16,7 +16,7 @@ library(ggplot2)
 library(oilabs)
 ```
 
-## Hot Hands
+## The Hot Hand
 
 Basketball players who make several baskets in succession are described as 
 having a *hot hand*. Fans and players have long believed in the hot hand 
@@ -54,9 +54,9 @@ To create your new lab report, start by opening a new R Markdown document... Fro
 
 ### Data
 
-Our investigation will focus on the performance of one player: Kobe Bryant of 
-the Los Angeles Lakers. His performance against the Orlando Magic in the 2009 
-NBA finals earned him the title *Most Valuable Player* and many spectators 
+Our investigation will focus on the performance of one player: [Kobe Bryant](https://en.wikipedia.org/wiki/Kobe_Bryant) of 
+the Los Angeles Lakers. His performance against the Orlando Magic in the [2009 
+NBA Finals](https://en.wikipedia.org/wiki/2009_NBA_Finals) earned him the title *Most Valuable Player* and many spectators 
 commented on how he appeared to show a hot hand. Let's load some necessary files
 that we will need for this lab.
 
@@ -109,7 +109,7 @@ qplot(data = kobe_streak, x = length, geom = "bar")
 ## Compared to What?
 
 We've shown that Kobe had some long shooting streaks, but are they long enough 
-to support the belief that he had hot hands? What can we compare them to?
+to support the belief that he had a hot hand? What can we compare them to?
 
 To answer these questions, let's return to the idea of *independence*. Two 
 processes are independent if the outcome of one process doesn't effect the outcome 
@@ -145,8 +145,8 @@ same probability of hitting every shot regardless of his past shots: 45%.
 
 Now that we've phrased the situation in terms of independent shots, let's return
 to the question: how do we tell if Kobe's shooting streaks are long enough to 
-indicate that he has hot hands? We can compare his streak lengths to someone
-without hot hands: an independent shooter. 
+indicate that he has a hot hand? We can compare his streak lengths to someone
+without a hot hand: an independent shooter. 
 
 ## Simulations in R
 
@@ -161,7 +161,7 @@ coin_outcomes <- c("heads", "tails")
 sample(coin_outcomes, size = 1, replace = TRUE)
 ```
 
-The vector `outcomes` can be thought of as a hat with two slips of paper in it: 
+The vector `coin_outcomes` can be thought of as a hat with two slips of paper in it: 
 one slip says `heads` and the other says `tails`. The function `sample` draws 
 one slip from the hat and tells us if it was a head or a tail. 
 
@@ -187,7 +187,7 @@ sim_fair_coin
 table(sim_fair_coin)
 ```
 
-Since there are only two elements in `outcomes`, the probability that we "flip" 
+Since there are only two elements in `coin_outcomes`, the probability that we "flip" 
 a coin and it lands heads is 0.5. Say we're trying to simulate an unfair coin 
 that we know only lands heads 20% of the time. We can adjust for this by adding 
 an argument called `prob`, which provides a vector of two probability weights.
@@ -295,10 +295,6 @@ a hot hand.
     comparison, do you have evidence that the hot hand model fits Kobe's 
     shooting patterns? Explain.
 
--   What concepts from the textbook are covered in this lab? What concepts, if 
-    any, are not covered in the textbook? Have you seen these concepts elsewhere,
-    e.g. class, videos, textbook, previous labs, or homework problems? Be
-    specific in your answer.
 
 </div>
 

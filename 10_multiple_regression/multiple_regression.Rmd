@@ -5,7 +5,6 @@ output:
     css: ../lab.css
     highlight: pygments
     theme: cerulean
-  pdf_document: default
 ---
 
 ```{r global_options, include=FALSE}
@@ -104,7 +103,7 @@ Before we draw conclusions about the trend, compare the number of observations
 in the data frame with the approximate number of points on the scatterplot. 
 Is anything awry?
 
-4.  Replot the scatterplot, but this time use `geom = "jitter`. What was
+4.  Replot the scatterplot, but this time use `geom = "jitter"`. What was
     misleading about the initial scatterplot?
 
 ```{r scatter-score-bty_avg-jitter}
@@ -150,13 +149,15 @@ evals %>%
   summarise(cor(bty_avg, bty_f1lower))
 ```
 
-As expected the relationship is quite strong - after all, the average score is 
-calculated using the individual scores. We can actually take a look at the 
+As expected the relationship is quite strong---after all, the average score is 
+calculated using the individual scores. We can actually look at the 
 relationships between all beauty variables (columns 13 through 19) using the 
 following command:
 
 ```{r bty-rels}
-ggpairs(evals, columns = 13:19)
+evals %>%
+  select(contains("bty")) %>%
+  ggpairs()
 ```
 
 These variables are collinear (correlated), and adding more than one of these 
@@ -212,7 +213,7 @@ the intercept and slope form familiar from simple regression.
 The decision to call the indicator variable `gendermale` instead of`genderfemale`
 has no deeper meaning. R simply codes the category that comes first 
 alphabetically as a $0$. (You can change the reference level of a categorical 
-variable, which is the level that is coded as a 0, using the`relevel` function. 
+variable, which is the level that is coded as a 0, using the`relevel()` function. 
 Use `?relevel` to learn more.)
 
 10. Create a new model called `m_bty_rank` with `gender` removed and `rank` 

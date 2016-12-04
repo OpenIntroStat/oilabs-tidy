@@ -96,7 +96,7 @@ qplot(x = hgt, data = fdims, geom = "blank") +
 
 After initializing a blank plot with the first command, the `ggplot2` package
 allows us to add additional layers. The first layer is a density histogram. The
-second layer is a statistical function - the density of the normal curve, `dnorm`.
+second layer is a statistical function -- the density of the normal curve, `dnorm`.
 We specify that we want the curve to have the same mean and standard deviation 
 as the column of female heights. The argument `col` simply sets the color for 
 the line to be drawn. If we left it out, the line would be drawn in black.
@@ -114,16 +114,16 @@ constructing a normal probability plot, also called a normal Q-Q plot for
 "quantile-quantile".
 
 ```{r qq}
-qplot(sample = hgt, data = fdims, stat = "qq")
+qplot(sample = hgt, data = fdims, geom = "qq")
 ```
 
 The x-axis values correspond to the quantiles of a theoretically normal curve 
-with mean 0 and standard deviation 1 AKA the standard normal distribution.  The 
+with mean 0 and standard deviation 1 (i.e., the standard normal distribution).  The 
 y-axis values correspond to the quantiles of the original unstandardized sample 
 data. However, even if we were to standardize the sample data values, the Q-Q
 plot would look identical. A data set that is nearly normal will result in a
-probability plot where the points closely follow the line.  Any deviations from
-normality leads to deviations of these points from the line.
+probability plot where the points closely follow a diagonal line.  Any deviations from
+normality leads to deviations of these points from that line.
 
 The plot for female heights shows points that tend to follow the line but with
 some errant points towards the tails.  We're left with the same problem that we

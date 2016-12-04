@@ -14,7 +14,7 @@ output:
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-In August of 2012, news outlets ranging from the [Washington Post](http://www.washingtonpost.com/national/on-faith/poll-shows-atheism-on-the-rise-in-the-us/2012/08/13/90020fd6-e57d-11e1-9739-eef99c5fb285_story.html) to the [Huffington Post](http://www.huffingtonpost.com/2012/08/14/atheism-rise-religiosity-decline-in-america_n_1777031.html) ran a story about the rise of atheism in America. The source for the story was a poll that asked people, "Irrespective of whether you attend a place of worship or not, would you say you are a religious person, not a religious person or a convinced atheist?" This type of question, which asks people to classify themselves in one way or another, is common in polling and generates categorical data. In this lab we take a look at the atheism survey and explore what's at play when making inference about population proportions using categorical data.
+In August of 2012, news outlets ranging from the [Washington Post](http://www.washingtonpost.com/national/on-faith/poll-shows-atheism-on-the-rise-in-the-us/2012/08/13/90020fd6-e57d-11e1-9739-eef99c5fb285_story.html) to the [Huffington Post](http://www.huffingtonpost.com/2012/08/14/atheism-rise-religiosity-decline-in-america_n_1777031.html) ran a story about the rise of atheism in America. The source for the story was a poll that asked people, "Irrespective of whether you attend a place of worship or not, would you say you are a religious person, not a religious person, or a convinced atheist?" This type of question, which asks people to classify themselves in one way or another, is common in polling and generates categorical data. In this lab we take a look at the atheism survey and explore what's at play when making inference about population proportions using categorical data.
 
 ## Getting Started
 
@@ -113,7 +113,7 @@ is a response of `"atheist"`.
 
 Although formal confidence intervals and hypothesis tests don't show up in the 
 report, suggestions of inference appear at the bottom of page 7: "In general, 
-the error margin for surveys of this kind is $\pm$ 3-5% at 95% confidence".
+the error margin for surveys of this kind is $\pm$ 3--5% at 95% confidence".
 
 1.  Based on the R output, what is the margin of error for the estimate of the 
     proportion of the proportion of atheists in US in 2012?
@@ -136,7 +136,11 @@ it is also affected by the proportion.
 
 Think back to the formula for the standard error: $SE = \sqrt{p(1-p)/n}$. This 
 is then used in the formula for the margin of error for a 95% confidence 
-interval: $ME = 1.96\times SE = 1.96\times\sqrt{p(1-p)/n}$. Since the 
+interval: 
+$$
+ME = 1.96\times SE = 1.96\times\sqrt{p(1-p)/n} \,.
+$$
+Since the 
 population proportion $p$ is in this $ME$ formula, it should make sense that 
 the margin of error is in some way dependent on the population proportion. We 
 can visualize this relationship by creating a plot of $ME$ vs. $p$.
@@ -149,23 +153,25 @@ n <- 1000
 ```
 
 The first step is to make a variable `p` that is a sequence from 0 to 1 with 
-each number incremented by 0.01. We can then create a vector of the margin of 
+each number incremented by 0.01. We can then create a variable of the margin of 
 error (`me`) associated with each of these values of `p` using the familiar 
 approximate formula ($ME = 2 \times SE$).
 
 ```{r p-me}
-p <- seq(0, 1, 0.01)
+p <- seq(from = 0, to = 1, by = 0.01)
 me <- 2 * sqrt(p * (1 - p)/n)
 ```
 
-Lastly, we plot the two vectors against each other to reveal their relationship.
+Lastly, we plot the two variables against each other to reveal their relationship.
 To do so, we need to first put these variables in a data frame that we can
 call in the `qplot` function.
 
 ```{r me-plot}
 dd <- data.frame(p = p, me = me)
 qplot(x = p, y = me, data = dd, 
-      ylab = "Margin of Error", xlab = "Population Proportion")
+      ylab = "Margin of Error", 
+      xlab = "Population Proportion") + 
+  geom_line()
 ```
 
 1.  Describe the relationship between `p` and `me`. Include the margin of
@@ -223,12 +229,12 @@ renderPlot({
 
 1.  Keep $n$ constant and change $p$. How does the shape, center, and spread 
     of the sampling distribution vary as $p$ changes. You might want to adjust
-    min and max for the x-axis for a better view of the distribution.
+    min and max for the $x$-axis for a better view of the distribution.
     
-1.  Now also change $n$.How does $n$ appear to affect the distribution of $\hat{p}$?
+1.  Now also change $n$. How does $n$ appear to affect the distribution of $\hat{p}$?
 
 1.  If you refer to Table 6, you'll find that Australia has a sample 
-    proportion of 0.1 on a sample size of 1040, and that Ecuador has a sample 
+    proportion of 0.1 in a sample size of 1040, and that Ecuador has a sample 
     proportion of 0.02 on 400 subjects. Let's suppose for this exercise that 
     these point estimates are actually the truth. Construct their sampling
     distributions by using these values as inputs in the app. Do you think it 

@@ -17,7 +17,7 @@ library(oilabs)
 ```
 
 If you have access to data on an entire population, say the size of every 
-house in Ames, Iowa, it's straight forward to answer questions like, "How big 
+house in Ames, Iowa, it's straightforward to answer questions like, "How big 
 is the typical house in Ames?" and "How much variation is there in sizes of 
 houses?". If you have access to only a sample of the population, as is often 
 the case, the task becomes more complicated. What is your best guess for the 
@@ -66,15 +66,17 @@ data(ames)
 ```
 
 In this lab we'll start with a simple random sample of size 60 from the 
-population. Specifically, this is a simple random sample of size 60. Note that 
-the data set has information on many housing variables, but for the first 
-portion of the lab we'll focus on the size of the house, represented by the 
-variable `area`.
+population. 
 
 ```{r sample}
 n <- 60
 samp <- sample_n(ames, n)
 ```
+
+Note that 
+the data set has information on many housing variables, but for the first 
+portion of the lab we'll focus on the size of the house, represented by the 
+variable `area`.
 
 1.  Describe the distribution of house area in your sample. What would you say is the
     "typical" size within your sample? Also state precisely what you interpreted 
@@ -116,13 +118,16 @@ familiar with by now.
 Let's finally calculate the confidence interval:
 ```{r ci}
 samp %>%
-  summarise(lower = mean(area) - z_star_95 * (sd(area) / sqrt(n)),
-            upper = mean(area) + z_star_95 * (sd(area) / sqrt(n)))
+  summarise(x_bar = mean(area), 
+            se = sd(area) / sqrt(n),
+            me = z_star_95 * se,
+            lower = x_bar - me,
+            upper = x_bar + me)
 ```
 
 To recap: even though we don't know what the full population looks like, we're 95% 
-confident that the true average size of houses in Ames lies between the values *lower* 
-and *upper*. There are a few conditions that must be met for this interval to be valid.
+confident that the true average size of houses in Ames lies between the values `lower` 
+and `upper`. There are a few conditions that must be met for this interval to be valid.
 
 1.  For the confidence interval to be valid, the sample mean must be normally 
     distributed and have standard error $s / \sqrt{n}$. What conditions must be 
@@ -167,8 +172,11 @@ $n = 60$ earlier), and computes the upper and lower bounds of the confidence int
 ```{r calculate-50-cis}
 ci <- ames %>%
         rep_sample_n(size = n, reps = 50, replace = TRUE) %>%
-        summarise(lower = mean(area) - z_star_95 * (sd(area) / sqrt(n)),
-                  upper = mean(area) + z_star_95 * (sd(area) / sqrt(n)))
+        summarise(x_bar = mean(area), 
+                  se = sd(area) / sqrt(n),
+                  me = z_star_95 * se,
+                  lower = x_bar - me,
+                  upper = x_bar + me)
 ```
 
 Let's view the first five intervals:
@@ -179,7 +187,7 @@ ci %>%
 ```
 
 Next we'll create a plot similar to Figure 4.8 on page 175 of [OpenIntro Statistics, 3rd
-Edition](https://www.openintro.org/os). First step will be to create a new variable in 
+Edition](https://www.openintro.org/os). The first step will be to create a new variable in 
 the `ci` data frame that indicates whether the interval does or does not capture the 
 true population mean. Note that capturing this value would mean the lower bound of the
 confidence interval is below the value and upper bound of the confidence interval is
@@ -194,47 +202,17 @@ The `ifelse` function is new. It takes three arguments: first is a logical state
 second is the value we want if the logical statement yields a true result, and the
 third is the value we want if the logical statement yields a false result.
 
-We now have all the information we need to create the plot, but we need to re-organize
-our data a bit for easy plotting. Specifically, we need to organize the data in a new
-data frame where each row represents one bound, as opposed to one interval. So this
-
-~~~
-     lower    upper capture_mu
-1 1350.540 1544.360        yes
-2 1333.441 1584.425        yes
-3 1412.133 1663.801        yes
-...
-~~~
-
-should instead look like
-
-~~~
-  ci_id ci_bounds capture_mu
-1     1  1350.540        yes
-2     2  1333.441        yes
-3     3  1412.133        yes
-4     1  1544.360        yes
-5     2  1584.425        yes
-6     3  1663.801        yes
-...
-~~~
-
-We can accomplish this using the following:
-
-```{r create-ci-data-for-plot}
-ci_data <- data.frame(ci_id = c(1:50, 1:50),
-                      ci_bounds = c(ci$lower, ci$upper),
-                      capture_mu = c(ci$capture_mu, ci$capture_mu))
-```
-
-And finally we can create the plot using the following:
+We now have all the information we need to create the plot. 
+Note that the `geom_errorbar()` function
+only understands `y` values, and thus we have used the `coord_flip()` function
+to flip the coordinates of the entire plot back to the more familiar vertical 
+orientation. 
 
 ```{r plot-ci}
-qplot(data = ci_data, x = ci_bounds, y = ci_id, 
-      group = ci_id, color = capture_mu) +
-  geom_point(size = 2) +  # add points at the ends, size = 2
-  geom_line() +           # connect with lines
-  geom_vline(xintercept = params$mu, color = "darkgray") # draw vertical line
+qplot(data = ci, x = replicate, y = x_bar, color = capture_mu) +
+  geom_errorbar(aes(ymin = lower, ymax = upper)) + 
+  geom_hline(data = params, aes(yintercept = mu), color = "darkgray") + # draw vertical line
+  coord_flip()
 ```
 
 1.  What proportion of your confidence intervals include the true population mean? Is 
