@@ -178,10 +178,8 @@ Come up with a research question evaluating the relationship between these varia
 Formulate the question in a way that it can be answered using a hypothesis test
 and/or a confidence interval. Answer your question using the `inference` 
 function, report the statistical results, and also provide an explanation in 
-plain language. Be sure to check all assumptions,state your $\alpha$ level, and conclude 
-in context. (Note: Picking your own variables, coming up with a research question,
-and analyzing the data to answer this question is basically what you'll need to do for
-your project as well.)
+plain language. Be sure to check all assumptions, state your $\alpha$ level, and conclude 
+in context.
 
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
