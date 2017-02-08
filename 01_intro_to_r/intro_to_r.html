@@ -257,19 +257,12 @@ div.tocify {
 <p>Any plots that you generate will show up in the panel in the lower right corner. This is also where you can browse your files, access help, manage packages, etc.</p>
 <div id="r-packages" class="section level3">
 <h3>R Packages</h3>
-<p>R is an open-source programming language, meaning that users can contribute packages that make our lives easier, and we can use them for free. For this lab, and many others in the future, we will use the following R packages:</p>
-<ul>
-<li><code>dplyr</code>: for data wrangling</li>
-<li><code>ggplot2</code>: for data visualization</li>
-<li><code>oilabs</code>: for data and custom functions with the OpenIntro labs</li>
-</ul>
+<p>R is an open-source programming language, meaning that users can contribute packages that make our lives easier, and we can use them for free. For this lab, and many others in the future, we will use a suite of R packages that are known as the ‘tidyverse’, as well as a package specifically written to accompany the OpenIntro labs (<code>oilabs</code>).</p>
 <p>If these packages are not already available in your R environment, install them by typing the following three lines of code into the console of your RStudio session, pressing the enter/return key after each one. Note that you can check to see which packages (and which versions) are installed by inspecting the <em>Packages</em> tab in the lower right panel of RStudio.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)
-<span class="kw">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)
 <span class="kw">install.packages</span>(<span class="st">&quot;oilabs&quot;</span>)</code></pre></div>
 <p>You may need to select a server from which to download; any of them will work. Next, you need to load these packages in your working environment. We do this with the <code>library</code> function. Run the following three lines in your console.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(ggplot2)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
 <span class="kw">library</span>(oilabs)</code></pre></div>
 <p>Note that you only need to <em>install</em> packages once, but you need to <em>load</em> them each time you relaunch RStudio.</p>
 </div>
@@ -311,12 +304,12 @@ div.tocify {
 <div id="some-exploration" class="section level2">
 <h2>Some Exploration</h2>
 <p>Let’s start to examine the data a little more closely. We can access the data in a single column of a data frame separately using a command like</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arbuthnot$boys</code></pre></div>
-<p>This command will only show the number of boys baptized each year. The dollar sign basically says “go to the data frame that comes before me, and find the variable that comes after me”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(arbuthnot, boys)</code></pre></div>
+<p>This command will only show the number of boys baptized each year. The select function pulls a variable from the dataset it comes from.</p>
 <ol style="list-style-type: decimal">
 <li>What command would you use to extract just the counts of girls baptized? Try it!</li>
 </ol>
-<p>Notice that the way R has printed these data is different. When we looked at the complete data frame, we saw 82 rows, one on each line of the display. These data are no longer structured in a table with other variables, so they are displayed one right after another. Objects that print out in this way are called <em>vectors</em>; they represent a set of numbers. R has added numbers in [brackets] along the left side of the printout to indicate locations within the vector. For example, 5218 follows [1], indicating that 5218 is the first entry in the vector. And if [43] starts a line, then that would mean the first number on that line would represent the 43rd entry in the vector.</p>
+<p>Notice that the way R has printed these data is different. When we looked at the complete data frame, we saw 82 rows, one on each line of the display. These data are no longer structured in a table with other variables, so they are displayed one right after another. Objects that print out in this way are called <em>vectors</em>; they represent a set of numbers. R has added numbers along the left side of the printout to indicate locations within the vector. For example, 5218 follows 1, indicating that 5218 is the first entry in the vector. And if 43 starts a line, then that would mean the first number on that line would represent the 43rd entry in the vector.</p>
 <div id="data-visualization" class="section level3">
 <h3>Data visualization</h3>
 <p>R has some powerful functions for making graphics. We can create a simple plot of the number of girls baptized per year with the command</p>
@@ -334,25 +327,28 @@ div.tocify {
 <h3>R as a big calculator</h3>
 <p>Now, suppose we want to plot the total number of baptisms. To compute this, we could use the fact that R is really just a big calculator. We can type in mathematical expressions like</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">5218</span> +<span class="st"> </span><span class="dv">4683</span></code></pre></div>
-<p>to see the total number of baptisms in 1629. We could repeat this once for each year, but there is a faster way. If we add the vector for baptisms for boys to that of girls, R will compute all sums simultaneously.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arbuthnot$boys +<span class="st"> </span>arbuthnot$girls</code></pre></div>
-<p>What you will see are 82 numbers (in that packed display, because we aren’t looking at a data frame here), each one representing the sum we’re after. Take a look at a few of them and verify that they are right.</p>
+<p>to see the total number of baptisms in 1629. We could repeat this once for each year, but there is a faster way. If we add the vector for baptisms for boys to that of girls, R will compute all sums simultaneously. To do this, we can use the <code>mutate()</code> function to create a new variable, <code>total</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arbuthnot %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">total =</span> boys +<span class="st"> </span>girls)</code></pre></div>
+<p>The <code>%&gt;%</code> operator is called the <strong>piping</strong> operator. It takes the output of the previous expression and pipes it into the first argument of the function in the following one. To continue our analogy with mathematical functions, <code>x %&gt;% f(y)</code> is equivalent to <code>f(x, y)</code>.</p>
+<div id="boxedtext">
+<p><strong>A note on piping: </strong> Note that we can read these two lines of code as the following:</p>
+<p>*“Take the <code>arbuthnot</code> dataset and <strong>pipe</strong> it into the <code>mutate</code> function. Mutate the <code>arbuthnot</code> data set by creating a new variable called <code>total</code> that is the sum of the variables called <code>boys</code> and <code>girls</code>.*</p>
+<p>This is equivalent to going through each row and adding up the <code>boys</code> and <code>girls</code> counts for that year and recording that value in a new column called <code>total</code>.</p>
+</div>
+<div id="boxedtext">
+<p><strong>Where is the new variable? </strong> If you click on the name of the dataset again to update it in the data viewer, you will notice that it still does not have a column labeled <code>total</code>. This is because we haven’t overwritten the old version of <code>arbuthnot</code>, just tried making a new one to make sure it looked right.</p>
+</div>
 </div>
 <div id="adding-a-new-variable-to-the-data-frame" class="section level3">
 <h3>Adding a new variable to the data frame</h3>
 <p>We’ll be using this new vector to generate some plots, so we’ll want to save it as a permanent column in our data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arbuthnot &lt;-<span class="st"> </span>arbuthnot %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">total =</span> boys +<span class="st"> </span>girls)</code></pre></div>
-<p>The <code>%&gt;%</code> operator is called the <strong>piping</strong> operator. It takes the output of the previous expression and pipes it into the first argument of the function in the following one. To continue our analogy with mathematical functions, <code>x %&gt;% f(y)</code> is equivalent to <code>f(x, y)</code>.</p>
 <div id="boxedtext">
-<p><strong>A note on piping: </strong> Note that we can read these three lines of code as the following:</p>
-<p><em>“Take the <code>arbuthnot</code> dataset and <strong>pipe</strong> it into the <code>mutate</code> function. Mutate the <code>arbuthnot</code> data set by creating a new variable called <code>total</code> that is the sum of the variables called <code>boys</code> and <code>girls</code>. Then assign the resulting dataset to the object called <code>arbuthnot</code>, i.e. overwrite the old <code>arbuthnot</code> dataset with the new one containing the new variable.”</em></p>
-<p>This is equivalent to going through each row and adding up the <code>boys</code> and <code>girls</code> counts for that year and recording that value in a new column called <code>total</code>.</p>
+<p><strong>The assignment operator</strong> This code does much the same thing as the chunk above. However, it “assigns” the resulting dataset to the object called <code>arbuthnot</code>. This means we overwrite the old <code>arbuthnot</code> dataset with the new one containing the new variable.&quot;</p>
 </div>
-<div id="boxedtext">
-<p><strong>Where is the new variable? </strong> When you make changes to variables in your dataset, click on the name of the dataset again to update it in the data viewer.</p>
-</div>
-<p>You’ll see that there is now a new column called <code>total</code> that has been tacked on to the data frame. The special symbol <code>&lt;-</code> performs an <em>assignment</em>, taking the output of one line of code and saving it into an object in your workspace. In this case, you already have an object called <code>arbuthnot</code>, so this command updates that data set with the new mutated column.</p>
+<p>You’ll see that there is now a new column called <code>total</code> that has been tacked on to the data frame. The special symbol <code>&lt;-</code> performs an <em>assignment</em>, taking the output of some code and saving it into an object in your workspace. In this case, you already have an object called <code>arbuthnot</code>, so this command updates that data set with the new mutated column.</p>
 <p>We can make a plot of the total number of baptisms per year with the command</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qplot</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> total, <span class="dt">data =</span> arbuthnot, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>)</code></pre></div>
 <p>Similarly to how we computed the total number of births, we can compute the ratio of the number of boys to the number of girls baptized in 1629 with</p>
@@ -372,12 +368,14 @@ div.tocify {
 <div id="boxedtext">
 <p><strong>Tip: </strong> If you use the up and down arrow keys, you can scroll through your previous commands, your so-called command history. You can also access it by clicking on the history tab in the upper right panel. This will save you a lot of typing in the future.</p>
 </div>
-<p>Finally, in addition to simple mathematical operators like subtraction and division, you can ask R to make comparisons like greater than, <code>&gt;</code>, less than, <code>&lt;</code>, and equality, <code>==</code>. For example, we can ask if boys outnumber girls in each year with the expression</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arbuthnot &lt;-<span class="st"> </span>arbuthnot %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">more_boys =</span> boys &gt;<span class="st"> </span>girls)</code></pre></div>
-<p>This command add a new variable to the <code>arbuthnot</code> dataframe containing the values of either <code>TRUE</code> if that year had more boys than girls, or <code>FALSE</code> if that year did not (the answer may surprise you). This variable contains a different kind of data than we have encountered so far. All other columns in the <code>arbuthnot</code> data frame have values that are numerical (the year, the number of boys and girls). Here, we’ve asked R to create <em>logical</em> data, data where the values are either <code>TRUE</code> or <code>FALSE</code>. In general, data analysis will involve many different kinds of data types, and one reason for using R is that it is able to represent and compute with many of them.</p>
-<hr />
 </div>
+</div>
+<div id="sorting-data" class="section level2">
+<h2>Sorting data</h2>
+<p>Finally, we can use the <code>arrange</code> function to sort the data according to some variable. In this case, we might be interested in the years in the <code>arbuthnot</code> data with the highest totals. If we <code>arrange</code> in <strong>desc</strong>ending order, we can see that information.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arbuthnot %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(total))</code></pre></div>
+<hr />
 </div>
 <div id="more-practice" class="section level2">
 <h2>More Practice</h2>
@@ -388,10 +386,8 @@ div.tocify {
 <li><p>What years are included in this data set? What are the dimensions of the data frame? What are the variable (column) names?</p></li>
 <li><p>How do these counts compare to Arbuthnot’s? Are they of a similar magnitude?</p></li>
 <li><p>Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot’s observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. <em>Hint:</em> You should be able to reuse your code from Ex 3 above, just replace the dataframe name.</p></li>
-<li><p>In what year did we see the most total number of births in the U.S.? <em>Hint:</em> First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the total column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions: <code>arrange</code> (for sorting). We can arrange the data in a descending order with another function: <code>desc</code> (for descending order). Sample code provided below.</p></li>
+<li><p>In what year did we see the most total number of births in the U.S.? <em>Hint:</em> First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the total column.</p></li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">present %&gt;%
-<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(total))</code></pre></div>
 <p>These data come from reports by the Centers for Disease Control. You can learn more about them by bringing up the help file using the command <code>?present</code>.</p>
 <div id="license">
 <p>This is a product of OpenIntro that is released under a <a href="http://creativecommons.org/licenses/by-sa/3.0">Creative Commons Attribution-ShareAlike 3.0 Unported</a>. This lab was adapted for OpenIntro by Andrew Bray and Mine Çetinkaya-Rundel from a lab written by Mark Hansen of UCLA Statistics.</p>

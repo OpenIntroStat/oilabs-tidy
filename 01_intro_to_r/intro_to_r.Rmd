@@ -11,8 +11,7 @@ output:
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 ```
 
@@ -57,11 +56,8 @@ This is also where you can browse your files, access help, manage packages, etc.
 
 R is an open-source programming language, meaning that users can contribute
 packages that make our lives easier, and we can use them for free. For this lab,
-and many others in the future, we will use the following R packages:
-
-- `dplyr`: for data wrangling
-- `ggplot2`: for data visualization
-- `oilabs`: for data and custom functions with the OpenIntro labs
+and many others in the future, we will use a suite of R packages that are known as 
+the 'tidyverse', as well as a package specifically written to accompany the OpenIntro labs (`oilabs`). 
 
 If these packages are not already available in your R environment, 
 install them by typing the following three lines of code into
@@ -70,8 +66,7 @@ Note that you can check to see which packages (and which versions) are installed
 inspecting the *Packages* tab in the lower right panel of RStudio. 
 
 ```{r install-packages, message = FALSE, eval=FALSE}
-install.packages("dplyr")
-install.packages("ggplot2")
+install.packages("tidyverse")
 install.packages("oilabs")
 ```
 
@@ -80,8 +75,7 @@ Next, you need to load these packages in your working environment. We do this wi
 the `library` function. Run the following three lines in your console.
 
 ```{r load-packages, message = FALSE, eval=TRUE}
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 ```
 
@@ -186,24 +180,19 @@ Let's start to examine the data a little more closely. We can access the data in
 a single column of a data frame separately using a command like
 
 ```{r view-boys}
-arbuthnot$boys
+select(arbuthnot, boys)
 ```
 
-This command will only show the number of boys baptized each year. The dollar
-sign basically says "go to the data frame that comes before me, and find the 
-variable that comes after me".
+This command will only show the number of boys baptized each year. The select function pulls
+a variable from the dataset it comes from. 
 
 1. What command would you use to extract just the counts of girls baptized? Try
     it!
     
-Notice that the way R has printed these data is different. When we looked at the
-complete data frame, we saw 82 rows, one on each line of the display. These data
-are no longer structured in a table with other variables, so they are displayed 
-one right after another. Objects that print out in this way are called *vectors*; 
-they represent a set of numbers. R has added numbers in [brackets] along the left
-side of the printout to indicate locations within the vector. For example, 5218 
-follows [1], indicating that 5218 is the first entry in the vector. And if [43] 
-starts a line, then that would mean the first number on that line would represent
+Notice that R has added numbers along the left side of the printout to indicate 
+locations within the vector. For example, 5218 follows 1, indicating that 5218 
+is the first entry in the vector. And if 43 starts a line, then that would 
+mean the first number on that line would represent
 the 43rd entry in the vector.
 
 
@@ -259,15 +248,39 @@ mathematical expressions like
 
 to see the total number of baptisms in 1629. We could repeat this once for each 
 year, but there is a faster way. If we add the vector for baptisms for boys to 
-that of girls, R will compute all sums simultaneously.
+that of girls, R will compute all sums simultaneously. To do this, we can use
+the `mutate()` function to create a new variable, `total`.
 
 ```{r calc-total-bapt-vars}
-arbuthnot$boys + arbuthnot$girls
+arbuthnot %>% 
+  mutate(total = boys + girls)
 ```
 
-What you will see are 82 numbers (in that packed display, because we aren’t 
-looking at a data frame here), each one representing the sum we’re after. Take a
-look at a few of them and verify that they are right.
+The `%>%` operator is called the **piping** 
+operator. It takes the output of the previous expression and pipes it into 
+the first argument of the function in the following one. 
+To continue our analogy with mathematical functions, `x %>% f(y)` is 
+equivalent to `f(x, y)`.
+
+<div id="boxedtext">
+**A note on piping: ** Note that we can read these two lines of code as the following: 
+
+*"Take the `arbuthnot` dataset and **pipe** it into the `mutate` function. 
+Mutate the `arbuthnot` data set by creating a new variable called `total` that is the sum of the variables
+called `boys` and `girls`.*
+
+This is equivalent to going through each row and adding up the `boys` 
+and `girls` counts for that year and recording that value in a new column called
+`total`.
+</div>
+
+<div id="boxedtext">
+**Where is the new variable? ** If you click on the name of the dataset again to update
+it in the data viewer, you will notice that it still does not have a column labeled 
+`total`. This is because we haven't overwritten the old version of `arbuthnot`, just
+tried making a new one to make sure it looked right. 
+</div>
+
 
 ### Adding a new variable to the data frame
 
@@ -279,34 +292,16 @@ arbuthnot <- arbuthnot %>%
   mutate(total = boys + girls)
 ```
 
-The `%>%` operator is called the **piping** 
-operator. It takes the output of the previous expression and pipes it into 
-the first argument of the function in the following one. 
-To continue our analogy with mathematical functions, `x %>% f(y)` is 
-equivalent to `f(x, y)`.
-
 <div id="boxedtext">
-**A note on piping: ** Note that we can read these three lines of code as the following: 
-
-*"Take the `arbuthnot` dataset and **pipe** it into the `mutate` function. 
-Mutate the `arbuthnot` data set by creating a new variable called `total` that is the sum of the variables
-called `boys` and `girls`. Then assign the resulting dataset to the object
-called `arbuthnot`, i.e. overwrite the old `arbuthnot` dataset with the new one
-containing the new variable."*
-
-This is equivalent to going through each row and adding up the `boys` 
-and `girls` counts for that year and recording that value in a new column called
-`total`.
-</div>
-
-<div id="boxedtext">
-**Where is the new variable? ** When you make changes to variables in your dataset, 
-click on the name of the dataset again to update it in the data viewer.
+**The assignment operator** This code does much the same thing as the chunk above. 
+However, it "assigns" the resulting dataset to the object called `arbuthnot`.
+This means we overwrite the old `arbuthnot` dataset with the new one
+containing the new variable."
 </div>
 
 You'll see that there is now a new column called `total` that has been tacked on
 to the data frame. The special symbol `<-` performs an *assignment*, taking the 
-output of one line of code and saving it into an object in your workspace. In 
+output of some code and saving it into an object in your workspace. In 
 this case, you already have an object called `arbuthnot`, so this command updates
 that data set with the new mutated column.
 
@@ -354,25 +349,18 @@ by clicking on the history tab in the upper right panel. This will save
 you a lot of typing in the future.
 </div>
 
-Finally, in addition to simple mathematical operators like subtraction and 
-division, you can ask R to make comparisons like greater than, `>`, less than,
-`<`, and equality, `==`. For example, we can ask if boys outnumber girls in each 
-year with the expression
+## Sorting data
 
-```{r boys-more-than-girls}
-arbuthnot <- arbuthnot %>%
-  mutate(more_boys = boys > girls)
+Finally, we can use the `arrange` function to sort the data according to some variable. 
+In this case, we might be interested in the years in the `arbuthnot` data with the highest
+totals. If we `arrange` in **desc**ending order, we can see that information. 
+
+
+```{r arrange}
+arbuthnot %>%
+  arrange(desc(total))
 ```
 
-This command add a new variable to the `arbuthnot` dataframe containing the values
-of either `TRUE` if that year had more boys than girls, or `FALSE` if that year 
-did not (the answer may surprise you). This variable contains a different kind of 
-data than we have encountered so far. All other columns in the `arbuthnot` data 
-frame have values that are numerical (the year, the number of boys and girls). Here, 
-we've asked R to create *logical* data, data where the values are either `TRUE` 
-or `FALSE`. In general, data analysis will involve many different kinds of data 
-types, and one reason for using R is that it is able to represent and compute 
-with many of them.
 
 * * *
 
@@ -401,17 +389,9 @@ The data are stored in a data frame called `present`.
 
 7.  In what year did we see the most total number of births in the U.S.? *Hint:*
     First calculate the totals and save it as a new variable. Then, sort your
-    dataset in descending order based on the total column. You can do this
-    interactively in the data viewer by clicking on the arrows next to the 
-    variable names. To include the sorted result in your report you will need 
-    to use two new functions: `arrange` (for sorting). We can arrange the data 
-    in a descending order with another function: `desc` (for descending order).
-    Sample code provided below.
+    dataset in descending order based on the total column. 
     
-```{r eval=FALSE}
-present %>%
-  arrange(desc(total))
-```
+
 
 These data come from reports by the Centers for Disease Control. You can learn more about them
 by bringing up the help file using the command `?present`.
