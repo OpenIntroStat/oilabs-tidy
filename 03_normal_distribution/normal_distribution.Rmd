@@ -94,7 +94,7 @@ qplot(x = hgt, data = fdims, geom = "blank") +
   stat_function(fun = dnorm, args = c(mean = fhgtmean, sd = fhgtsd), col = "tomato")
 ```
 
-After initializing a blank plot with the first command, the `ggplot2` package
+After initializing a blank plot with the first command, the ggplot2 package
 allows us to add additional layers. The first layer is a density histogram. The
 second layer is a statistical function -- the density of the normal curve, `dnorm`.
 We specify that we want the curve to have the same mean and standard deviation 
