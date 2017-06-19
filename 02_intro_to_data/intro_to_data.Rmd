@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r global-options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 library(dplyr)
 library(ggplot2)
 library(oilabs)
@@ -30,9 +30,9 @@ processing and subsetting.
 
 ### Load packages
 
-In this lab we will explore the data using the `dplyr` package and visualize it 
-using the `ggplot2` package for data visualization. The data can be found in the
-companion package for OpenIntro labs, `oilabs`.
+In this lab we will explore the data using the dplyr package and visualize it 
+using the ggplot2 package for data visualization. The data can be found in the
+companion package for OpenIntro labs, oilabs.
 
 Let's load the packages.
 
@@ -126,7 +126,7 @@ departing flights?
 
 ### Lab report
 To record your analysis in a reproducible format, you can adapt the general Lab 
-Report template from the `oilabs` package. Watch the video above to learn how.
+Report template from the oilabs package. Watch the video above to learn how.
 
 ### Departure delays
 
