@@ -85,8 +85,12 @@ library(ggplot2)
 library(oilabs)
 ```
 
-Note that you only need to *install* packages once, but you need to *load* 
+You only need to *install* packages once, but you need to *load* 
 them each time you relaunch RStudio. 
+
+Note that `dplyr` and `ggplot2` are part of a collection of R packages called
+the *tidyverse*. These packages share common philosophies and are designed to 
+work together. You can find more about the packages in the tidyverse at http://tidyverse.org/.
 
 
 ### Creating a reproducible lab report
@@ -163,7 +167,8 @@ think of them as the index that you see on the left side of a spreadsheet. In
 fact, the comparison to a spreadsheet will generally be helpful. R has stored 
 Arbuthnot's data in a kind of spreadsheet or table called a *data frame*.
 
-You can see the dimensions of this data frame as well as the names of the variables and the first few observations by typing:
+You can see the dimensions of this data frame as well as the names of the variables 
+and the first few observations by typing:
 
 ```{r glimpse-data}
 glimpse(arbuthnot)
@@ -408,7 +413,7 @@ The data are stored in a data frame called `present`.
     in a descending order with another function: `desc` (for descending order).
     Sample code provided below.
     
-```{r eval=FALSE}
+```{r sample-arrange, eval=FALSE}
 present %>%
   arrange(desc(total))
 ```
@@ -438,9 +443,9 @@ of googling "scatterplot in R", google "scatterplot in R with ggplot2".
 
 These cheatsheets may come in handy throughout the semester:
 
-- [RMarkdown cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
-- [Data wrangling cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
-- [Data visualization cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf)
+- [RMarkdown cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)
+- [Data transformation cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf)
+- [Data visualization cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
 
 The book titled "Getting used to R, RStudio, and R Markdown" by Chester Ismay, which can be freely accessed [here](https://ismayc.github.io/rbasics-book), is also a wonderful resource for for new users of R, RStudio, and R Markdown. It includes examples showing working with R Markdown files in RStudio recorded as GIFs.
 
