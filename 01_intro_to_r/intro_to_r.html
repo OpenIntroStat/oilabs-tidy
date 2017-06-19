@@ -260,9 +260,9 @@ div.tocify {
 <h3>R Packages</h3>
 <p>R is an open-source programming language, meaning that users can contribute packages that make our lives easier, and we can use them for free. For this lab, and many others in the future, we will use the following R packages:</p>
 <ul>
-<li><code>dplyr</code>: for data wrangling</li>
-<li><code>ggplot2</code>: for data visualization</li>
-<li><code>oilabs</code>: for data and custom functions with the OpenIntro labs</li>
+<li><em>dplyr</em>: for data wrangling</li>
+<li><em>ggplot2</em>: for data visualization</li>
+<li><em>oilabs</em>: for data and custom functions with the OpenIntro labs</li>
 </ul>
 <p>If these packages are not already available in your R environment, install them by typing the following three lines of code into the console of your RStudio session, pressing the enter/return key after each one. Note that you can check to see which packages (and which versions) are installed by inspecting the <em>Packages</em> tab in the lower right panel of RStudio.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)
@@ -272,7 +272,8 @@ div.tocify {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(oilabs)</code></pre></div>
-<p>Note that you only need to <em>install</em> packages once, but you need to <em>load</em> them each time you relaunch RStudio.</p>
+<p>You only need to <em>install</em> packages once, but you need to <em>load</em> them each time you relaunch RStudio.</p>
+<p>Note that dplyr and ggplot2 are part of a collection of R packages called the <em>tidyverse</em>. These packages share common philosophies and are designed to work together. You can find more about the packages in the tidyverse at <a href="http://tidyverse.org/" class="uri">http://tidyverse.org/</a>.</p>
 </div>
 <div id="creating-a-reproducible-lab-report" class="section level3">
 <h3>Creating a reproducible lab report</h3>
@@ -402,12 +403,12 @@ div.tocify {
 <div id="resources-for-learning-r-and-working-in-rstudio" class="section level2">
 <h2>Resources for learning R and working in RStudio</h2>
 <p>That was a short introduction to R and RStudio, but we will provide you with more functions and a more complete sense of the language as the course progresses.</p>
-<p>In this course we will be using R packages called <code>dplyr</code> for data wrangling and <code>ggplot2</code> for data visualization. If you are googling for R code, make sure to also include these package names in your search query. For example, instead of googling “scatterplot in R”, google “scatterplot in R with ggplot2”.</p>
+<p>In this course we will be using R packages called dplyr for data wrangling and ggplot2 for data visualization. If you are googling for R code, make sure to also include these package names in your search query. For example, instead of googling “scatterplot in R”, google “scatterplot in R with ggplot2”.</p>
 <p>These cheatsheets may come in handy throughout the semester:</p>
 <ul>
-<li><a href="http://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">RMarkdown cheatsheet</a></li>
-<li><a href="http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Data wrangling cheatsheet</a></li>
-<li><a href="http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf">Data visualization cheatsheet</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">RMarkdown cheatsheet</a></li>
+<li><a href="https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf">Data transformation cheatsheet</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf">Data visualization cheatsheet</a></li>
 </ul>
 <p>The book titled “Getting used to R, RStudio, and R Markdown” by Chester Ismay, which can be freely accessed <a href="https://ismayc.github.io/rbasics-book">here</a>, is also a wonderful resource for for new users of R, RStudio, and R Markdown. It includes examples showing working with R Markdown files in RStudio recorded as GIFs.</p>
 <p>Note that some of the code on these cheatsheets may be too advanced for this course, however majority of it will become useful throughout the semester.</p>

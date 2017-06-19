@@ -59,9 +59,9 @@ R is an open-source programming language, meaning that users can contribute
 packages that make our lives easier, and we can use them for free. For this lab,
 and many others in the future, we will use the following R packages:
 
-- `dplyr`: for data wrangling
-- `ggplot2`: for data visualization
-- `oilabs`: for data and custom functions with the OpenIntro labs
+- *dplyr*: for data wrangling
+- *ggplot2*: for data visualization
+- *oilabs*: for data and custom functions with the OpenIntro labs
 
 If these packages are not already available in your R environment, 
 install them by typing the following three lines of code into
@@ -88,7 +88,7 @@ library(oilabs)
 You only need to *install* packages once, but you need to *load* 
 them each time you relaunch RStudio. 
 
-Note that `dplyr` and `ggplot2` are part of a collection of R packages called
+Note that dplyr and ggplot2 are part of a collection of R packages called
 the *tidyverse*. These packages share common philosophies and are designed to 
 work together. You can find more about the packages in the tidyverse at http://tidyverse.org/.
 
@@ -436,8 +436,8 @@ from a lab written by Mark Hansen of UCLA Statistics.
 That was a short introduction to R and RStudio, but we will provide you with more
 functions and a more complete sense of the language as the course progresses. 
 
-In this course we will be using R packages called `dplyr` for data wrangling 
-and `ggplot2` for data visualization. If you are googling for R code, make sure
+In this course we will be using R packages called dplyr for data wrangling 
+and ggplot2 for data visualization. If you are googling for R code, make sure
 to also include these package names in your search query. For example, instead
 of googling "scatterplot in R", google "scatterplot in R with ggplot2".
 
