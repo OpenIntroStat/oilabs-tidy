@@ -284,9 +284,6 @@ shinyApp(
         matrix(ncol = input$n_samp) %>%
         rowMeans() %>%
         data.frame(x_bar = .)
-      #ames %>%
-      #  rep_sample_n(size = input$n_samp, reps = input$n_sim, replace = TRUE) %>%
-      #  summarise_(x_bar = mean(input$selected_var))
     })
     
     # plot sampling distribution
