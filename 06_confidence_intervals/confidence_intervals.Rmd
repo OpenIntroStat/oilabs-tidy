@@ -35,9 +35,9 @@ is new to you, review the lab concerning probability.
 
 ### Load packages
 
-In this lab we will explore the data using the `dplyr` package and visualize it 
-using the `ggplot2` package for data visualization. The data can be found in the
-companion package for the OpenIntro labs, `oilabs`.
+In this lab we will explore the data using the dplyr package and visualize it 
+using the ggplot2 package for data visualization. The data can be found in the
+companion package for the OpenIntro labs, oilabs.
 
 Let's load the packages.
 
