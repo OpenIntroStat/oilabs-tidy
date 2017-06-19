@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 library(dplyr)
 library(ggplot2)
 library(oilabs)
@@ -36,9 +36,9 @@ data in order to determine if the hot hand phenomenon appears to be real.
 
 ### Load packages
 
-In this lab we will explore the data using the `dplyr` package and visualize it 
-using the `ggplot2` package for data visualization. The data can be found in the
-companion package for OpenIntro labs, `oilabs`.
+In this lab we will explore the data using the dplyr package and visualize it 
+using the ggplot2 package for data visualization. The data can be found in the
+companion package for OpenIntro labs, oilabs.
 
 Let's load the packages.
 
@@ -50,7 +50,7 @@ library(oilabs)
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `oilabs` package. 
+To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the oilabs package. 
 
 ### Data
 
