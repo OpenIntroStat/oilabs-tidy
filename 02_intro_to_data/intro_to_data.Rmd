@@ -80,7 +80,7 @@ names(nycflights)
 This returns the names of the variables in this data frame. The **codebook**
 (description of the variables) can be accessed by pulling up the help file:
 
-```{r}
+```{r help}
 ?nycflights
 ```
 
@@ -223,7 +223,7 @@ returns a single value.
 We can also filter based on multiple criteria. Suppose we are interested in
 flights headed to San Francisco (SFO) in February:
 
-```{r}
+```{r sfo-feb-flights}
 sfo_feb_flights <- nycflights %>%
   filter(dest == "SFO", month == 2)
 ```
@@ -324,9 +324,9 @@ for 5 or more minutes.
 Note that we are also overwriting the `nycflights` data frame with the new 
 version of this data frame that includes the new `dep_type` variable.
 
-We can handle all the remaining steps in one code chunk:
+We can handle all of the remaining steps in one code chunk:
 
-```{r}
+```{r ot-dep-rate}
 nycflights %>%
   group_by(origin) %>%
   summarise(ot_dep_rate = sum(dep_type == "on time") / n()) %>%
@@ -339,7 +339,7 @@ nycflights %>%
 We can also visualize the distribution of on on time departure rate across 
 the three airports using a segmented bar plot.
 
-```{r}
+```{r viz-origin-dep-type}
 qplot(x = origin, fill = dep_type, data = nycflights, geom = "bar")
 ```
 
@@ -362,7 +362,7 @@ qplot(x = origin, fill = dep_type, data = nycflights, geom = "bar")
     the plot, determine (roughly) what the cutoff point is for departure
     delays where you can still expect to get to your destination on time.
 
-```{r echo=FALSE, eval=TRUE, fig.width=7, fig.height=4}
+```{r plot-to-replicate, echo=FALSE, eval=TRUE, fig.width=7, fig.height=4}
 dl_aa_ua <- nycflights %>%
   filter(carrier == "AA" | carrier == "DL" | carrier == "UA")
 qplot(x = dep_delay, y = arr_delay, data = dl_aa_ua, color = carrier)
