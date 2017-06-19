@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 library(dplyr)
 library(ggplot2)
 library(oilabs)
@@ -442,9 +442,7 @@ These cheatsheets may come in handy throughout the semester:
 - [Data wrangling cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 - [Data visualization cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf)
 
-Chester Ismay has put together a resource for new users of R, RStudio, and R Markdown
-[here](https://ismayc.github.io/rbasics-book).  It includes examples showing working with R Markdown files
-in RStudio recorded as GIFs.
+The book titled "Getting used to R, RStudio, and R Markdown" by Chester Ismay, which can be freely accessed [here](https://ismayc.github.io/rbasics-book), is also a wonderful resource for for new users of R, RStudio, and R Markdown. It includes examples showing working with R Markdown files in RStudio recorded as GIFs.
 
 Note that some of the code on these cheatsheets may be too advanced for this course,
 however majority of it will become useful throughout the semester.
