@@ -1,4 +1,4 @@
-OpenIntro Labs - dplyr and ggplot2
+OpenIntro Labs - tidyverse
 ==============
 
 OpenIntro Labs promote the understanding and application of statistics through 
@@ -8,7 +8,8 @@ open-source textbook. The textbook as well as the html version of the labs can
 be found at [http://www.openintro.org/stat/labs.php](http://www.openintro.org/stat/labs.php).
 
 This repository is a fork of the original base-R labs. It incoperates 
-the 'tidyverse' syntax from the `dplyr` package, and `ggplot` graphics. 
+the 'tidyverse' syntax from the `dplyr` package for data maniplation, the `ggplot2` 
+package for graphics, and the `infer` package for statistical inference.
 
 We currently support our source files in the RMarkdown (.Rmd) format, which can be output into
 html format (though output to pdf is also possible). The source files are processed
