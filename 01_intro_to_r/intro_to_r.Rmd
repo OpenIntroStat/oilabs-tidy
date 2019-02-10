@@ -218,9 +218,8 @@ R has some powerful functions for making graphics. We can create a simple plot
 of the number of girls baptized per year with the command
 
 ```{r plot-girls-vs-year}
-qplot(x = year, y = girls, data = arbuthnot)
-
-ggplot(data = arbuthnot, aes(x = year, y = girls)) + geom_point()
+ggplot(data = arbuthnot, aes(x = year, y = girls)) + 
+  geom_point()
 ```
 
 
@@ -241,7 +240,8 @@ For instance, if you wanted to visualize the above plot using a line graph, you
 would replace `geom_point()` with `geom_line()`.
 
 ```{r plot-girls-vs-year-line}
-ggplot(data = arbuthnot, aes(x = year, y = girls)) + geom_line()
+ggplot(data = arbuthnot, aes(x = year, y = girls)) + 
+  geom_line()
 ```
 
 You might wonder how you are supposed to know the syntax for the `ggplot` 
@@ -329,7 +329,8 @@ You can make a line plot of the total number of baptisms per year with the
 command
 
 ```{r plot-total-vs-year}
-ggplot(data = arbuthnot, aes(x = year, y = total)) + geom_line()
+ggplot(data = arbuthnot, aes(x = year, y = total)) + 
+  geom_line()
 ```
 
 Similarly to you we computed the total number of births, you can compute the
