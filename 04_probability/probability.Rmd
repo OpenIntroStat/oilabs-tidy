@@ -36,9 +36,9 @@ data in order to determine if the hot hand phenomenon appears to be real.
 
 ### Load packages
 
-In this lab we will explore the data using the dplyr package and visualize it 
-using the ggplot2 package for data visualization. The data can be found in the
-companion package for OpenIntro labs, oilabs.
+In this lab, you will explore the data using the `dplyr` package and visualize it 
+using the `ggplot2` package for data visualization. The data can be found in the
+companion package for OpenIntro labs, `oilabs`.
 
 Let's load the packages.
 
@@ -50,11 +50,11 @@ library(oilabs)
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the oilabs package. 
+To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `oilabs` package. 
 
 ### Data
 
-Our investigation will focus on the performance of one player: [Kobe Bryant](https://en.wikipedia.org/wiki/Kobe_Bryant) of 
+Your investigation will focus on the performance of one player: [Kobe Bryant](https://en.wikipedia.org/wiki/Kobe_Bryant) of 
 the Los Angeles Lakers. His performance against the Orlando Magic in the [2009 
 NBA Finals](https://en.wikipedia.org/wiki/2009_NBA_Finals) earned him the title *Most Valuable Player* and many spectators 
 commented on how he appeared to show a hot hand. Let's load some necessary files
@@ -79,7 +79,7 @@ his nine shot attempts in the first quarter:
 
 \[ \textrm{H M | M | H H M | M | M | M} \]
 
-You can verify this by viewing the first 8 rows of the data in the data viewer.
+You can verify this by viewing the first 9 rows of the data in the data viewer.
 
 Within the nine shot attempts, there are six streaks, which are separated by a 
 "|" above. Their lengths are one, zero, two, zero, zero, zero (in order of 
@@ -99,7 +99,8 @@ kobe_streak <- calc_streak(kobe_basket$shot)
 We can then take a look at the distribution of these streak lengths.
 
 ```{r plot-streak-kobe}
-qplot(data = kobe_streak, x = length, geom = "bar")
+ggplot(data = kobe_streak, aes(x = length)) +
+  geom_bar()
 ```
 
 2.  Describe the distribution of Kobe's streak lengths from the 2009 NBA finals. 
@@ -221,13 +222,13 @@ set.seed(35797)                 # make sure to change the seed
 ```
 The number above is completely arbitraty. If you need inspiration, you can use your
 ID, birthday, or just a random string of numbers. The important thing is that you
-use each seed only once. Remember to do this **before** you sample in the exercise 
-above.
+use each seed only once in a document. Remember to do this **before** you sample
+in the exercise above.
 </div>
 
 In a sense, we've shrunken the size of the slip of paper that says "heads", 
-making it less likely to be drawn and we've increased the size of the slip of 
-paper saying "tails", making it more likely to be drawn. When we simulated the 
+making it less likely to be drawn, and we've increased the size of the slip of 
+paper saying "tails", making it more likely to be drawn. When you simulated the 
 fair coin, both slips of paper were the same size. This happens by default if 
 you don't provide a `prob` argument; all elements in the `outcomes` vector have 
 an equal probability of being drawn.
@@ -242,16 +243,16 @@ can always check out its help file.
 ## Simulating the Independent Shooter
 
 Simulating a basketball player who has independent shots uses the same mechanism 
-that we use to simulate a coin flip. To simulate a single shot from an 
-independent shooter with a shooting percentage of 50% we type,
+that you used to simulate a coin flip. To simulate a single shot from an 
+independent shooter with a shooting percentage of 50% you can type
 
 ```{r sim-basket}
 shot_outcomes <- c("H", "M")
 sim_basket <- sample(shot_outcomes, size = 1, replace = TRUE)
 ```
 
-To make a valid comparison between Kobe and our simulated independent shooter, 
-we need to align both their shooting percentage and the number of attempted shots.
+To make a valid comparison between Kobe and your simulated independent shooter, 
+you need to align both their shooting percentage and the number of attempted shots.
 
 4.  What change needs to be made to the `sample` function so that it reflects a 
     shooting percentage of 45%? Make this adjustment, then run a simulation to 
@@ -263,7 +264,7 @@ the previous vector reflecting a shooting percentage of 50%. In this situation,
 R overwrites the old object with the new one, so always make sure that you don't
 need the information in an old vector before reassigning its name.
 
-With the results of the simulation saved as `sim_basket`, we have the data 
+With the results of the simulation saved as `sim_basket`, you have the data 
 necessary to compare Kobe to our independent shooter.
 
 Both data sets represent the results of 133 shot attempts, each with the same 
