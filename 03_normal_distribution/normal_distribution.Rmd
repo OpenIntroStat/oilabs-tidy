@@ -13,15 +13,15 @@ output:
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-In this lab we'll investigate the probability distribution that is most central
-to statistics: the normal distribution.  If we are confident that our data are 
+In this lab you'll investigate the probability distribution that is most central
+to statistics: the normal distribution.  If you are confident that your data are 
 nearly normal, that opens the door to many powerful statistical methods.  Here 
 we'll use the graphical tools of R to assess the normality of our data and also 
 learn how to generate random numbers from a normal distribution.
 
 ## The Data
 
-This week we'll be working with measurements of body dimensions.  This data set 
+This week you'll be working with measurements of body dimensions.  This data set 
 contains measurements from 247 men and 260 women, most of whom were considered 
 healthy young adults. Let's take a quick peek at the first few rows of the data.
 
@@ -33,15 +33,15 @@ data(bdims)
 head(bdims)
 ```
 
-You'll see that for every observation we have 25 measurements, many of which are
-either diameters or girths.  You can learn about what the variable names mean by
-bringing up the help page.
+You'll see that for every observation there are 25 measurements, many of which are
+either diameters or girths.  You can learn more about the variables by bringing 
+up their help page.
 
 ```{r help-bdims}
 ?bdims
 ```
 
-We'll be focusing on just three columns to get started: weight in kg (`wgt`), 
+You'll be focusing on just three columns to get started: weight in kg (`wgt`), 
 height in cm (`hgt`), and `sex` (`m` indicates male, `f` indicates female).
 
 Since males and females tend to have different body dimensions, it will be 
@@ -50,9 +50,9 @@ only women.
 
 ```{r male-female}
 mdims <- bdims %>%
-  filter(sex == "m")
+  filter(sex == 1)
 fdims <- bdims %>%
-  filter(sex == "f")
+  filter(sex == 0)
 ```
 
 1.  Make a plot (or plots) to visualize the distributions of men's and women's heights.  
@@ -64,10 +64,10 @@ In your description of the distributions, did you use words like *bell-shaped*
 or *normal*?  It's tempting to say so when faced with a unimodal symmetric 
 distribution.
 
-To see how accurate that description is, we can plot a normal distribution curve 
+To see how accurate that description is, you can plot a normal distribution curve 
 on top of a histogram to see how closely the data follow a normal distribution. 
 This normal curve should have the same mean and standard deviation as the data. 
-We'll be working with women's heights, so let's store them as a separate object 
+You'll be focusing on women's heights, so let's store them as a separate object 
 and then calculate some statistics that will be referenced later. 
 
 ```{r female-hgt-mean-sd}
@@ -75,7 +75,7 @@ fhgtmean <- mean(fdims$hgt)
 fhgtsd   <- sd(fdims$hgt)
 ```
 
-Next we make a density histogram to use as the backdrop and use the `lines` 
+Next, you make a density histogram to use as the backdrop and use the `lines` 
 function to overlay a normal probability curve. The difference between a 
 frequency histogram and a density histogram is that while in a frequency 
 histogram the *heights* of the bars add up to the total number of observations, 
@@ -89,12 +89,13 @@ comparing the frequency histogram you constructed earlier and the density
 histogram created by the commands below.
 
 ```{r hist-height}
-qplot(x = hgt, data = fdims, geom = "blank") +
-  geom_histogram(aes(y = ..density..)) +
-  stat_function(fun = dnorm, args = c(mean = fhgtmean, sd = fhgtsd), col = "tomato")
+ggplot(data = fdims, aes(x = hgt)) +
+        geom_blank() +
+        geom_histogram(aes(y = ..density..)) +
+        stat_function(fun = dnorm, args = c(mean = fhgtmean, sd = fhgtsd), col = "tomato")
 ```
 
-After initializing a blank plot with the first command, the ggplot2 package
+After initializing a blank plot with `geom_blank()`, the `ggplot2` package
 allows us to add additional layers. The first layer is a density histogram. The
 second layer is a statistical function -- the density of the normal curve, `dnorm`.
 We specify that we want the curve to have the same mean and standard deviation 
@@ -114,19 +115,24 @@ constructing a normal probability plot, also called a normal Q-Q plot for
 "quantile-quantile".
 
 ```{r qq}
-qplot(sample = hgt, data = fdims, geom = "qq")
+ggplot(data = fdims, aes(sample = hgt)) + 
+  geom_line(stat = "qq")
 ```
+
+This time, you can use the `geom_line()` layer, while specifying that you will 
+be creating a Q-Q plot with the `stat` argument. It's important to note that here,
+instead of using `x` instead `aes()`, you need to use `sample`.
 
 The x-axis values correspond to the quantiles of a theoretically normal curve 
 with mean 0 and standard deviation 1 (i.e., the standard normal distribution).  The 
 y-axis values correspond to the quantiles of the original unstandardized sample 
 data. However, even if we were to standardize the sample data values, the Q-Q
 plot would look identical. A data set that is nearly normal will result in a
-probability plot where the points closely follow a diagonal line.  Any deviations from
-normality leads to deviations of these points from that line.
+probability plot where the points closely follow a diagonal line.  Any deviations
+from normality leads to deviations of these points from that line.
 
 The plot for female heights shows points that tend to follow the line but with
-some errant points towards the tails.  We're left with the same problem that we
+some errant points towards the tails.  You're left with the same problem that we
 encountered with the histogram above: how close is close enough?
 
 A useful way to address this question is to rephrase it as: what do probability 
@@ -141,7 +147,7 @@ The first argument indicates how many numbers you'd like to generate, which we
 specify to be the same number of heights in the `fdims` data set using the 
 `nrow()` function.  The last two arguments determine the mean and standard 
 deviation of the normal distribution from which the simulated sample will be 
-generated.  We can take a look at the shape of our simulated data set, `sim_norm`, 
+generated.  You can take a look at the shape of our simulated data set, `sim_norm`, 
 as well as its normal probability plot.
 
 3.  Make a normal probability plot of `sim_norm`.  Do all of the points fall on 
@@ -169,10 +175,10 @@ qqnormsim(sample = hgt, data = fdims)
 ## Normal probabilities
 
 Okay, so now you have a slew of tools to judge whether or not a variable is 
-normally distributed.  Why should we care?
+normally distributed.  Why should you care?
 
 It turns out that statisticians know a lot about the normal distribution.  Once 
-we decide that a random variable is approximately normal, we can answer all 
+you decide that a random variable is approximately normal, you can answer all 
 sorts of questions about that variable related to probability.  Take, for 
 example, the question of, "What is the probability that a randomly chosen young 
 adult female is taller than 6 feet (about 182 cm)?" (The study that published
