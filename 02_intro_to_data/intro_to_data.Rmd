@@ -103,11 +103,11 @@ is coded according to the following system.
     + `YV`:          Mesa Airlines Inc.
 
 
-A very useful function for taking a quick peek at your data frame and viewing
-its dimensions and data types is `str`, which stands for **str**ucture.
+Remember that you can use `glimpse` to take a quick peek at your data to 
+understand its contents better.
 
-```{r str}
-str(nycflights)
+```{r glimpse}
+glimpse(nycflights)
 ```
 
 The `nycflights` data frame is a massive trove of information. Let's think about 
