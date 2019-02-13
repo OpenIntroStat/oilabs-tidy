@@ -46,7 +46,7 @@ and interpreting the output. These commands and their syntax have evolved over
 decades (literally) and now provide what many users feel is a fairly natural way
 to access data and organize, describe, and invoke statistical computations.
 
-The panel in the upper right contains your *workspace* as well as a history of 
+The panel in the upper right contains your *environment* as well as a history of 
 the commands that you've previously entered. 
 
 Any plots that you generate will show up in the panel in the lower right corner. 
@@ -126,7 +126,7 @@ corner of the pane, or
 
 This command instructs R to load some data: 
 the Arbuthnot baptism counts for boys and girls. You should see that the 
-workspace area in the upper righthand corner of the RStudio window now lists a 
+environment area in the upper righthand corner of the RStudio window now lists a 
 data set called `arbuthnot` that has 82 observations on 3 variables. As you 
 interact with R, you will create a series of objects. Sometimes you load them as
 we have done here, and sometimes you create them yourself as the byproduct of a 
@@ -145,7 +145,7 @@ arbuthnot
 However, printing the whole dataset in the console is not that useful. 
 One advantage of RStudio is that it comes with a built-in data viewer. Click on
 the name `arbuthnot` in the *Environment* pane (upper right window) that lists 
-the objects in your workspace. This will bring up an alternative display of the 
+the objects in your environment. This will bring up an alternative display of the 
 data set in the *Data Viewer* (upper left window). You can close the data viewer
 by clicking on the `x` in the upper lefthand corner.
 
@@ -168,6 +168,9 @@ and the first few observations by typing:
 ```{r glimpse-data}
 glimpse(arbuthnot)
 ```
+
+It is better practice to type this command into your console, since it is not 
+necessary code to include in your solution file.
 
 This command should output the following
 
@@ -316,7 +319,7 @@ click on the name of the dataset again to update it in the data viewer.
 
 You'll see that there is now a new column called `total` that has been tacked on
 to the data frame. The special symbol `<-` performs an *assignment*, taking the 
-output of one line of code and saving it into an object in your workspace. In 
+output of one line of code and saving it into an object in your environment. In 
 this case, you already have an object called `arbuthnot`, so this command updates
 that data set with the new mutated column.
 
@@ -401,6 +404,18 @@ data(present)
 ```
 
 The data are stored in a data frame called `present`.
+
+To find the minimum and maximum values of columns, you can use the functions
+`min` and `max` within a `summarize()` call, which you will learn more 
+about in the following lab. Here's an example of how to find the minimum and 
+maximum amount of boy births in a year:
+
+```{r summarize min and max}
+arbuthnot %>%
+  summarize(min = min(boys), max = max(boys))
+```
+
+
 
 4.  What years are included in this data set? What are the dimensions of the 
     data frame? What are the variable (column) names?
