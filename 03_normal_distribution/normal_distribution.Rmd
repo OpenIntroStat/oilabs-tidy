@@ -25,6 +25,8 @@ This week you'll be working with measurements of body dimensions.  This data set
 contains measurements from 247 men and 260 women, most of whom were considered 
 healthy young adults. Let's take a quick peek at the first few rows of the data.
 
+Either you can use `glimpse` like before, or `head` to do this.
+
 ```{r load-data}
 library(tidyverse)
 library(oilabs)
