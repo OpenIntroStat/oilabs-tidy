@@ -369,6 +369,6 @@ ggplot(data = nycflights, aes(x = origin, fill = dep_type)) +
 ```{r plot-to-replicate, echo=FALSE, eval=TRUE, fig.width=7, fig.height=4}
 dl_aa_ua <- nycflights %>%
   filter(carrier == "AA" | carrier == "DL" | carrier == "UA")
-ggplot(data = dl_aa_ua, aes(x = dep_delay, y = arr_delay, color = carrer)) +
+ggplot(data = dl_aa_ua, aes(x = dep_delay, y = arr_delay, color = carrier)) +
   geom_point()
 ```

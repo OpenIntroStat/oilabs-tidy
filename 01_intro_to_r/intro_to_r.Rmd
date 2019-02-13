@@ -11,8 +11,7 @@ output:
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 ```
 
@@ -59,8 +58,7 @@ R is an open-source programming language, meaning that users can contribute
 packages that make our lives easier, and we can use them for free. For this lab,
 and many others in the future, we will use the following R packages:
 
-- *dplyr*: for data wrangling
-- *ggplot2*: for data visualization
+- The suite of *tidyverse* packages: for data wrangling and data visualization
 - *oilabs*: for data and custom functions with the OpenIntro labs
 
 If these packages are not already available in your R environment, 
@@ -70,8 +68,7 @@ Note that you can check to see which packages (and which versions) are installed
 inspecting the *Packages* tab in the lower right panel of RStudio. 
 
 ```{r install-packages, message = FALSE, eval=FALSE}
-install.packages("dplyr")
-install.packages("ggplot2")
+install.packages("tidyverse")
 install.packages("oilabs")
 ```
 
@@ -80,16 +77,14 @@ Next, you need to load these packages in your working environment. We do this wi
 the `library` function. Run the following three lines in your console.
 
 ```{r load-packages, message = FALSE, eval=TRUE}
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 ```
 
 You only need to *install* packages once, but you need to *load* 
 them each time you relaunch RStudio. 
 
-Note that *dplyr* and *ggplot2* are part of a collection of R packages called
-the *tidyverse*. These packages share common philosophies and are designed to 
+The Tidyverse packages share common philosophies and are designed to 
 work together. You can find more about the packages in the tidyverse at http://tidyverse.org/.
 
 
@@ -449,10 +444,10 @@ from a lab written by Mark Hansen of UCLA Statistics.
 That was a short introduction to R and RStudio, but we will provide you with more
 functions and a more complete sense of the language as the course progresses. 
 
-In this course we will be using R packages called *dplyr* for data wrangling 
-and *ggplot2* for data visualization. If you are googling for R code, make sure
-to also include these package names in your search query. For example, instead
-of googling "scatterplot in R", google "scatterplot in R with ggplot2".
+In this course we will be using the suite of R packages from the *tidyverse*. If 
+you are googling for R code, make sureto also include these package names in your
+search query. For example, instead of googling "scatterplot in R", google 
+"scatterplot in R with the tidyverse".
 
 These cheatsheets may come in handy throughout the semester:
 
