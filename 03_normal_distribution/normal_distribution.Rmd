@@ -26,8 +26,7 @@ contains measurements from 247 men and 260 women, most of whom were considered
 healthy young adults. Let's take a quick peek at the first few rows of the data.
 
 ```{r load-data}
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 data(bdims)
 head(bdims)
@@ -95,12 +94,13 @@ ggplot(data = fdims, aes(x = hgt)) +
         stat_function(fun = dnorm, args = c(mean = fhgtmean, sd = fhgtsd), col = "tomato")
 ```
 
-After initializing a blank plot with `geom_blank()`, the `ggplot2` package
-allows us to add additional layers. The first layer is a density histogram. The
-second layer is a statistical function -- the density of the normal curve, `dnorm`.
-We specify that we want the curve to have the same mean and standard deviation 
-as the column of female heights. The argument `col` simply sets the color for 
-the line to be drawn. If we left it out, the line would be drawn in black.
+After initializing a blank plot with `geom_blank()`, the `ggplot2` package (within
+the `tidyverse`) allows us to add additional layers. The first layer is a density 
+histogram. The second layer is a statistical function -- the density of the normal
+curve, `dnorm`. We specify that we want the curve to have the same mean and 
+standard deviation as the column of female heights. The argument `col` simply sets
+the color for the line to be drawn. If we left it out, the line would be drawn in
+black.
 
 2.  Based on the this plot, does it appear that the data follow a nearly normal 
     distribution?
