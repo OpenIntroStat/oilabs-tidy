@@ -11,8 +11,7 @@ output:
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 ```
 
@@ -47,7 +46,7 @@ and interpreting the output. These commands and their syntax have evolved over
 decades (literally) and now provide what many users feel is a fairly natural way
 to access data and organize, describe, and invoke statistical computations.
 
-The panel in the upper right contains your *workspace* as well as a history of 
+The panel in the upper right contains your *environment* as well as a history of 
 the commands that you've previously entered. 
 
 Any plots that you generate will show up in the panel in the lower right corner. 
@@ -59,8 +58,7 @@ R is an open-source programming language, meaning that users can contribute
 packages that make our lives easier, and we can use them for free. For this lab,
 and many others in the future, we will use the following R packages:
 
-- *dplyr*: for data wrangling
-- *ggplot2*: for data visualization
+- The suite of *tidyverse* packages: for data wrangling and data visualization
 - *oilabs*: for data and custom functions with the OpenIntro labs
 
 If these packages are not already available in your R environment, 
@@ -70,8 +68,7 @@ Note that you can check to see which packages (and which versions) are installed
 inspecting the *Packages* tab in the lower right panel of RStudio. 
 
 ```{r install-packages, message = FALSE, eval=FALSE}
-install.packages("dplyr")
-install.packages("ggplot2")
+install.packages("tidyverse")
 install.packages("oilabs")
 ```
 
@@ -80,16 +77,14 @@ Next, you need to load these packages in your working environment. We do this wi
 the `library` function. Run the following three lines in your console.
 
 ```{r load-packages, message = FALSE, eval=TRUE}
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 ```
 
 You only need to *install* packages once, but you need to *load* 
 them each time you relaunch RStudio. 
 
-Note that dplyr and ggplot2 are part of a collection of R packages called
-the *tidyverse*. These packages share common philosophies and are designed to 
+The Tidyverse packages share common philosophies and are designed to 
 work together. You can find more about the packages in the tidyverse at http://tidyverse.org/.
 
 
@@ -114,43 +109,43 @@ arrow in the code chunk.
 
 ## Dr. Arbuthnot's Baptism Records
 
-To get you started, run the following command to load the data.
+To get started, run the following command to load the data.
 
 ```{r load-abrbuthnot-data, eval=TRUE}
 data(arbuthnot)
 ```
 
-You can do this by
+You can run the command by
 
 - clicking on the green arrow at the top right of the code chunk in the R Markdown (Rmd) 
 file, or
-- putting your cursor on this line, and hit the **Run** button on the upper right 
+- putting your cursor on this line, and clicking the **Run** button on the upper right 
 corner of the pane, or
-- hitting `Ctrl-Shift-Enter`, or
+- holding `Ctrl-Shift-Enter`, or
 - typing the code in the console.
 
 This command instructs R to load some data: 
 the Arbuthnot baptism counts for boys and girls. You should see that the 
-workspace area in the upper righthand corner of the RStudio window now lists a 
+environment area in the upper righthand corner of the RStudio window now lists a 
 data set called `arbuthnot` that has 82 observations on 3 variables. As you 
 interact with R, you will create a series of objects. Sometimes you load them as
 we have done here, and sometimes you create them yourself as the byproduct of a 
 computation or some analysis you have performed.
 
-The Arbuthnot data set refers to Dr. John Arbuthnot, an 18<sup>th</sup> century 
-physician, writer, and mathematician. He was interested in the ratio of newborn
-boys to newborn girls, so he gathered the baptism records for children born in
-London for every year from 1629 to 1710. We can view the data by 
-typing its name into the console.
+The Arbuthnot data set refers to the work of Dr. John Arbuthnot, an 
+18<sup>th</sup> century physician, writer, and mathematician. He was interested 
+in the ratio of newborn boys to newborn girls, so he gathered the baptism 
+records for children born in London for every year from 1629 to 1710. We can 
+view the data by typing its name into the console.
 
 ```{r view-data}
 arbuthnot
 ```
 
-However printing the whole dataset in the console is not that useful. 
+However, printing the whole dataset in the console is not that useful. 
 One advantage of RStudio is that it comes with a built-in data viewer. Click on
 the name `arbuthnot` in the *Environment* pane (upper right window) that lists 
-the objects in your workspace. This will bring up an alternative display of the 
+the objects in your environment. This will bring up an alternative display of the 
 data set in the *Data Viewer* (upper left window). You can close the data viewer
 by clicking on the `x` in the upper lefthand corner.
 
@@ -173,6 +168,9 @@ and the first few observations by typing:
 ```{r glimpse-data}
 glimpse(arbuthnot)
 ```
+
+It is better practice to type this command into your console, since it is not 
+necessary code to include in your solution file.
 
 This command should output the following
 
@@ -218,34 +216,44 @@ R has some powerful functions for making graphics. We can create a simple plot
 of the number of girls baptized per year with the command
 
 ```{r plot-girls-vs-year}
-qplot(x = year, y = girls, data = arbuthnot)
+ggplot(data = arbuthnot, aes(x = year, y = girls)) + 
+  geom_point()
 ```
 
-The `qplot()` function (meaning "quick plot") considers the type of data you have
-provided it and makes the decision to visualize it with a scatterplot. The plot
-should appear under the *Plots* tab of the lower right panel of RStudio. Notice 
-that the command above again looks like a function, this time with three arguments
-separated by commas. The first two arguments in the `qplot()` function specify 
-the variables for the x-axis and the y-axis and the third provides the name of the
-data set where they can be found. If we wanted to connect the data points with 
-lines, we could add a fourth argument to specify the geometry that we'd like.
+
+We use the `ggplot()` function to build plots. If you run the plotting code in 
+your console, you should see the plot appear under the *Plots* tab 
+of the lower right panel of RStudio. Notice that the command above again looks 
+like a function, this time with arguments separated by commas. 
+
+With `ggplot()`:
+
+- The first argument is always the dataset. 
+- Next, you provide the variables from the dataset to be assigned to `aes`thetic 
+elements of the plot, e.g. the x and the y axes. 
+- Finally, you use another layer, separated by a `+` to specify the `geom`etric 
+object for the plot. Since we want to scatterplot, we use `geom_point()`.
+
+For instance, if you wanted to visualize the above plot using a line graph, you 
+would replace `geom_point()` with `geom_line()`.
 
 ```{r plot-girls-vs-year-line}
-qplot(x = year, y = girls, data = arbuthnot, geom = "line")
+ggplot(data = arbuthnot, aes(x = year, y = girls)) + 
+  geom_line()
 ```
 
-You might wonder how you are supposed to know that it was possible to add that 
-fourth argument. Thankfully, R documents all of its functions extensively. To 
-read what a function does and learn the arguments that are available to you, 
-just type in a question mark followed by the name of the function that you're 
-interested in. Try the following.
+You might wonder how you are supposed to know the syntax for the `ggplot` 
+function. Thankfully, R documents all of its functions extensively. To learn what
+a function does and its arguments that are available to you, just type in a 
+question mark followed by the name of the function that you're interested in. 
+Try the following in your console:
 
 ```{r plot-help, tidy = FALSE}
-?qplot
+?ggplot
 ```
 
 Notice that the help file replaces the plot in the lower right panel. You can 
-toggle between plots and help files using the tabs at the top of that panel.
+toggle between plots and help files using the tabs at the top of that panel. 
 
 2. Is there an apparent trend in the number of girls baptized over the years? 
 How would you describe it? (To ensure that your lab report is comprehensive,
@@ -291,7 +299,7 @@ To continue our analogy with mathematical functions, `x %>% f(y)` is
 equivalent to `f(x, y)`.
 
 <div id="boxedtext">
-**A note on piping: ** Note that we can read these three lines of code as the following: 
+**A note on piping: ** Note that we can read these two lines of code as the following: 
 
 *"Take the `arbuthnot` dataset and **pipe** it into the `mutate` function. 
 Mutate the `arbuthnot` data set by creating a new variable called `total` that is the sum of the variables
@@ -311,44 +319,47 @@ click on the name of the dataset again to update it in the data viewer.
 
 You'll see that there is now a new column called `total` that has been tacked on
 to the data frame. The special symbol `<-` performs an *assignment*, taking the 
-output of one line of code and saving it into an object in your workspace. In 
+output of one line of code and saving it into an object in your environment. In 
 this case, you already have an object called `arbuthnot`, so this command updates
 that data set with the new mutated column.
 
-We can make a plot of the total number of baptisms per year with the command
+You can make a line plot of the total number of baptisms per year with the 
+command
 
 ```{r plot-total-vs-year}
-qplot(x = year, y = total, data = arbuthnot, geom = "line")
+ggplot(data = arbuthnot, aes(x = year, y = total)) + 
+  geom_line()
 ```
 
-Similarly to how we computed the total number of births, we can compute the ratio 
-of the number of boys to the number of girls baptized in 1629 with
+Similarly to you we computed the total number of births, you can compute the
+ratio of the number of boys to the number of girls baptized in 1629 with
 
 ```{r calc-prop-boys-to-girls-numbers}
 5218 / 4683
 ```
 
-or we can act on the complete columns with the expression
+or you can act on the complete columns with the expression
 
 ```{r calc-prop-boys-to-girls-vars}
 arbuthnot <- arbuthnot %>%
   mutate(boy_to_girl_ratio = boys / girls)
 ```
 
-We can also compute the proportion of newborns that are boys in 1629
+You can also compute the proportion of newborns that are boys in 1629
 
 ```{r calc-prop-boys-numbers}
 5218 / (5218 + 4683)
 ```
 
-or this may also be computed for all years simultaneously and append it to the dataset:
+or you can compute this for all years simultaneously and append it to the dataset
 
 ```{r calc-prop-boys-vars}
 arbuthnot <- arbuthnot %>%
   mutate(boy_ratio = boys / total)
 ```
 
-Note that we are using the new `total` variable we created earlier in our calculations.
+Note that we are using the new `total` variable we created earlier in our 
+calculations.
 
 3. Now, generate a plot of the proportion of boys born over time. What do you see? 
 
@@ -361,15 +372,15 @@ you a lot of typing in the future.
 
 Finally, in addition to simple mathematical operators like subtraction and 
 division, you can ask R to make comparisons like greater than, `>`, less than,
-`<`, and equality, `==`. For example, we can ask if boys outnumber girls in each 
-year with the expression
+`<`, and equality, `==`. For example, we can ask if the number of births of boys
+outnumber that of girls in each year with the expression
 
 ```{r boys-more-than-girls}
 arbuthnot <- arbuthnot %>%
   mutate(more_boys = boys > girls)
 ```
 
-This command add a new variable to the `arbuthnot` dataframe containing the values
+This command adds a new variable to the `arbuthnot` dataframe containing the values
 of either `TRUE` if that year had more boys than girls, or `FALSE` if that year 
 did not (the answer may surprise you). This variable contains a different kind of 
 data than we have encountered so far. All other columns in the `arbuthnot` data 
@@ -394,6 +405,18 @@ data(present)
 
 The data are stored in a data frame called `present`.
 
+To find the minimum and maximum values of columns, you can use the functions
+`min` and `max` within a `summarize()` call, which you will learn more 
+about in the following lab. Here's an example of how to find the minimum and 
+maximum amount of boy births in a year:
+
+```{r summarize min and max}
+arbuthnot %>%
+  summarize(min = min(boys), max = max(boys))
+```
+
+
+
 4.  What years are included in this data set? What are the dimensions of the 
     data frame? What are the variable (column) names?
 
@@ -402,7 +425,7 @@ The data are stored in a data frame called `present`.
 6.  Make a plot that displays the proportion of boys born over time. What do you see? 
     Does Arbuthnot's observation about boys being born in greater proportion than girls 
     hold up in the U.S.? Include the plot in your response. *Hint:* You should be
-    able to reuse your code from Ex 3 above, just replace the dataframe name.
+    able to reuse your code from Exercise 3 above, just replace the dataframe name.
 
 7.  In what year did we see the most total number of births in the U.S.? *Hint:*
     First calculate the totals and save it as a new variable. Then, sort your
@@ -411,7 +434,7 @@ The data are stored in a data frame called `present`.
     variable names. To include the sorted result in your report you will need 
     to use two new functions: `arrange` (for sorting). We can arrange the data 
     in a descending order with another function: `desc` (for descending order).
-    Sample code provided below.
+    The sample code is provided below.
     
 ```{r sample-arrange, eval=FALSE}
 present %>%
@@ -436,10 +459,10 @@ from a lab written by Mark Hansen of UCLA Statistics.
 That was a short introduction to R and RStudio, but we will provide you with more
 functions and a more complete sense of the language as the course progresses. 
 
-In this course we will be using R packages called dplyr for data wrangling 
-and ggplot2 for data visualization. If you are googling for R code, make sure
-to also include these package names in your search query. For example, instead
-of googling "scatterplot in R", google "scatterplot in R with ggplot2".
+In this course we will be using the suite of R packages from the *tidyverse*. If 
+you are googling for R code, make sureto also include these package names in your
+search query. For example, instead of googling "scatterplot in R", google 
+"scatterplot in R with the tidyverse".
 
 These cheatsheets may come in handy throughout the semester:
 
@@ -449,5 +472,5 @@ These cheatsheets may come in handy throughout the semester:
 
 The book titled "Getting used to R, RStudio, and R Markdown" by Chester Ismay, which can be freely accessed [here](https://ismayc.github.io/rbasics-book), is also a wonderful resource for for new users of R, RStudio, and R Markdown. It includes examples showing working with R Markdown files in RStudio recorded as GIFs.
 
-Note that some of the code on these cheatsheets may be too advanced for this course,
-however majority of it will become useful throughout the semester.
+Note that some of the code on these cheatsheets may be too advanced for this course.
+However the majority of it will become useful throughout the semester.
