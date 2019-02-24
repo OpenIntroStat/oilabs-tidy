@@ -20,15 +20,13 @@ In August of 2012, news outlets ranging from the [Washington Post](http://www.wa
 
 ### Load packages
 
-In this lab we will explore the data using the `dplyr` package and visualize it 
-using the `ggplot2` package for data visualization. The data can be found in the
-companion package for OpenIntro labs, `oilabs`.
+In this lab, we will explore and visualize the data using the `tidyverse` suite of 
+packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE, eval=TRUE}
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
 ```
 

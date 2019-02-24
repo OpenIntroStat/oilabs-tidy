@@ -13,50 +13,46 @@ output:
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-In this lab we'll investigate the probability distribution that is most central
-to statistics: the normal distribution.  If we are confident that our data are 
+In this lab, you'll investigate the probability distribution that is most central
+to statistics: the normal distribution.  If you are confident that your data are 
 nearly normal, that opens the door to many powerful statistical methods.  Here 
 we'll use the graphical tools of R to assess the normality of our data and also 
 learn how to generate random numbers from a normal distribution.
 
 ## The Data
 
-This week we'll be working with measurements of body dimensions.  This data set 
-contains measurements from 247 men and 260 women, most of whom were considered 
-healthy young adults. Let's take a quick peek at the first few rows of the data.
+This week you'll be working with fast food data.  This data set contains data on
+515 menu items from some of the most popular fast food restaurants worldwide.
+Let's take a quick peek at the first few rows of the data.
+
+Either you can use `glimpse` like before, or `head` to do this.
 
 ```{r load-data}
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
-data(bdims)
-head(bdims)
+fastfood <- read_csv("fastfood_calories.csv")
+head(fastfood)
 ```
 
-You'll see that for every observation we have 25 measurements, many of which are
-either diameters or girths.  You can learn about what the variable names mean by
-bringing up the help page.
+You'll see that for every observation there are 18 measurements, many of which are
+nutritional facts. Note that the first column, `X1`, is a physical index for each
+observation.
 
-```{r help-bdims}
-?bdims
-```
+You'll be focusing on just three columns to get started: restaurant, calories, 
+calories from fat.
 
-We'll be focusing on just three columns to get started: weight in kg (`wgt`), 
-height in cm (`hgt`), and `sex` (`m` indicates male, `f` indicates female).
-
-Since males and females tend to have different body dimensions, it will be 
-useful to create two additional data sets: one with only men and another with 
-only women.
+Let's first focus on just products from McDonalds and Dairy Queen.
 
 ```{r male-female}
-mdims <- bdims %>%
-  filter(sex == "m")
-fdims <- bdims %>%
-  filter(sex == "f")
+mcdonalds <- fastfood %>%
+  filter(restaurant == "McDonalds")
+dairy_queen <- fastfood %>%
+  filter(restaurant == "Dairy Queen")
 ```
 
-1.  Make a plot (or plots) to visualize the distributions of men's and women's heights.  
-    How do their centers, shapes, and spreads compare?
+1.  Make a plot (or plots) to visualize the distributions of the amount of calories
+from fat of the options from these two restaurants.  How do their centers, shapes,
+and spreads compare?
 
 ## The normal distribution
 
@@ -64,18 +60,19 @@ In your description of the distributions, did you use words like *bell-shaped*
 or *normal*?  It's tempting to say so when faced with a unimodal symmetric 
 distribution.
 
-To see how accurate that description is, we can plot a normal distribution curve 
+To see how accurate that description is, you can plot a normal distribution curve 
 on top of a histogram to see how closely the data follow a normal distribution. 
 This normal curve should have the same mean and standard deviation as the data. 
-We'll be working with women's heights, so let's store them as a separate object 
-and then calculate some statistics that will be referenced later. 
+You'll be focusing on calories from fat from Dairy Queen products, so let's store
+them as a separate object and then calculate some statistics that will be referenced 
+later. 
 
 ```{r female-hgt-mean-sd}
-fhgtmean <- mean(fdims$hgt)
-fhgtsd   <- sd(fdims$hgt)
+dqmean <- mean(dairy_queen$cal_fat)
+dqsd   <- sd(dairy_queen$cal_fat)
 ```
 
-Next we make a density histogram to use as the backdrop and use the `lines` 
+Next, you make a density histogram to use as the backdrop and use the `lines` 
 function to overlay a normal probability curve. The difference between a 
 frequency histogram and a density histogram is that while in a frequency 
 histogram the *heights* of the bars add up to the total number of observations, 
@@ -89,17 +86,19 @@ comparing the frequency histogram you constructed earlier and the density
 histogram created by the commands below.
 
 ```{r hist-height}
-qplot(x = hgt, data = fdims, geom = "blank") +
-  geom_histogram(aes(y = ..density..)) +
-  stat_function(fun = dnorm, args = c(mean = fhgtmean, sd = fhgtsd), col = "tomato")
+ggplot(data = dairy_queen, aes(x = cal_fat)) +
+        geom_blank() +
+        geom_histogram(aes(y = ..density..)) +
+        stat_function(fun = dnorm, args = c(mean = dqmean, sd = dqsd), col = "tomato")
 ```
 
-After initializing a blank plot with the first command, the ggplot2 package
-allows us to add additional layers. The first layer is a density histogram. The
-second layer is a statistical function -- the density of the normal curve, `dnorm`.
-We specify that we want the curve to have the same mean and standard deviation 
-as the column of female heights. The argument `col` simply sets the color for 
-the line to be drawn. If we left it out, the line would be drawn in black.
+After initializing a blank plot with `geom_blank()`, the `ggplot2` package (within
+the `tidyverse`) allows us to add additional layers. The first layer is a density 
+histogram. The second layer is a statistical function -- the density of the normal
+curve, `dnorm`. We specify that we want the curve to have the same mean and 
+standard deviation as the column of female heights. The argument `col` simply sets
+the color for the line to be drawn. If we left it out, the line would be drawn in
+black.
 
 2.  Based on the this plot, does it appear that the data follow a nearly normal 
     distribution?
@@ -114,34 +113,39 @@ constructing a normal probability plot, also called a normal Q-Q plot for
 "quantile-quantile".
 
 ```{r qq}
-qplot(sample = hgt, data = fdims, geom = "qq")
+ggplot(data = dairy_queen, aes(sample = cal_fat)) + 
+  geom_line(stat = "qq")
 ```
+
+This time, you can use the `geom_line()` layer, while specifying that you will 
+be creating a Q-Q plot with the `stat` argument. It's important to note that here,
+instead of using `x` instead `aes()`, you need to use `sample`.
 
 The x-axis values correspond to the quantiles of a theoretically normal curve 
 with mean 0 and standard deviation 1 (i.e., the standard normal distribution).  The 
 y-axis values correspond to the quantiles of the original unstandardized sample 
 data. However, even if we were to standardize the sample data values, the Q-Q
 plot would look identical. A data set that is nearly normal will result in a
-probability plot where the points closely follow a diagonal line.  Any deviations from
-normality leads to deviations of these points from that line.
+probability plot where the points closely follow a diagonal line.  Any deviations
+from normality leads to deviations of these points from that line.
 
-The plot for female heights shows points that tend to follow the line but with
-some errant points towards the tails.  We're left with the same problem that we
-encountered with the histogram above: how close is close enough?
+The plot for Dairy Queen's calories from fat shows points that tend to follow the
+line but with some errant points towards the upper tail.  You're left with the same
+problem that we encountered with the histogram above: how close is close enough?
 
 A useful way to address this question is to rephrase it as: what do probability 
 plots look like for data that I *know* came from a normal distribution?  We can 
 answer this by simulating data from a normal distribution using `rnorm`.
 
 ```{r sim-norm}
-sim_norm <- rnorm(n = nrow(fdims), mean = fhgtmean, sd = fhgtsd)
+sim_norm <- rnorm(n = nrow(dairy_queen), mean = dqmean, sd = dqsd)
 ```
 
 The first argument indicates how many numbers you'd like to generate, which we 
-specify to be the same number of heights in the `fdims` data set using the 
+specify to be the same number of menu items in the `dairy_queen` data set using the 
 `nrow()` function.  The last two arguments determine the mean and standard 
 deviation of the normal distribution from which the simulated sample will be 
-generated.  We can take a look at the shape of our simulated data set, `sim_norm`, 
+generated.  You can take a look at the shape of our simulated data set, `sim_norm`, 
 as well as its normal probability plot.
 
 3.  Make a normal probability plot of `sim_norm`.  Do all of the points fall on 
@@ -156,176 +160,79 @@ left corner, and the Q-Q plots of 8 different simulated normal data.  It may be
 helpful to click the zoom button in the plot window.
 
 ```{r qqnormsim}
-qqnormsim(sample = hgt, data = fdims)
+qqnormsim(sample = cal_fat, data = dairy_queen)
 ```
 
-4.  Does the normal probability plot for female heights look similar to the plots 
+4.  Does the normal probability plot for the calories from fat look similar to the plots 
     created for the simulated data?  That is, do the plots provide evidence that the
     female heights are nearly normal?
 
-5.  Using the same technique, determine whether or not female weights appear to 
-    come from a normal distribution.
+5.  Using the same technique, determine whether or not the calories from McDonald's
+    menu appear to come from a normal distribution.
 
 ## Normal probabilities
 
 Okay, so now you have a slew of tools to judge whether or not a variable is 
-normally distributed.  Why should we care?
+normally distributed.  Why should you care?
 
 It turns out that statisticians know a lot about the normal distribution.  Once 
-we decide that a random variable is approximately normal, we can answer all 
+you decide that a random variable is approximately normal, you can answer all 
 sorts of questions about that variable related to probability.  Take, for 
-example, the question of, "What is the probability that a randomly chosen young 
-adult female is taller than 6 feet (about 182 cm)?" (The study that published
-this data set is clear to point out that the sample was not random and therefore 
-inference to a general population is not suggested.  We do so here only as an
-exercise.)
+example, the question of, "What is the probability that a randomly chosen Dairy 
+Queen product has more than 600 calories from fat?"
 
-If we assume that female heights are normally distributed (a very close 
-approximation is also okay), we can find this probability by calculating a Z 
-score and consulting a Z table (also called a normal probability table).  In R, 
-this is done in one step with the function `pnorm()`.
+If we assume that the calories from fat from Dairy Queen's menu are normally 
+distributed (a very close approximation is also okay), we can find this probability
+by calculating a Z score and consulting a Z table (also called a normal probability
+table).  In R, this is done in one step with the function `pnorm()`.
 
 ```{r pnorm}
-1 - pnorm(q = 182, mean = fhgtmean, sd = fhgtsd)
+1 - pnorm(q = 600, mean = dqmean, sd = dqsd)
 ```
 
 Note that the function `pnorm()` gives the area under the normal curve below a 
 given value, `q`, with a given mean and standard deviation.  Since we're 
-interested in the probability that someone is taller than 182 cm, we have to 
-take one minus that probability.
+interested in the probability that a Dairy Queen item has more than 600 calories
+from fat, we have to take one minus that probability.
 
 Assuming a normal distribution has allowed us to calculate a theoretical 
 probability.  If we want to calculate the probability empirically, we simply 
-need to determine how many observations fall above 182 then divide this number 
+need to determine how many observations fall above 600 then divide this number 
 by the total sample size.
 
 ```{r probability}
-fdims %>% 
-  filter(hgt > 182) %>%
-  summarise(percent = n() / nrow(fdims))
+dairy_queen %>% 
+  filter(cal_fat > 600) %>%
+  summarise(percent = n() / nrow(dairy_queen))
 ```
 
 Although the probabilities are not exactly the same, they are reasonably close. 
 The closer that your distribution is to being normal, the more accurate the 
 theoretical probabilities will be.
 
-6.  Write out two probability questions that you would like to answer; one 
-    regarding female heights and one regarding female weights.  Calculate 
-    those probabilities using both the theoretical normal distribution as well 
-    as the empirical distribution (four probabilities in all).  Which variable,
-    height or weight, had a closer agreement between the two methods?
+6.  Write out two probability questions that you would like to answer about any 
+    of the restaurants in this dataset.  Calculate those probabilities using both
+    the theoretical normal distribution as well as the empirical distribution 
+    (four probabilities in all).  Which one had a closer agreement between the 
+    two methods?
 
 * * *
 
 ## More Practice
 
-7.  Now let's consider some of the other variables in the body dimensions data 
-    set.  Using the figures at the end of the exercises, match the histogram to 
-    its normal probability plot.  All of the variables have been standardized 
-    (first subtract the mean, then divide by the standard deviation), so the 
-    units won't be of any help.  If you are uncertain based on these figures, 
-    generate the plots in R to check.
-
-    **a.** The histogram for female biiliac (pelvic) diameter (`bii.di`) belongs
-    to normal probability plot letter ____.
-
-    **b.** The histogram for female elbow diameter (`elb.di`) belongs to normal 
-    probability plot letter ____.
-
-    **c.** The histogram for general age (`age`) belongs to normal probability 
-    plot letter ____.
-
-    **d.** The histogram for female chest depth (`che.de`) belongs to normal 
-    probability plot letter ____.
-
-8.  Note that normal probability plots C and D have a slight stepwise pattern.  
-    Why do you think this is the case?
+7.  Now let's consider some of the other variables in the dataset.  Out of all the
+    different restaurants, which ones' distribution is the closest to normal for sodium?
+   
+8.  Note that some of the normal probability plots for sodium distributions seem
+    to have a stepwise pattern. why do you think this might be the case?
 
 9.  As you can see, normal probability plots can be used both to assess 
-    normality and visualize skewness.  Make a normal probability plot for female 
-    knee diameter (`kne.di`).  Based on this normal probability plot, is this 
-    variable left skewed, symmetric, or right skewed?  Use a histogram to confirm 
-    your findings.
+    normality and visualize skewness.  Make a normal probability plot for the total
+    carbohydrates from a restaurant of your choice.  Based on this normal 
+    probability plot, is this variable left skewed, symmetric, or right skewed?  
+    Use a histogram to confirm your findings.
 
 
-```{r hists-and-qqs, echo=FALSE, eval=FALSE}
-sdata <- fdims %>%
-  mutate(sdata = (bii.di - mean(bii.di))/sd(bii.di)) %>%
-  select(sdata)
-p1 <- ggplot(sdata, aes(x = sdata)) +
-  geom_histogram() + 
-  ggtitle("Histogram for female bii.di")
-p4 <- qplot(sample = sdata, data = sdata, stat = "qq") +
-  ggtitle("Normal QQ plot B")
-sdata <- fdims %>%
-  mutate(sdata = (elb.di - mean(elb.di))/sd(elb.di)) %>%
-  select(sdata)
-p3 <- ggplot(sdata, aes(x = sdata)) +
-  geom_histogram() + 
-  ggtitle("Histogram for female elb.di")
-p6 <- qplot(sample = sdata, data = sdata, stat = "qq") +
-  ggtitle("Normal QQ plot C")
-sdata <- bdims %>%
-  mutate(sdata = (age - mean(age))/sd(age)) %>%
-  select(sdata)
-p5 <- ggplot(sdata, aes(x = sdata)) +
-  geom_histogram() + 
-  ggtitle("Histogram for general age")
-p8 <- qplot(sample = sdata, data = sdata, stat = "qq") +
-  ggtitle("Normal QQ plot D")
-sdata <- fdims %>%
-  mutate(sdata = (che.de - mean(che.de))/sd(che.de)) %>%
-  select(sdata)
-p7 <- ggplot(sdata, aes(x = sdata)) +
-  geom_histogram() + 
-  ggtitle("Histogram for general age")
-p2 <- qplot(sample = sdata, data = sdata, stat = "qq") +
-  ggtitle("Normal QQ plot A")
-
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  library(grid)
-
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-
-  numPlots = length(plots)
-
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                    ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-
- if (numPlots==1) {
-    print(plots[[1]])
-
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
-
-png("more/histQQmatch.png", height = 1600, width = 1200, res = 150)
-multiplot(p1, p2, p3, p4, p5, p6, p7, p8,
-          layout = matrix(1:8, ncol = 2, byrow = TRUE))
-dev.off()
-```
-
-
-![](more/histQQmatchgg.png)
 
 <div id="license">
 This is a product of OpenIntro that is released under a 

@@ -11,9 +11,9 @@ output:
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
+library(infer)
 ```
 
 If you have access to data on an entire population, say the size of every 
@@ -21,12 +21,12 @@ house in Ames, Iowa, it's straightforward to answer questions like, "How big
 is the typical house in Ames?" and "How much variation is there in sizes of 
 houses?". If you have access to only a sample of the population, as is often 
 the case, the task becomes more complicated. What is your best guess for the 
-typical size if you only know the sizes of several dozen houses? This sort of 
+typical size if you only know the sizes of several dozen houses? This type of 
 situation requires that you use your sample to make inference on what your 
 population looks like.
 
 <div id="boxedtext">
-**Setting a seed:** We will take some random samples and build sampling distributions
+**Setting a seed:** You will take some random samples and build sampling distributions
 in this lab, which means you should set a seed on top of your lab. If this concept
 is new to you, review the lab concerning probability.
 </div>
@@ -35,16 +35,16 @@ is new to you, review the lab concerning probability.
 
 ### Load packages
 
-In this lab we will explore the data using the dplyr package and visualize it 
-using the ggplot2 package for data visualization. The data can be found in the
-companion package for the OpenIntro labs, oilabs.
+In this lab, we will explore and visualize the data using the `tidyverse` suite of 
+packages, and perform statistical inference using `infer`. The data can be found
+in the companion package for OpenIntro labs, `oilabs`.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(oilabs)
+library(infer)
 ```
 
 ### Creating a reproducible lab report
@@ -53,29 +53,36 @@ To create your new lab report, start by opening a new R Markdown document... Fro
 
 ### The data
 
-We consider real estate data from the city of Ames, Iowa. This is the same 
-dataset used in the previous lab. The details of 
-every real estate transaction in Ames is recorded by the City Assessor's 
-office. Our particular focus for this lab will be all residential home sales 
-in Ames between 2006 and 2010.  This collection represents our population of 
-interest. In this lab we would like to learn about these home sales by taking 
-smaller samples from the full population. Let's load the data.
+You will consider real estate data from the city of Ames, Iowa. This is the same 
+dataset used in the previous lab. The details of every real estate transaction in
+Ames is recorded by the City Assessor's office. Your particular focus for this lab
+will be all residential home sales in Ames between 2006 and 2010.  This collection
+represents your population of interest. In this lab, you will learn about 
+these home sales by taking smaller samples from the full population. Let's load 
+the data.
 
 ```{r load-data}
 data(ames)
 ```
 
-In this lab we'll start with a simple random sample of size 60 from the 
-population. 
+In this lab, you'll start with a simple random sample of size 60 from the 
+population using the `rep_sample_n` function from the `infer` package. Although
+`rep_sample_n` has more arguments that you will use in the future, you just need
+to include the size of the sample since we are just taking one sample without 
+replacement.
 
 ```{r sample}
 n <- 60
-samp <- sample_n(ames, n)
+samp <- ames %>%
+  rep_sample_n(size = n)
 ```
 
-Note that 
-the data set has information on many housing variables, but for the first 
-portion of the lab we'll focus on the size of the house, represented by the 
+Remember that if you want to learn more about the arguments of a command, you can
+do so by typing `?` in front of the command in your console to pull up the help
+page.
+
+Note that the dataset has information on many housing variables, but for the first 
+portion of the lab, you'll focus on the size of the house, represented by the 
 variable `area`.
 
 1.  Describe the distribution of house area in your sample. What would you say is the
@@ -88,46 +95,52 @@ variable `area`.
 ## Confidence intervals
 
 Return for a moment to the question that first motivated this lab: based on 
-this sample, what can we infer about the population? Based only on this single 
-sample, the best estimate of the average living area of houses sold in Ames 
-would be the sample mean, usually denoted as $\bar{x}$ (here we're calling it 
-`x_bar`). That serves as a good **point estimate** but it would be useful 
-to also communicate how uncertain we are of that estimate. This uncertainty
-can be quantified using a **confidence interval**.
+this sample, what can you infer about the population? With just one sample, the 
+best estimate of the average living area of houses sold in Ames would be the sample
+mean, usually denoted as $\bar{x}$ (here we're calling it `x_bar`). That serves 
+as a good **point estimate**, but it would be useful to also communicate how uncertain
+you are of that estimate. This uncertainty can be quantified using a **confidence
+interval**.
 
 A confidence interval for a population mean is of the following form
 \[ \bar{x} + z^\star \frac{s}{\sqrt{n}} \]
 
-You should by now be comfortable with calculating the mean and standard deviation of 
-a sample in R. And we know that the sample size is 60. So the only remaining building
-block is finding the appropriate critical value for a given confidence level. We can
-use the `qnorm` function for this task, which will give the critical value associated
-with a given percentile under the normal distribution. Remember that confidence levels
-and percentiles are not equivalent. For example, a 95% confidence level refers to the
-middle 95% of the distribution, and the critical value associated with this area will
-correspond to the 97.5th percentile.
+Although you can do this calculate by hand, the `infer` package provides a set of
+commands consistent with the `tidyverse` framework, thus making it easy to follow 
+a similar workflow. You can use these commands to find a single confidence 
+interval:
 
-We can find the critical value for a 95% confidence interal using
-```{r z_star_95}
-z_star_95 <- qnorm(0.975)
-z_star_95
-```
-which is roughly equal to the value critical value 1.96 that you're likely
-familiar with by now.
+Command | Purpose
+------- | -------
+`specify` | Identify your variable of interest using the `formula` argument
+`generate` | The amount of repetitions you want to do
+`calculate` | The type of statistic you are looking for
+`get_ci` | Find the confidence interval
 
-Let's finally calculate the confidence interval:
-```{r ci}
+This code will find the 95 percent confidence interval for the average living area
+of houses sold in Ames.
+
+```{r confidence interval infer}
 samp %>%
-  summarise(x_bar = mean(area), 
-            se = sd(area) / sqrt(n),
-            me = z_star_95 * se,
-            lower = x_bar - me,
-            upper = x_bar + me)
+  specify(formula = area ~ NULL) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean") %>%
+  get_ci(level = .95)
 ```
+
+Note that within `generate`, there are two argument included here. The first, 
+`reps`, should be set to a reasonably large number. Here, we used 1000 since it
+is sufficiently large for this example without sacrificing any speed in the 
+calculation. The second argument is `type`. When generating confidence intervals,
+always set the type to "bootstrap". 
+
+Feel free to research the rest of the arguments for these functions, since these
+commands will be used together to calculate confidence intervals and solve
+inference problems for the rest of the semester.
 
 To recap: even though we don't know what the full population looks like, we're 95% 
-confident that the true average size of houses in Ames lies between the values `lower` 
-and `upper`. There are a few conditions that must be met for this interval to be valid.
+confident that the true average size of houses in Ames lies between the two printed
+values. There are a few conditions that must be met for this interval to be valid.
 
 1.  For the confidence interval to be valid, the sample mean must be normally 
     distributed and have standard error $s / \sqrt{n}$. What conditions must be 
@@ -137,10 +150,10 @@ and `upper`. There are a few conditions that must be met for this interval to be
 
 1.  What does "95% confidence" mean?
 
-In this case we have the rare luxury of knowing the true population mean since we 
-have data on the entire population. Let's calculate this value so that
-we can determine if our confidence intervals actually capture it. We'll store it in a
-data frame called `params` (short for population parameters), and name it `mu`.
+In this case, you have the rare luxury of knowing the true population mean since 
+you have data on the entire population. Let's calculate this value so you can 
+determine if your confidence intervals actually capture it. You can store it in 
+a data frame called `params` (short for population parameters), and name it `mu`.
 
 ```{r pop-mean}
 params <- ames %>%
@@ -155,29 +168,34 @@ params <- ames %>%
     proportion of those intervals would you expect to capture the true population 
     mean? Why?
 
-Using R, we're going to collect many samples to learn more about how sample 
-means and confidence intervals vary from one sample to another.
-
-Here is the rough outline:
+Using R, you will now collect many samples to learn more about how sample means and 
+confidence intervals vary from one sample to another.
 
 -   Obtain a random sample.
 -   Calculate the sample's mean and standard deviation, and use these to calculate
 and store the lower and upper bounds of the confidence intervals.
 -   Repeat these steps 50 times.
 
-We can accomplish this using the `rep_sample_n` function. The following lines of 
-code takes 50 random samples of size `n` from population (and remember we defined 
-$n = 60$ earlier), and computes the upper and lower bounds of the confidence intervals based on these samples.
+The following lines of code takes 50 random samples of size `n` from population
+(and remember we defined $n = 60$ earlier), and computes the upper and lower bounds
+of the confidence intervals based on these samples manually using `qnorm` to 
+find the corresponding critical value for a 95 percent confidence interval, as 
+opposed to the `get_ci` method within `infer`, which can only compute a single 
+interval at a time.
+
+Note: `qnorm` is set to .975 for a two-sided 95 percent confidence interval since
+the upper bound is at the 97.5 percentile.
 
 ```{r calculate-50-cis}
 ci <- ames %>%
         rep_sample_n(size = n, reps = 50, replace = TRUE) %>%
         summarise(x_bar = mean(area), 
                   se = sd(area) / sqrt(n),
-                  me = z_star_95 * se,
+                  me = qnorm(.975) * se,
                   lower = x_bar - me,
                   upper = x_bar + me)
 ```
+
 
 Let's view the first five intervals:
 
@@ -191,7 +209,7 @@ Edition](https://www.openintro.org/os). The first step will be to create a new v
 the `ci` data frame that indicates whether the interval does or does not capture the 
 true population mean. Note that capturing this value would mean the lower bound of the
 confidence interval is below the value and upper bound of the confidence interval is
-above the value. Remember that we create new variables using the `mutate` function.
+above the value. Remember that you can create new variables using the `mutate` function.
 
 ```{r capture-mu}
 ci <- ci %>%
@@ -202,17 +220,45 @@ The `ifelse` function is new. It takes three arguments: first is a logical state
 second is the value we want if the logical statement yields a true result, and the
 third is the value we want if the logical statement yields a false result.
 
-We now have all the information we need to create the plot. 
-Note that the `geom_errorbar()` function
-only understands `y` values, and thus we have used the `coord_flip()` function
-to flip the coordinates of the entire plot back to the more familiar vertical 
-orientation. 
+You now have all the information you need to create the plot, but you need to re-organize
+your data a bit for easy plotting. Specifically, you need to organize the data in a new
+data frame where each row represents one bound, as opposed to one interval. So this
+
+~~~
+     lower    upper capture_mu
+1 1350.540 1544.360        yes
+2 1333.441 1584.425        yes
+3 1412.133 1663.801        yes
+...
+~~~
+
+should instead look something like
+
+~~~
+  replicate   type     bound capture_mu
+1         1  lower  1350.540        yes
+2         2  lower  1333.441        yes
+3         3  lower  1412.133        yes
+4         1  upper  1544.360        yes
+5         2  upper  1584.425        yes
+6         3  upper  1663.801        yes
+...
+~~~
+
+You can accomplish this using the following:
+
+```{r create-ci-data-for-plot}
+ci_data <- gather(ci, type, bound, lower:upper)
+```
+
+And finally you can create the plot using the following:
 
 ```{r plot-ci}
-qplot(data = ci, x = replicate, y = x_bar, color = capture_mu) +
-  geom_errorbar(aes(ymin = lower, ymax = upper)) + 
-  geom_hline(data = params, aes(yintercept = mu), color = "darkgray") + # draw vertical line
-  coord_flip()
+ggplot(data = ci_data, aes(x = bound, y = replicate, 
+                           group = replicate, color = capture_mu)) +
+  geom_point(size = 2) +  # add points at the ends, size = 2
+  geom_line() +           # connect with lines
+  geom_vline(xintercept = params$mu, color = "darkgray") # draw vertical line
 ```
 
 1.  What proportion of your confidence intervals include the true population mean? Is 
@@ -223,8 +269,8 @@ qplot(data = ci, x = replicate, y = x_bar, color = capture_mu) +
 
 ## More Practice
 
-1.  Pick a confidence level of your choosing, provided it is not 95%. What is 
-    the appropriate critical value?
+1.  Find a singular two-sided confidence interval with a percentage of your choosing
+(other than 95%) and interpret it.
 
 1.  Calculate 50 confidence intervals at the confidence level you chose in the 
     previous question, and plot all intervals on one plot, and calculate the proportion 
