@@ -44,7 +44,7 @@ observations from this data set.
 Load the `nc` data set into our workspace.
 
 ```{r load-data}
-data(nc)
+data(yrbss)
 ```
 
 We have observations on 13 different variables, some categorical and some 
