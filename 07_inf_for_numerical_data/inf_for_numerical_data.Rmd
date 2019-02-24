@@ -19,7 +19,7 @@ library(oilabs)
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
+In this lab, you will explore and visualize the data using the `tidyverse` suite of 
 packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
 
 Let's load the packages.
@@ -35,23 +35,24 @@ To create your new lab report, start by opening a new R Markdown document... Fro
 
 ### The data
 
-In 2004, the state of North Carolina released a large data set containing 
-information on births recorded in this state. This data set is useful to 
-researchers studying the relation between habits and practices of expectant 
-mothers and the birth of their children. We will work with a random sample of 
-observations from this data set.
+Every two years, the Centers for Disease Control and Prevention conduct the Youth
+Risk Behavior Surveillance System (YRBSS) survey, where it takes data from high 
+schoolers (9th through 12th grade), to analyze health patterns. You will work 
+with a selected group of variables from a random sample of observations during 
+one of the years the YRBSS was conducted.
 
-Load the `nc` data set into our workspace.
+
+Load the `yrbss` data set into your workspace.
 
 ```{r load-data}
 data(yrbss)
 ```
 
-We have observations on 13 different variables, some categorical and some 
+There are observations on 13 different variables, some categorical and some 
 numerical. The meaning of each variable can be found by bringing up the help file:
 
 ```{r help-nc}
-?nc
+?yrbss
 ```
 
 
@@ -61,45 +62,54 @@ Remember that you can answer this question by viewing the data in the data viewe
 by using the following command:
 
 ```{r str}
-glimpse(nc)
+glimpse(yrbss)
 ```
 
 ## Exploratory data analysis
 
-We will first start with analyzing the weight gained by mothers throughout the 
-pregnancy: `gained`.
+You will first start with analyzing the weight of the participants in kilograms:
+`weight`.
 
-Using visualization and summary statistics, describe the distribution of weight 
-gained by mothers during pregnancy. The `summary` function can be useful.
+Using visualization and summary statistics, describe the distribution of weights.
+The `summary` function can be useful.
 
 ```{r summary}
-summary(nc$gained)
+summary(yrbss$weight)
 ```
 
-1.  How many mothers are we missing weight gain data from?
+1.  How many observations are we missing weights from?
 
-Next, consider the possible relationship between a mother's smoking habit and the 
-weight of her baby. Plotting the data is a useful first step because it helps 
+Next, consider the possible relationship between a high schooler's weight and their
+physical activity. Plotting the data is a useful first step because it helps 
 us quickly visualize trends, identify strong associations, and develop research
 questions.
 
-2.  Make a side-by-side boxplot of `habit` and `weight`. What does the plot 
-highlight about the relationship between these two variables?
+First, let's create a new variable `physical_3plus`, which will be coded as either
+"yes" if they are physically active for at least 3 days a week, and "no" if not.
+
+```{r create new var}
+yrbss <- yrbss %>% 
+  mutate(physical_3plus = ifelse(yrbss$physically_active_7d > 2, "yes", "no"))
+```
+
+
+2.  Make a side-by-side boxplot of `physical_3plus` and `weight`. Is there a 
+relationship between these two variables? What did you expect and why?
 
 The box plots show how the medians of the two distributions compare, but we can
 also compare the means of the distributions using the following to 
-first group the data by the `habit` variable, and then calculate the mean
-`weight` in these groups using the `mean` function.
+first group the data by the `physical_3plus` variable, and then calculate the mean
+`weight` in these groups using the `mean` function while ignoring missing values
+by setting the `na.rm` argument to `TRUE`.
 
 ```{r by-means}
-nc %>%
-  group_by(habit) %>%
-  summarise(mean_weight = mean(weight))
+yrbss %>%
+  group_by(physical_3plus) %>%
+  summarise(mean_weight = mean(weight, na.rm = TRUE))
 ```
 
 There is an observed difference, but is this difference statistically 
-significant? In order to answer this question we will conduct a hypothesis test
-.
+significant? In order to answer this question we will conduct a hypothesis test.
 
 ## Inference
 
@@ -107,76 +117,75 @@ significant? In order to answer this question we will conduct a hypothesis test
 compute the group sizes with the `summarize` command above by defining a new variable
 with the definition `n()`.
 
-4.  Write the hypotheses for testing if the average weights of babies born to 
-smoking and non-smoking mothers are different.
+4.  Write the hypotheses for testing if the average weights are different for those
+who exercise at least times a week and those who don't.
 
-Next, we introduce a new function, `inference`, that we will use for conducting
-hypothesis tests and constructing confidence intervals. 
+Next, we will introduce a new function, `hypothesize`, that falls into the `infer` 
+workflow. You will use this method for conducting hypothesis tests. 
 
-```{r inf-weight-habit-ht, tidy=FALSE}
-inference(y = weight, x = habit, data = nc, statistic = "mean", type = "ht", null = 0, 
-          alternative = "twosided", method = "theoretical")
+But first, we need to initialize the test, which we will save as `d_hat`.
+
+```{r inf-weight-habit-ht-initial, tidy=FALSE}
+d_hat <- yrbss %>%
+  specify(weight ~ physical_3plus) %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
-Let's pause for a moment to go through the arguments of this custom function. 
-The first argument is `y`, which is the response variable that we are 
-interested in: `weight`. The second argument is the explanatory variable, 
-`x`, which is the variable that splits the data into two groups, smokers and 
-non-smokers: `habit`. The third argument, `data`, is the data frame these
-variables are stored in. Next is `statistic`, which is the sample statistic
-we're using, or similarly, the population parameter we're estimating. In future labs
-we'll also work with "median" and "proportion". Next we decide on the `type` of inference 
-we want: a hypothesis test (`"ht"`) or a confidence interval (`"ci"`). When performing a 
-hypothesis test, we also need to supply the `null` value, which in this case is `0`, 
-since the null hypothesis sets the two population means equal to each other. 
-The `alternative` hypothesis can be `"less"`, `"greater"`, or `"twosided"`. 
-Lastly, the `method` of inference can be `"theoretical"` or `"simulation"` based.
+Notice how you can use the functions `specify` and `calculate` again like you did
+for calculating confidence intervals. Here, though, the statistic you are searching
+for is the difference in means, with the order being `yes - no != 0`.
 
-For more information on the inference function see the help file with `?inference`.
+After you have initialized the test, you need to simulate the test on the null
+distribution, which we will save as `null`.
 
-5.  Change the `type` argument to `"ci"` to construct and record a confidence 
-interval for the difference between the weights of babies born to nonsmoking and 
-smoking mothers, and interpret this interval in context of the data. Note that by 
-default you'll get a 95% confidence interval. If you want to change the
-confidence level, add a new argument (`conf_level`) which takes on a value
-between 0 and 1. Also note that when doing a confidence interval arguments like
-`null` and `alternative` are not useful, so make sure to remove them.
-
-By default the function reports an interval for ($\mu_{nonsmoker} - \mu_{smoker}$)
-. We can easily change this order by using the `order` argument:
-
-```{r inf-weight-habit-ci, tidy=FALSE}
-inference(y = weight, x = habit, data = nc, statistic = "mean", type = "ci", 
-          method = "theoretical", order = c("smoker","nonsmoker"))
+```{r inf-weight-habit-ht-null, tidy=FALSE}
+null <- yrbss %>%
+  specify(weight ~ physical_3plus) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
 ```
+
+Here, `hypothesize` is used to set the null hypothesis as a test for independence.
+Also, note that the `type` argument within `generate` is set to `permute`, which 
+is the argument when generating a null distribution for a hypothesis test.
+
+Now that the test is initialized and the null distribution formed, you can calculate
+the p-value for your hypothesis test using the function `get_p_value`.
+
+```{r inf-weight-habit-ht-pvalue}
+null %>%
+  get_p_value(obs_stat = d_hat, direction = "two_sided")
+```
+
+This the standard workflow for performing hypothesis tests.
+
+5.  Construct and record a confidence interval for the difference between the 
+weights of those who exercise at least three times a week and those who don't, and
+interpret this interval in context of the data.
 
 * * *
 
 ## More Practice
 
-6.  Calculate a 95% confidence interval for the average length of pregnancies 
-(`weeks`) and interpret it in context. Note that since you're doing inference 
-on a single population parameter, there is no explanatory variable, so you can 
-omit the `x` variable from the function.
+6.  Calculate a 95% confidence interval for the average height in meters (`height`)
+and interpret it in context.
 
 7.  Calculate a new confidence interval for the same parameter at the 90% 
-confidence level. You can change the confidence level by adding a new argument 
-to the function: `conf_level = 0.90`. Comment on the width of this interval versus 
+confidence level. Comment on the width of this interval versus 
 the one obtained in the previous exercise.
 
-8.  Conduct a hypothesis test evaluating whether the average weight gained by 
-younger mothers is different than the average weight gained by mature mothers.
+8.  Conduct a hypothesis test evaluating whether the average height is different
+for those who exercise at least three times a week and those who don't.
 
-9.  Now, a non-inference task: Determine the age cutoff for younger and mature 
-mothers. Use a method of your choice, and explain how your method works.
+9.  Now, a non-inference task: Determine the amount of different options there 
+are in the dataset for the `hours_tv_per_school_day` there are.
 
-10. Pick a pair of variables: one numerical (response) and one categorical (explanatory). 
-Come up with a research question evaluating the relationship between these variables. 
-Formulate the question in a way that it can be answered using a hypothesis test
-and/or a confidence interval. Answer your question using the `inference` 
-function, report the statistical results, and also provide an explanation in 
-plain language. Be sure to check all assumptions, state your $\alpha$ level, and conclude 
-in context.
+10. Come up with a research question evaluating the relationship between height 
+or weight and sleep. Formulate the question in a way that it can be answered using
+a hypothesis test and/or a confidence interval. Report the statistical results, 
+and also provide an explanation in plain language. Be sure to check all 
+assumptions, state your $\alpha$ level, and conclude in context.
 
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
