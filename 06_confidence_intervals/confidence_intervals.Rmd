@@ -107,7 +107,7 @@ A confidence interval for a population mean is of the following form
 
 Although you can do this calculate by hand, the `infer` package provides a set of
 commands consistent with the `tidyverse` framework, thus making it easy to follow 
-a similar workflow. You can use these commands to generate a single confidence 
+a similar workflow. You can use these commands to find a single confidence 
 interval:
 
 Command | Purpose
@@ -123,10 +123,16 @@ of houses sold in Ames.
 ```{r confidence interval infer}
 samp %>%
   specify(formula = area ~ NULL) %>%
-  generate(reps = 100, type = "bootstrap") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
   calculate(stat = "mean") %>%
   get_ci(level = .95)
 ```
+
+Note that within `generate`, there are two argument included here. The first, 
+`reps`, should be set to a reasonably large number. Here, we used 1000 since it
+is sufficiently large for this example without sacrificing any speed in the 
+calculation. The second argument is `type`. When generating confidence intervals,
+always set the type to "bootstrap". 
 
 Feel free to research the rest of the arguments for these functions, since these
 commands will be used together to calculate confidence intervals and solve
