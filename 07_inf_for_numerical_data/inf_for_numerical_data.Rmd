@@ -123,10 +123,10 @@ who exercise at least times a week and those who don't.
 Next, we will introduce a new function, `hypothesize`, that falls into the `infer` 
 workflow. You will use this method for conducting hypothesis tests. 
 
-But first, we need to initialize the test, which we will save as `d_hat`.
+But first, we need to initialize the test, which we will save as `obs_diff`.
 
 ```{r inf-weight-habit-ht-initial, tidy=FALSE}
-d_hat <- yrbss %>%
+obs_diff <- yrbss %>%
   specify(weight ~ physical_3plus) %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
@@ -155,7 +155,7 @@ the p-value for your hypothesis test using the function `get_p_value`.
 
 ```{r inf-weight-habit-ht-pvalue}
 null %>%
-  get_p_value(obs_stat = d_hat, direction = "two_sided")
+  get_p_value(obs_stat = obs_diff, direction = "two_sided")
 ```
 
 This the standard workflow for performing hypothesis tests.
