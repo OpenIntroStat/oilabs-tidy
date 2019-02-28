@@ -102,8 +102,8 @@ Before you draw conclusions about the trend, compare the number of observations
 in the data frame with the approximate number of points on the scatterplot. 
 Is anything awry?
 
-4.  Replot the scatterplot, but this time use `geom_jitter` as your layer. What was
-    misleading about the initial scatterplot?
+4.  Replot the scatterplot, but this time use `geom_jitter` as your layer. What 
+    was misleading about the initial scatterplot?
 
 ```{r scatter-score-bty_avg-jitter}
 ggplot(data = evals, aes(x = bty_avg, y = score)) +
@@ -170,11 +170,11 @@ application and with these highly-correlated predictors, it is reasonable to use
 the average beauty score as the single representative of these variables.
 
 In order to see if beauty is still a significant predictor of professor score 
-after you've accounted for the color of the professor's picture, you can add the 
-picture color term into the model.
+after you've accounted for the professor's gender, you can add the gender term 
+into the model.
 
 ```{r scatter-score-bty_avg_pic-color}
-m_bty_gen <- lm(score ~ bty_avg + pic_color, data = evals)
+m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
 summary(m_bty_gen)
 ```
 
@@ -183,17 +183,17 @@ summary(m_bty_gen)
     for this model are reasonable using diagnostic plots.
 
 8.  Is `bty_avg` still a significant predictor of `score`? Has the addition
-    of `pic_color` to the model changed the parameter estimate for `bty_avg`?
+    of `gender` to the model changed the parameter estimate for `gender`?
 
-Note that the estimate for `pic_color` is now called `pic_colorcolor`. You'll see this 
+Note that the estimate for `gender` is now called `gendermale`. You'll see this 
 name change whenever you introduce a categorical variable. The reason is that R 
-recodes `pic_color` from having the values of `color` and `black&white` to being an 
-indicator variable called `pic_colorcolor` that takes a value of $0$ for 
-black and white pictures and a value of $1$ for those in color. (Such variables 
+recodes `gender` from having the values of `male` and `female` to being an 
+indicator variable called `gendermale` that takes a value of $0$ for 
+female professors and a value of $1$ for male professors. (Such variables 
 are often referred to as "dummy" variables.)
 
-As a result, for those with black and white pictures, the parameter estimate is 
-multiplied by zero, leaving the intercept and slope form familiar from simple regression.
+As a result, for female professors, the parameter estimate is multiplied by zero,
+leaving the intercept and slope form familiar from simple regression.
 
 \[
   \begin{aligned}
@@ -215,13 +215,13 @@ with the following  -->
     by 1.) For two professors who received the same beauty rating, which color 
     picture tends to have the higher course evaluation score?
 
-The decision to call the indicator variable `pic_color_color` instead of 
-`pic_color_back&white` has no deeper meaning. R simply codes the category that 
+The decision to call the indicator variable `gendermale` instead of 
+`genderfemale` has no deeper meaning. R simply codes the category that 
 comes first alphabetically as a $0$. (You can change the reference level of a categorical 
 variable, which is the level that is coded as a 0, using the`relevel()` function. 
 Use `?relevel` to learn more.)
 
-10. Create a new model called `m_bty_rank` with `pic_color` removed and `rank` 
+10. Create a new model called `m_bty_rank` with `gender` removed and `rank` 
     added in. How does R appear to handle categorical variables that have more 
     than two levels? Note that the rank variable has three levels: `teaching`, 
     `tenure track`, `tenured`.
@@ -236,7 +236,7 @@ with `bty_avg` scores that are one point apart.
 ## The search for the best model
 
 We will start with a full model that predicts professor score based on rank, 
-ethnicity, language of the university where they got their degree, age, 
+gender, ethnicity, language of the university where they got their degree, age, 
 proportion of students that filled out evaluations, class size, course level, 
 number of professors, number of credits, average beauty rating, outfit, and 
 picture color.
@@ -248,7 +248,7 @@ picture color.
 Let's run the model...
 
 ```{r m_full, tidy = FALSE}
-m_full <- lm(score ~ rank + ethnicity + language + age + cls_perc_eval 
+m_full <- lm(score ~ rank + gender + ethnicity + language + age + cls_perc_eval 
              + cls_students + cls_level + cls_profs + cls_credits + bty_avg 
              + pic_outfit + pic_color, data = evals)
 summary(m_full)
