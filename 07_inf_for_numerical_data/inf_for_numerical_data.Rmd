@@ -14,6 +14,7 @@ knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
 library(oilabs)
 library(infer)
+library(openintro)
 ```
 
 ## Getting Started
@@ -30,6 +31,7 @@ Let's load the packages.
 library(tidyverse)
 library(oilabs)
 library(infer)
+library(openintro)
 ```
 
 ### Creating a reproducible lab report
@@ -128,7 +130,7 @@ workflow. You will use this method for conducting hypothesis tests.
 
 But first, we need to initialize the test, which we will save as `obs_diff`.
 
-```{r inf-weight-habit-ht-initial, tidy=FALSE}
+```{r inf-weight-habit-ht-initial, tidy=FALSE, warning = FALSE}
 obs_diff <- yrbss %>%
   specify(weight ~ physical_3plus) %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
@@ -141,7 +143,7 @@ for is the difference in means, with the order being `yes - no != 0`.
 After you have initialized the test, you need to simulate the test on the null
 distribution, which we will save as `null`.
 
-```{r inf-weight-habit-ht-null, tidy=FALSE}
+```{r inf-weight-habit-ht-null, tidy=FALSE, warning = FALSE}
 null <- yrbss %>%
   specify(weight ~ physical_3plus) %>%
   hypothesize(null = "independence") %>%
@@ -150,8 +152,21 @@ null <- yrbss %>%
 ```
 
 Here, `hypothesize` is used to set the null hypothesis as a test for independence.
+In one sample cases, the `null` argument can be set to "point" to test a hypothesis
+relative to a point estimate.
+
 Also, note that the `type` argument within `generate` is set to `permute`, which 
 is the argument when generating a null distribution for a hypothesis test.
+
+We can visualize this null distribution with the following code:
+
+```{r}
+ggplot(data = null, aes(x = stat)) +
+  geom_histogram()
+```
+
+
+5. How many of these `null` permutations have a difference of at least `obs_stat`?
 
 Now that the test is initialized and the null distribution formed, you can calculate
 the p-value for your hypothesis test using the function `get_p_value`.
@@ -163,7 +178,7 @@ null %>%
 
 This the standard workflow for performing hypothesis tests.
 
-5.  Construct and record a confidence interval for the difference between the 
+6.  Construct and record a confidence interval for the difference between the 
 weights of those who exercise at least three times a week and those who don't, and
 interpret this interval in context of the data.
 
@@ -171,20 +186,20 @@ interpret this interval in context of the data.
 
 ## More Practice
 
-6.  Calculate a 95% confidence interval for the average height in meters (`height`)
+7.  Calculate a 95% confidence interval for the average height in meters (`height`)
 and interpret it in context.
 
-7.  Calculate a new confidence interval for the same parameter at the 90% 
+8.  Calculate a new confidence interval for the same parameter at the 90% 
 confidence level. Comment on the width of this interval versus 
 the one obtained in the previous exercise.
 
-8.  Conduct a hypothesis test evaluating whether the average height is different
+9.  Conduct a hypothesis test evaluating whether the average height is different
 for those who exercise at least three times a week and those who don't.
 
-9.  Now, a non-inference task: Determine the amount of different options there 
+10.  Now, a non-inference task: Determine the amount of different options there 
 are in the dataset for the `hours_tv_per_school_day` there are.
 
-10. Come up with a research question evaluating the relationship between height 
+11. Come up with a research question evaluating the relationship between height 
 or weight and sleep. Formulate the question in a way that it can be answered using
 a hypothesis test and/or a confidence interval. Report the statistical results, 
 and also provide an explanation in plain language. Be sure to check all 
