@@ -28,6 +28,7 @@ Let's load the packages.
 library(tidyverse)
 library(oilabs)
 library(infer)
+library(openintro)
 ```
 
 ### Creating a reproducible lab report
@@ -47,10 +48,11 @@ data(yrbss)
 ```
 
 1.   What are the counts within each category for the amount of days these students
-have texted while driving within the past 30 days?
+have texted while driving within the past 30 days? This variable is encoded as
+`text_while_driving_30d`.
 
 1.  What is the proportion of people who have texted while driving every day in 
-the past 30 days and never wear helmets?
+the past 30 days and have not worn a helmet when biking in the last 12 months?
 
 Remember that you can use `filter` to limit the dataset to just non-helmet
 wearers. Here, we will name the dataset `no_helmet`.
@@ -83,8 +85,9 @@ those used for means in the last chapter: the confidence interval and the
 hypothesis test.
 
 1.  Write out the conditions for inference to construct a 95% confidence
-    interval for the proportion of non-helmet wearers that have texted while
-    driving for the past 30 days. Are you confident all conditions are met?
+    interval for the proportion of non-helmet wearers in the past 12 months that
+    have texted while driving for the past 30 days. Are you confident all 
+    conditions are met?
 
 If the conditions for inference are reasonable, we can either calculate
 the standard error and construct the interval by hand, or allow the `infer`
@@ -99,16 +102,16 @@ no_helmet %>%
 ```
 
 Note that since the goal is to construct an interval estimate for a 
-proportion, it's necessary to both include the `success` argument within `specify`,
-which accounts for the proportion of non-helmet wearers than have consistently texted
-while driving the past 30 days, in this example, and that `stat` within `calculate`
-is here "prop", signaling that you are trying to do some sort of inference on a 
-proportion.
+proportion, it is necessary to include the `success` argument within `specify`,
+which accounts for the proportion of non-helmet wearers in the last 12 months
+than have consistently texted while driving the past 30 days. Here, the `stat`
+argument within `calculate` is here "prop", signaling that you are trying
+to do some sort of inference on a proportion.
 
 
 1.  What is the margin of error for the estimate of the proportion of non-helmet 
-wearers that have texted while driving each day for the past 30 days based on 
-this survey?
+wearers in the past 12 months that have texted while driving each day for the 
+past 30 days based on this survey?
 
 1.  Using the `infer` package, calculate confidence intervals for the 
     proportion of atheists in 2012 in two other categorical variables, and 
