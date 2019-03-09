@@ -13,19 +13,19 @@ output:
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-The movie [*Moneyball*](http://en.wikipedia.org/wiki/Moneyball_(film)) focuses on
-the "quest for the secret of success in baseball". It follows a low-budget team, 
-the Oakland Athletics, who believed that underused statistics, such as a player's 
-ability to get on base, better predict the ability to score runs than typical 
-statistics like home runs, RBIs (runs batted in), and batting average. Obtaining 
-players who excelled in these underused statistics turned out to be much more 
-affordable for the team.
+The Human Freedom Index is a report that attempts to summarize the idea of "freedom"
+through a bunch of different variables for many countries around the globe.
+It serves as a rough objective measure for the relationships between the different
+types of freedom - whether it's political, religious, economical or personal freedom -
+and other social and economic circumstances. The Human Freedom Index is an anually
+co-published report by the Cato Institute, the Fraser Institute, and the Liberales
+Institut at the Friedrich Naumann Fourndation for Freedom.
 
-In this lab we'll be looking at data from all 30 Major League Baseball teams and
-examining the linear relationship between runs scored in a season and a number 
-of other player statistics. Our aim will be to summarize these relationships 
-both graphically and numerically in order to find which variable, if any, helps 
-us best predict a team's runs scored in a season.
+
+In this lab, you'll be analyzing data from Human Freedom Index reports from 2008-2016.
+Your aim will be to summarize a few of the relationships within the data both 
+graphically and numerically in order to find which variables can help tell a story
+about freedom.
 
 ## Getting Started
 
@@ -39,6 +39,10 @@ Let's load the packages.
 ```{r load-packages, message=FALSE}
 library(tidyverse)
 library(oilabs)
+```
+
+```{r}
+hfi <- read_csv("hfi_cc_2018.csv")
 ```
 
 ### Creating a reproducible lab report
