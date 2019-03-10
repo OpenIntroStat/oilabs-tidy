@@ -21,7 +21,6 @@ and other social and economic circumstances. The Human Freedom Index is an anual
 co-published report by the Cato Institute, the Fraser Institute, and the Liberales
 Institut at the Friedrich Naumann Fourndation for Freedom.
 
-
 In this lab, you'll be analyzing data from Human Freedom Index reports from 2008-2016.
 Your aim will be to summarize a few of the relationships within the data both 
 graphically and numerically in order to find which variables can help tell a story
@@ -31,7 +30,7 @@ about freedom.
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
+In this lab, you will explore and visualize the data using the `tidyverse` suite of 
 packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
 
 Let's load the packages.
@@ -41,7 +40,7 @@ library(tidyverse)
 library(oilabs)
 ```
 
-```{r}
+```{r read-csv}
 hfi <- read_csv("hfi_cc_2018.csv")
 ```
 
@@ -51,59 +50,60 @@ To create your new lab report, start by opening a new R Markdown document... Fro
 
 ### The data
 
-Let's load up the data for the 2011 season.
+Let's load up the data.
 
 ```{r load-data}
-data(mlb11)
+data(hfi)
 ```
 
-In addition to runs scored, there are seven [traditionally-used variables](https://en.wikipedia.org/wiki/Baseball_statistics#Commonly_used_statistics) in the 
-data set: at-bats, hits, home runs, batting average, strikeouts, stolen bases, 
-and wins. There are also three newer variables: on-base percentage, slugging 
-percentage, and on-base plus slugging. For the first portion of the analysis 
-we'll consider the seven traditional variables. At the end of the lab, you'll 
-work with the three newer variables on your own.
+1.  What are the dimensions of the dataset?
 
-1.  What type of plot would you use to display the relationship between `runs` 
-    and one of the other numerical variables? Plot this relationship using the 
-    variable `at_bats` as the predictor. Does the relationship look linear? If 
-    you knew a team's `at_bats`, would you be comfortable using a linear model 
-    to predict the number of runs?
+1.  What type of plot would you use to display the relationship between the personal
+    freedom score, `pf_score`, and one of the other numerical variables? Plot 
+    this relationship using the variable `pf_expression_control` as the predictor.
+    Does the relationship look linear? If you knew a country's `pf_expression_control`,
+    or its score out of 10, with 0 being the most, of political pressures and 
+    controls on media content, would you be comfortable using a linear model to
+    predict the personal freedom score?
 
 If the relationship looks linear, we can quantify the strength of the
 relationship with the correlation coefficient.
 
 ```{r cor}
-mlb11 %>%
-  summarise(cor(runs, at_bats))
+hfi %>%
+  summarise(cor(pf_expression_control, pf_score, use = "complete.obs"))
 ```
+
+Here, we set the `use` argument to "complete.obs" since there are some observations
+of NA.
 
 ## Sum of squared residuals
 
 <div id="boxedtext">
-In this section you will use an interactive function to investigate what we mean by "sum 
+In this section, you will use an interactive function to investigate what we mean by "sum 
 of squared residuals". You will need to run this function in your console, not in your 
-markdown document. Running the function also requires that the `mlb11` dataset is loaded 
+markdown document. Running the function also requires that the `hfi` dataset is loaded 
 in your environment.
 </div>
 
 Think back to the way that we described the distribution of a single variable. 
 Recall that we discussed characteristics such as center, spread, and shape. It's
 also useful to be able to describe the relationship of two numerical variables, 
-such as `runs` and `at_bats` above.
+such as `pf_expression_control` and `pf_score` above.
 
-2.  Looking at your plot from the previous exercise, describe the relationship 
+1.  Looking at your plot from the previous exercise, describe the relationship 
     between these two variables. Make sure to discuss the form, direction, and 
     strength of the relationship as well as any unusual observations.
 
-Just as we used the mean and standard deviation to summarize a single variable, 
-we can summarize the relationship between these two variables by finding the 
+Just as you've used the mean and standard deviation to summarize a single variable, 
+you can summarize the relationship between these two variables by finding the 
 line that best follows their association. Use the following interactive 
 function to select the line that you think does the best job of going through 
 the cloud of points.
 
-```{r plotss-atbats-runs, eval=FALSE}
-plot_ss(x = at_bats, y = runs, data = mlb11)
+```{r plotss-expression-score, eval=FALSE}
+#this isn't working, wondering if we should just remove rows with NA
+plot_ss(x = pf_expression_control, y = pf_score, data = hfi)
 ```
 
 After running this command, you'll be prompted to click two points on the plot 
@@ -120,14 +120,14 @@ The most common way to do linear regression is to select the line that minimizes
 the sum of squared residuals. To visualize the squared residuals, you can rerun 
 the plot command and add the argument `showSquares = TRUE`.
 
-```{r plotss-atbats-runs-squares, eval=FALSE}
-plot_ss(x = at_bats, y = runs, data = mlb11, showSquares = TRUE)
+```{r plotss-expression-score-squares, eval=FALSE}
+plot_ss(x = pf_expression_control, y = pf_score, data = hfi, showSquares = TRUE)
 ```
 
 Note that the output from the `plot_ss` function provides you with the slope and
 intercept of your line as well as the sum of squares.
 
-3.  Using `plot_ss`, choose a line that does a good job of minimizing the sum of
+1.  Using `plot_ss`, choose a line that does a good job of minimizing the sum of
     squares. Run the function several times. What was the smallest sum of 
     squares that you got? How does it compare to your neighbors?
 
@@ -135,17 +135,17 @@ intercept of your line as well as the sum of squares.
 
 It is rather cumbersome to try to get the correct least squares line, i.e. the 
 line that minimizes the sum of squared residuals, through trial and error. 
-Instead we can use the `lm` function in R to fit the linear model (a.k.a. 
+Instead, you can use the `lm` function in R to fit the linear model (a.k.a. 
 regression line).
 
 ```{r m1}
-m1 <- lm(runs ~ at_bats, data = mlb11)
+m1 <- lm(pf_score ~ pf_expression_control, data = hfi)
 ```
 
 The first argument in the function `lm` is a formula that takes the form 
-`y ~ x`. Here it can be read that we want to make a linear model of `runs` as a 
-function of `at_bats`. The second argument specifies that R should look in the 
-`mlb11` data frame to find the `runs` and `at_bats` variables.
+`y ~ x`. Here it can be read that we want to make a linear model of 
+`pf_score` as a function of `pf_expression_control`. The second argument specifies
+that R should look in the `hfi` data frame to find the two variables.
 
 The output of `lm` is an object that contains all of the information we need 
 about the linear model that was just fit. We can access this information using 
@@ -163,90 +163,103 @@ With this table, we can write down the least squares regression line for the
 linear model:
 
 \[
-  \hat{y} = -2789.2429 + 0.6305 \times at\_bats
+  \hat{y} = 4.61707 + 0.49143 \times pf\_expression\_control
 \]
 
 One last piece of information we will discuss from the summary output is the 
 Multiple R-squared, or more simply, $R^2$. The $R^2$ value represents the 
 proportion of variability in the response variable that is explained by the 
-explanatory variable. For this model, 37.3% of the variability in runs is 
+explanatory variable. For this model, 63.42% of the variability in runs is 
 explained by at-bats.
 
-4.  Fit a new model that uses `homeruns` to predict `runs`. Using the estimates 
-    from the R output, write the equation of the regression line. What does the 
-    slope tell us in the context of the relationship between success of a team 
-    and its home runs?
+1.  Fit a new model that uses `pf_expression_control` to predict `hf_score`, or
+    the total human freedom score. Using the estimates from the R output, write 
+    the equation of the regression line. What does the slope tell us in the 
+    context of the relationship between human freedom and the amount of political
+    pressure on media content?
 
 ## Prediction and prediction errors
 
 Let's create a scatterplot with the least squares line for `m1` laid on top.
 
 ```{r reg-with-line}
-qplot(x = at_bats, y = runs, data = mlb11, geom = "point") +
-  geom_smooth(method = "lm", se = FALSE)
+ggplot(data = hfi, aes(x = pf_expression_control, y = pf_score)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE)
 ```
 
-Here we are literally adding a layer on top of our plot. `geom_smooth` creates
+Here, we are literally adding a layer on top of our plot. `geom_smooth` creates
 the line by fitting a linear model. It can also show us the standard error `se`
 associated with our line, but we'll suppress that for now.
 
-This line can be used to predict $y$ at any value of $x$. When 
-predictions are made for values of $x$ that are beyond the range of the observed
-data, it is referred to as *extrapolation* and is not usually recommended. 
-However, predictions made within the range of the data are more reliable. 
-They're also used to compute the residuals.
+This line can be used to predict $y$ at any value of $x$. When predictions are 
+made for values of $x$ that are beyond the range of the observed data, it is 
+referred to as *extrapolation* and is not usually recommended. However, 
+predictions made within the range of the data are more reliable. They're also 
+used to compute the residuals.
 
-5.  If a team manager saw the least squares regression line and not the actual 
-    data, how many runs would he or she predict for a team with 5,579 at-bats? 
-    Is this an overestimate or an underestimate, and by how much? In other 
-    words, what is the residual for this prediction?
+1.  If someone saw the least squares regression line and not the actual data, how
+    would they predict a country's personal freedom school for one with a 6.7 rating
+    for `pf_expression_control`? Is this an overestimate or an underestimate, and
+    by how much? In other words, what is the residual for this prediction?
 
 ## Model diagnostics
 
 To assess whether the linear model is reliable, we need to check for (1) 
 linearity, (2) nearly normal residuals, and (3) constant variability.
 
-**Linearity**: You already checked if the relationship between runs and at-bats
-is linear using a scatterplot. We should also verify this condition with a plot 
-of the residuals vs. fitted (predicted) values.
+**Linearity**: You already checked if the relationship between `pf_score` and 
+`pf_expression_control' is linear using a scatterplot. We should also verify this
+condition with a plot of the residuals vs. fitted (predicted) values.
 
 ```{r residuals}
-qplot(x = .fitted, y = .resid, data = m1) +
+ggplot(data = m1, aes(x = .fitted, y = .resid)) +
+  geom_point() +
   geom_hline(yintercept = 0, linetype = "dashed") +
   xlab("Fitted values") +
   ylab("Residuals")
 ```
 
-Notice here that our model object `m1` can also serve as a data set because stored within it are the fitted values ($\hat{y}$) and the residuals. Also note that we're getting fancy with the code here. After creating the scatterplot on the first layer (first line of code), we overlay a horizontal dashed line at $y = 0$ (to help us check whether residuals are distributed around 0), and we also adjust the axis labels to be more informative.
+Notice here that `m1` can also serve as a data set because stored within it are 
+the fitted values ($\hat{y}$) and the residuals. Also note that we're getting 
+fancy with the code here. After creating the scatterplot on the first layer 
+(first line of code), we overlay a horizontal dashed line at $y = 0$ (to help us
+check whether residuals are distributed around 0), and we also reanme the axis 
+labels to be more informative.
 
-6.  Is there any apparent pattern in the residuals plot? What does this indicate
-    about the linearity of the relationship between runs and at-bats?  
+1.  Is there any apparent pattern in the residuals plot? What does this indicate
+    about the linearity of the relationship between the two variables?  
 
 </br>
 
 **Nearly normal residuals**: To check this condition, we can look at a histogram
 
 ```{r hist-res}
-qplot(x = .resid, data = m1, geom = "histogram", binwidth = 25) +
+ggplot(data = m1, aes(x = .resid)) +
+  geom_histogram(binwidth = 25) +
   xlab("Residuals")
 ```
 
 or a normal probability plot of the residuals.
 
 ```{r qq-res}
-qplot(sample = .resid, data = m1, stat = "qq")
+ggplot(data = m1, aes(sample = .resid)) +
+  stat_qq()
 ```
 
-Note that the syntax for making a normal probability plot is a bit different than what you're used to seeing: we set `sample` equal to the residuals instead of `x`, and we set a statistical method `qq`, which stands for "quantile-quantile", another name commonly used for normal probability plots.
+Note that the syntax for making a normal probability plot is a bit different 
+than what you're used to seeing: we set `sample` equal to the residuals instead 
+of `x`, and we set a statistical method `qq`, which stands for "quantile-quantile",
+another name commonly used for normal probability plots.
 
-7.  Based on the histogram and the normal probability plot, does the nearly 
+1.  Based on the histogram and the normal probability plot, does the nearly 
     normal residuals condition appear to be met?
 
 </br>
 
 **Constant variability**:
 
-8.  Based on the residuals vs. fitted plot, does the constant variability condition 
+1.  Based on the residuals vs. fitted plot, does the constant variability condition 
     appear to be met?
 
 * * *
@@ -254,33 +267,18 @@ Note that the syntax for making a normal probability plot is a bit different tha
 ## More Practice
 <div class="oyo">
 
--   Choose another one of the seven traditional variables from `mlb11` besides 
-    `at_bats` that you think might be a good predictor of `runs`. Produce a 
-    scatterplot of the two variables and fit a linear model. At a glance, does 
-    there seem to be a linear relationship?
+-   Choose another freedom variable and a variable you think would strongly
+    correlate with it.. Produce a scatterplot of the two variables and fit a 
+    linear model. At a glance, does there seem to be a linear relationship?
 
--   How does this relationship compare to the relationship between `runs` and 
-    `at_bats`? Use the $R^2$ values from the two model summaries to compare. 
-    Does your variable seem to predict `runs` better than `at_bats`? How can you
-    tell?
+-   How does this relationship compare to the relationship between 
+    `pf_expression_control` and `pf_score`? Use the $R^2$ values from the two 
+    model summaries to compare. Does your independent variable seem to predict
+    your dependent one better? Why or why not?
 
--   Now that you can summarize the linear relationship between two variables, 
-    investigate the relationships between `runs` and each of the other five 
-    traditional variables. Which variable best predicts `runs`? Support your 
-    conclusion using the graphical and numerical methods we've discussed (for 
-    the sake of conciseness, only include output for the best variable, not all 
-    five).
 
--   Now examine the three newer variables. These are the statistics used by [the 
-    central character](https://en.wikipedia.org/wiki/Paul_DePodesta) in *Moneyball* to predict a team's success. In general, are they more 
-    or less effective at predicting runs that the old variables? Explain using 
-    appropriate graphical and numerical evidence. Of all ten variables we've 
-    analyzed, which seems to be the best predictor of `runs`? Using the limited 
-    (or not so limited) information you know about these baseball statistics, 
-    does your result make sense?
-
--   Check the model diagnostics for the regression model with the variable you 
-    decided was the best predictor for runs.
+-   What's one freedom relationship you were most surprised about and why? Display
+    the model diagnostics for the regression model analyzing this relationship.
     
 </div>
 
