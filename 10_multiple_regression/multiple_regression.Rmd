@@ -10,6 +10,7 @@ output:
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
+library(oilabs)
 library(GGally)
 ```
 
@@ -25,14 +26,14 @@ pulchritude and putative pedagogical productivity" by Hamermesh and Parker
 found that instructors who are viewed to be better looking receive higher 
 instructional ratings. 
 
-In this lab we will analyze the data from this study in order to learn what goes 
+Here, you will analyze the data from this study in order to learn what goes 
 into a positive professor evaluation.
 
 ## Getting Started
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
+In this lab, you will explore and visualize the data using the `tidyverse` suite of 
 packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
 
 Let's load the packages.
@@ -43,7 +44,7 @@ library(oilabs)
 library(GGally)
 ```
 
-This is the first time we're using the `GGally` package. We will be using the
+This is the first time we're using the `GGally` package. You will be using the
 `ggpairs` function from this package later in the lab.
 
 ### Creating a reproducible lab report
@@ -68,7 +69,7 @@ data(evals)
 We have observations on 21 different variables, some categorical and some 
 numerical. The meaning of each variable can be found by bringing up the help file:
 
-```{r help-nc}
+```{r help-evals}
 ?evals
 ```
 
@@ -93,18 +94,20 @@ are evaluated more favorably. Let's create a scatterplot to see if this appears
 to be the case:
 
 ```{r scatter-score-bty_avg}
-qplot(data = evals, x = bty_avg, y = score)
+ggplot(data = evals, aes(x = bty_avg, y = score)) +
+  geom_point()
 ```
 
-Before we draw conclusions about the trend, compare the number of observations 
+Before you draw conclusions about the trend, compare the number of observations 
 in the data frame with the approximate number of points on the scatterplot. 
 Is anything awry?
 
-4.  Replot the scatterplot, but this time use `geom = "jitter"`. What was
-    misleading about the initial scatterplot?
+4.  Replot the scatterplot, but this time use `geom_jitter` as your layer. What 
+    was misleading about the initial scatterplot?
 
 ```{r scatter-score-bty_avg-jitter}
-qplot(data = evals, x = bty_avg, y = score, geom = "jitter")
+ggplot(data = evals, aes(x = bty_avg, y = score)) +
+  geom_jitter()
 ```
 
 5.  Let's see if the apparent trend in the plot is something more than
@@ -116,15 +119,17 @@ qplot(data = evals, x = bty_avg, y = score, geom = "jitter")
 Add the line of the bet fit model to your plot using the following:
     
 ```{r scatter-score-bty_avg-line-se}
-qplot(data = evals, x = bty_avg, y = score, geom = "jitter") +
+ggplot(data = evals, aes(x = bty_avg, y = score)) +
+  geom_jitter() +
   geom_smooth(method = "lm")
 ```
 
-The blue line is the model. The shaded gray area around the line tells us about the 
-variability we might expect in our predictions. To turn that off, use `se = FALSE`.
+The blue line is the model. The shaded gray area around the line tells you about the 
+variability you might expect in your predictions. To turn that off, use `se = FALSE`.
 
 ```{r scatter-score-bty_avg-line}
-qplot(data = evals, x = bty_avg, y = score, geom = "jitter") +
+ggplot(data = evals, aes(x = bty_avg, y = score)) +
+  geom_jitter() +
   geom_smooth(method = "lm", se = FALSE)
 ```
 
@@ -141,13 +146,15 @@ take a look at the relationship between one of these scores and the average
 beauty score.
 
 ```{r bty-rel}
-qplot(data = evals, x = bty_f1lower, y = bty_avg)
+ggplot(data = evals, aes(x = bty_f1lower, y = bty_avg)) +
+  geom_point()
+
 evals %>% 
   summarise(cor(bty_avg, bty_f1lower))
 ```
 
-As expected the relationship is quite strong---after all, the average score is 
-calculated using the individual scores. We can actually look at the 
+As expected, the relationship is quite strong---after all, the average score is 
+calculated using the individual scores. You can actually look at the 
 relationships between all beauty variables (columns 13 through 19) using the 
 following command:
 
@@ -163,10 +170,10 @@ application and with these highly-correlated predictors, it is reasonable to use
 the average beauty score as the single representative of these variables.
 
 In order to see if beauty is still a significant predictor of professor score 
-after we've accounted for the gender of the professor, we can add the gender 
-term into the model.
+after you've accounted for the professor's gender, you can add the gender term 
+into the model.
 
-```{r scatter-score-bty_avg_gender}
+```{r scatter-score-bty_avg_pic-color}
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
 summary(m_bty_gen)
 ```
@@ -176,17 +183,17 @@ summary(m_bty_gen)
     for this model are reasonable using diagnostic plots.
 
 8.  Is `bty_avg` still a significant predictor of `score`? Has the addition
-    of `gender` to the model changed the parameter estimate for `bty_avg`?
+    of `gender` to the model changed the parameter estimate for `gender`?
 
 Note that the estimate for `gender` is now called `gendermale`. You'll see this 
 name change whenever you introduce a categorical variable. The reason is that R 
-recodes `gender` from having the values of `female` and `male` to being an 
-indicator variable called `gendermale` that takes a value of $0$ for females and
-a value of $1$ for males. (Such variables are often referred to as "dummy" 
-variables.)
+recodes `gender` from having the values of `male` and `female` to being an 
+indicator variable called `gendermale` that takes a value of $0$ for 
+female professors and a value of $1$ for male professors. (Such variables 
+are often referred to as "dummy" variables.)
 
-As a result, for females, the parameter estimate is multiplied by zero, leaving 
-the intercept and slope form familiar from simple regression.
+As a result, for female professors, the parameter estimate is multiplied by zero,
+leaving the intercept and slope form familiar from simple regression.
 
 \[
   \begin{aligned}
@@ -194,22 +201,23 @@ the intercept and slope form familiar from simple regression.
 &= \hat{\beta}_0 + \hat{\beta}_1 \times bty\_avg\end{aligned}
 \]
 
-<!-- We can plot this line and the line corresponding to males with the following  -->
+<!-- We can plot this line and the line corresponding to those with color pictures
+with the following  -->
 <!-- custom function. -->
 
 <!-- ```{r twoLines} -->
-<!-- qplot(data = evals, x = bty_avg, y = score, color = gender) + -->
+<!-- ggplot(data = evals, aes(x = bty_avg, y = score, color = pic_color)) + -->
 <!--   geom_smooth(method = "lm", formula = y ~ x, se = FALSE) -->
 <!-- ``` -->
 
-9.  What is the equation of the line corresponding to males? (*Hint:* For
-    males, the parameter estimate is multiplied by 1.) For two professors
-    who received the same beauty rating, which gender tends to have the
-    higher course evaluation score?
+9.  What is the equation of the line corresponding to those with color pictures? 
+    (*Hint:* For those with color pictures, the parameter estimate is multiplied
+    by 1.) For two professors who received the same beauty rating, which color 
+    picture tends to have the higher course evaluation score?
 
-The decision to call the indicator variable `gendermale` instead of`genderfemale`
-has no deeper meaning. R simply codes the category that comes first 
-alphabetically as a $0$. (You can change the reference level of a categorical 
+The decision to call the indicator variable `gendermale` instead of 
+`genderfemale` has no deeper meaning. R simply codes the category that 
+comes first alphabetically as a $0$. (You can change the reference level of a categorical 
 variable, which is the level that is coded as a 0, using the`relevel()` function. 
 Use `?relevel` to learn more.)
 
@@ -228,7 +236,7 @@ with `bty_avg` scores that are one point apart.
 ## The search for the best model
 
 We will start with a full model that predicts professor score based on rank, 
-ethnicity, gender, language of the university where they got their degree, age, 
+gender, ethnicity, language of the university where they got their degree, age, 
 proportion of students that filled out evaluations, class size, course level, 
 number of professors, number of credits, average beauty rating, outfit, and 
 picture color.
@@ -240,7 +248,7 @@ picture color.
 Let's run the model...
 
 ```{r m_full, tidy = FALSE}
-m_full <- lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval 
+m_full <- lm(score ~ rank + gender + ethnicity + language + age + cls_perc_eval 
              + cls_students + cls_level + cls_profs + cls_credits + bty_avg 
              + pic_outfit + pic_color, data = evals)
 summary(m_full)
