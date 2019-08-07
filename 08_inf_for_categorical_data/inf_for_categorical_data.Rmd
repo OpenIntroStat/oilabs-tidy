@@ -14,120 +14,115 @@ output:
 knitr::opts_chunk$set(eval = FALSE, message = FALSE, warning = FALSE)
 ```
 
-In August of 2012, news outlets ranging from the [Washington Post](http://www.washingtonpost.com/national/on-faith/poll-shows-atheism-on-the-rise-in-the-us/2012/08/13/90020fd6-e57d-11e1-9739-eef99c5fb285_story.html) to the [Huffington Post](http://www.huffingtonpost.com/2012/08/14/atheism-rise-religiosity-decline-in-america_n_1777031.html) ran a story about the rise of atheism in America. The source for the story was a poll that asked people, "Irrespective of whether you attend a place of worship or not, would you say you are a religious person, not a religious person, or a convinced atheist?" This type of question, which asks people to classify themselves in one way or another, is common in polling and generates categorical data. In this lab we take a look at the atheism survey and explore what's at play when making inference about population proportions using categorical data.
-
 ## Getting Started
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
-packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of 
+packages, and perform statistical inference using **infer**. The data can be found
+in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE, eval=TRUE}
 library(tidyverse)
-library(oilabs)
+library(openintro)
+library(infer)
 ```
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `oilabs` package. 
-
-### The survey
-
-The press release for the poll, conducted by WIN-Gallup International, can be accessed [here](http://www.wingia.com/web/files/richeditor/filemanager/Global_INDEX_of_Religiosity_and_Atheism_PR__6.pdf).
-
-Take a moment to review the report then address the following questions.
-
-1.  In the first paragraph, several key findings are reported. Do these 
-    percentages appear to be *sample statistics* (derived from the data 
-    sample) or *population parameters*? Explain your reasoning.
-
-1.  The title of the report is "Global Index of Religiosity and Atheism". To
-    generalize the report's findings to the global human population, what must 
-    we assume about the sampling method? Does that seem like a reasonable 
-    assumption?
+To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
 
 ### The data
 
-Turn your attention to Table 6 (pages 15 and 16), which reports the
-sample size and response percentages for all 57 countries. While this is
-a useful format to summarize the data, we will base our analysis on the
-original data set of individual responses to the survey. Load this data
-set into R with the following command.
+You will be analyzing the same dataset as in the previous lab, where you delved 
+into a sample from the Youth Risk Behavior Surveillance System (YRBSS) survey,
+which uses data from high schoolers to help discover health patterns.
 
-```{r head-data}
-data(atheism)
+Load the `yrbss` data set into your workspace.
+
+```{r load-data}
+data(yrbss)
 ```
 
-1.   What does each row of Table 6 correspond to? What does each row of 
-    `atheism` correspond to?
+1.   What are the counts within each category for the amount of days these students
+have texted while driving within the past 30 days? This variable is encoded as
+`text_while_driving_30d`.
 
-To investigate the link between these two ways of organizing this data, take a 
-look at the estimated proportion of atheists in the United States. Towards 
-the bottom of Table 6, we see that this is 5%. We should be able to come to 
-the same number using the `atheism` data.
+1.  What is the proportion of people who have texted while driving every day in 
+the past 30 days and have not worn a helmet when biking in the last 12 months?
 
-1.  Using the command below, create a new dataframe called `us12` that contains
-    only the rows in `atheism` associated with respondents to the 2012 survey 
-    from the United States. Next, calculate the proportion of atheist 
-    responses. Does it agree with the percentage in Table 6? If not, why?
+Remember that you can use `filter` to limit the dataset to just non-helmet
+wearers. Here, we will name the dataset `no_helmet`.
 
-```{r us-atheism}
-us12 <- atheism %>%
-  filter(nationality == "United States", year == "2012")
+```{r no helmet}
+no_helmet <- yrbss %>%
+  filter(helmet_12m == "never")
+```
+
+Also, it may be easier to calculate the proportion if you create a new variable
+that specifies whether the individual has texted every day while driving over the 
+past 30 days or not. We will call this variable `text_ind`.
+
+```{r indicator-texting}
+no_helmet <- no_helmet %>%
+  mutate(text_ind = ifelse(text_while_driving_30d == "30", "yes", "no"))
 ```
 
 ## Inference on proportions
 
-As was hinted earlier, Table 6 provides *statistics*, that is, 
-calculations made from the sample of 51,927 people. What we'd like, though, is 
-insight into the population *parameters*. You answer the question, "What 
-proportion of people in your sample reported being atheists?" with a 
-statistic; while the question "What proportion of people on earth would report 
-being atheists" is answered with an estimate of the parameter.
+When summarizing the YRBSS, the Centers for Disease Control and Prevention seeks 
+insight into the population *parameters*. To do this, you can answer the question,
+"What proportion of people in your sample reported that they have texted while 
+driving each day for the past 30 days?" with a statistic; while the question 
+"What proportion of people on earth have texted while driving each day for the 
+past 30 days?" is answered with an estimate of the parameter.
 
 The inferential tools for estimating population proportion are analogous to 
 those used for means in the last chapter: the confidence interval and the 
 hypothesis test.
 
 1.  Write out the conditions for inference to construct a 95% confidence
-    interval for the proportion of atheists in the United States in 2012.
-    Are you confident all conditions are met?
+    interval for the proportion of non-helmet wearers in the past 12 months that
+    have texted while driving for the past 30 days. Are you confident all 
+    conditions are met?
 
 If the conditions for inference are reasonable, we can either calculate
-the standard error and construct the interval by hand, or allow the `inference`
-function to do it for us.
+the standard error and construct the interval by hand, or allow the `infer`
+package to do it for us.
 
-```{r us-atheism-ci, tidy = FALSE}
-inference(y = response, data = us12, statistic = "proportion",
-          type = "ci", method = "theoretical", success = "atheist")
+```{r nohelmet-text-ci, tidy = FALSE}
+no_helmet %>%
+  specify(formula = text_ind ~ NULL, success = "yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = .95)
 ```
 
 Note that since the goal is to construct an interval estimate for a 
-proportion, it's necessary to specify what constitutes a "success", which here 
-is a response of `"atheist"`.
+proportion, it is necessary to include the `success` argument within `specify`,
+which accounts for the proportion of non-helmet wearers in the last 12 months
+than have consistently texted while driving the past 30 days. Here, the `stat`
+argument within `calculate` is here "prop", signaling that you are trying
+to do some sort of inference on a proportion.
 
-Although formal confidence intervals and hypothesis tests don't show up in the 
-report, suggestions of inference appear at the bottom of page 7: "In general, 
-the error margin for surveys of this kind is $\pm$ 3--5% at 95% confidence".
 
-1.  Based on the R output, what is the margin of error for the estimate of the 
-    proportion of the proportion of atheists in US in 2012?
+1.  What is the margin of error for the estimate of the proportion of non-helmet 
+wearers in the past 12 months that have texted while driving each day for the 
+past 30 days based on this survey?
 
-1.  Using the `inference` function, calculate confidence intervals for the 
-    proportion of atheists in 2012 in two other countries of your choice, and 
+1.  Using the `infer` package, calculate confidence intervals for the 
+    proportion of atheists in 2012 in two other categorical variables, and 
     report the associated margins of error. Be sure to note whether the 
-    conditions for inference are met, and interpet the interval in context of the data.
-    It may be helpful to create new data sets for each of the two countries first, and 
-    then use these data sets in the `inference` function to construct the confidence 
-    intervals.
+    conditions for inference are met, and interpet the interval in context of the
+    data. It may be helpful to create new data sets for each of the two countries
+    first, and then use these data sets to construct the confidence intervals.
 
 ## How does the proportion affect the margin of error?
 
-Imagine you've set out to survey 1000 people on two questions: are you female? 
-and are you left-handed? Since both of these sample proportions were 
+Imagine you've set out to survey 1000 people on two questions: are you at least
+6-feet tall? and are you left-handed? Since both of these sample proportions were 
 calculated from the same sample size, they should have the same margin of 
 error, right? Wrong! While the margin of error does change with sample size, 
 it is also affected by the proportion.
@@ -138,10 +133,9 @@ interval:
 $$
 ME = 1.96\times SE = 1.96\times\sqrt{p(1-p)/n} \,.
 $$
-Since the 
-population proportion $p$ is in this $ME$ formula, it should make sense that 
-the margin of error is in some way dependent on the population proportion. We 
-can visualize this relationship by creating a plot of $ME$ vs. $p$.
+Since the population proportion $p$ is in this $ME$ formula, it should make sense
+that the margin of error is in some way dependent on the population proportion. 
+We can visualize this relationship by creating a plot of $ME$ vs. $p$.
 
 Since sample size is irrelevant to this discussion, let's just set it to
 some value ($n = 1000$) and use this value in the following calculations:
@@ -151,7 +145,7 @@ n <- 1000
 ```
 
 The first step is to make a variable `p` that is a sequence from 0 to 1 with 
-each number incremented by 0.01. We can then create a variable of the margin of 
+each number incremented by 0.01. You can then create a variable of the margin of 
 error (`me`) associated with each of these values of `p` using the familiar 
 approximate formula ($ME = 2 \times SE$).
 
@@ -160,16 +154,15 @@ p <- seq(from = 0, to = 1, by = 0.01)
 me <- 2 * sqrt(p * (1 - p)/n)
 ```
 
-Lastly, we plot the two variables against each other to reveal their relationship.
-To do so, we need to first put these variables in a data frame that we can
-call in the `qplot` function.
+Lastly, you can plot the two variables against each other to reveal their 
+relationship. To do so, we need to first put these variables in a data frame that
+you can call in the `ggplot` function.
 
 ```{r me-plot}
 dd <- data.frame(p = p, me = me)
-qplot(x = p, y = me, data = dd, 
-      ylab = "Margin of Error", 
-      xlab = "Population Proportion") + 
-  geom_line()
+ggplot(data = dd, aes(x = p, y = me)) + 
+  geom_line() +
+  labs(x = "Population Proportion", y = "Margin of Error")
 ```
 
 1.  Describe the relationship between `p` and `me`. Include the margin of
@@ -182,16 +175,16 @@ We have emphasized that you must always check conditions before making
 inference. For inference on proportions, the sample proportion can be assumed 
 to be nearly normal if it is based upon a random sample of independent 
 observations and if both $np \geq 10$ and $n(1 - p) \geq 10$. This rule of 
-thumb is easy enough to follow, but it makes one wonder: what's so special 
+thumb is easy enough to follow, but it makes you wonder: what's so special 
 about the number 10?
 
-The short answer is: nothing. You could argue that we would be fine with 9 or 
-that we really should be using 11. What is the "best" value for such a rule of 
+The short answer is: nothing. You could argue that you would be fine with 9 or 
+that you really should be using 11. What is the "best" value for such a rule of 
 thumb is, at least to some degree, arbitrary. However, when $np$ and $n(1-p)$ 
 reaches 10 the sampling distribution is sufficiently normal to use confidence 
 intervals and hypothesis tests that are based on that approximation.
 
-We can investigate the interplay between $n$ and $p$ and the shape of the 
+You can investigate the interplay between $n$ and $p$ and the shape of the 
 sampling distribution by using simulations. Play around with the following
 app to investigate how the shape, center, and spread of the distribution of
 $\hat{p}$ changes as $n$ and $p$ changes.
@@ -231,51 +224,26 @@ renderPlot({
     
 1.  Now also change $n$. How does $n$ appear to affect the distribution of $\hat{p}$?
 
-1.  If you refer to Table 6, you'll find that Australia has a sample 
-    proportion of 0.1 in a sample size of 1040, and that Ecuador has a sample 
-    proportion of 0.02 on 400 subjects. Let's suppose for this exercise that 
-    these point estimates are actually the truth. Construct their sampling
-    distributions by using these values as inputs in the app. Do you think it 
-    is sensible to proceed with inference and report margin of errors, as the 
-    report does?
-
 * * *
 
-## More Practice
+## More Practicexs
 
-The question of atheism was asked by WIN-Gallup International in a similar 
-survey that was conducted in 2005. (We assume here that sample sizes have 
-remained the same.) Table 4 on page 13 of the report summarizes survey results 
-from 2005 and 2012 for 39 countries.
+For some of the exercises below, you will conduct inference comparing two 
+proportions. In such cases, you have a response variable that is categorical, and
+an explanatory variable that is also categorical, and you are comparing the 
+proportions of success of the response variable across the levels of the 
+explanatory variable. This means that when using `infer`, you need to include
+both variables within `specify`.
 
-For some of the exercises below we will conduct inference comparing two proportions. In
-such cases we have a response variable that is categorical, and an exaplanatory variable
-that is also categorical, and we are comparing the proportions of success of the response
-variable across the levels of the explanatory variable. This means, in the `inference` function
-we need to specify both variables, response as `y` and explanatory as `x`.
+1.  Is there convincing evidence that those who sleep 10+ hours per day are more
+    likely to strength train every day of the week? As always, write out the 
+    hypotheses for any tests you conduct and outline the status of the conditions
+    for inference. If you find a significant difference, also quantify this 
+    difference with a confidence interval. 
 
-```{r eval=FALSE}
-inference(y = name_of_response_variable, x = name_of_explanatory_variable, ...)
-```
-
-
-1.   Is there convincing evidence that Spain has seen a change in its atheism index 
-    between 2005 and 2012? As always, write out the hypotheses for any tests you 
-    conduct and outline the status of the conditions for inference. If you find a 
-    significant difference, also quantify this difference with a confidence interval. \
-    *Hint:* First create a new data set for respondents from Spain. Also, modify the
-    code for the inference function changing the type to run a hypothesis test and
-    adding arguments for the null value and the alternative hypothesis. See the help
-    for the `inference` function using `?inference` to determine the appropriate syntax.
-
-1.   Is there convincing evidence that the US has seen a change in its atheism index 
-    between 2005 and 2012? As always, write out the hypotheses for any tests you 
-    conduct and outline the status of the conditions for inference. If you find a 
-    significant difference, also quantify this difference with a confidence interval.
-
-1.   If in fact there has been no change in the atheism index in the countries 
-    listed in Table 4, in how many of those countries would you expect to 
-    detect a change (at a significance level of 0.05) simply by chance?\
+1.  Let's say there has been no difference in likeliness to strength train every
+    day of the week for those who sleep 10+ hours. What is the probablity that
+    you could detect a change (at a significance level of 0.05) simply by chance?
     *Hint:* Review the definition of the Type 1 error.
 
 1.   Suppose you're hired by the local government to estimate the proportion of 
@@ -285,10 +253,9 @@ inference(y = name_of_response_variable, x = name_of_explanatory_variable, ...)
     people would you have to sample to ensure that you are within the 
     guidelines?\
     *Hint:* Refer to your plot of the relationship between $p$ and margin of 
-    error. This question does not require using the dataset.
+    error. This question does not require using a dataset.
 
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
-Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
-This lab was written for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel.
+Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
 </div>
