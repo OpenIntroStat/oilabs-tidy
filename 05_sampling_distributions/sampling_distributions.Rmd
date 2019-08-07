@@ -13,7 +13,8 @@ output:
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
-library(oilabs)
+library(openintro)
+library(infer)
 data(ames)
 ```
 
@@ -32,20 +33,22 @@ concept is new to you, review the lab concerning probability.
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
-packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of packages. 
+The data can be found in the companion package for OpenIntro resources, **openintro**.
+Lastly, we will use the **infer** package for resampling.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
-library(oilabs)
+library(openintro)
+library(infer)
 ```
 
 ### Creating a reproducible lab report
 
 To create your new lab report, start by opening a new R Markdown document... From 
-Template... then select Lab Report from the `oilabs` package. 
+Template... then select Lab Report from the **openintro** package. 
 
 ### The data
 
