@@ -10,9 +10,9 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 library(tidyverse)
-library(oilabs)
+library(openintro)
 library(infer)
 ```
 
@@ -26,7 +26,7 @@ situation requires that you use your sample to make inference on what your
 population looks like.
 
 <div id="boxedtext">
-**Setting a seed:** You will take some random samples and build sampling distributions
+**Setting a seed:** You will take random samples and build sampling distributions
 in this lab, which means you should set a seed on top of your lab. If this concept
 is new to you, review the lab concerning probability.
 </div>
@@ -35,21 +35,20 @@ is new to you, review the lab concerning probability.
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
-packages, and perform statistical inference using `infer`. The data can be found
-in the companion package for OpenIntro labs, `oilabs`.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of packages, and perform statistical inference using **infer**. 
+The data can be found in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
-library(oilabs)
+library(openintro)
 library(infer)
 ```
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `oilabs` package. 
+To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
 
 ### The data
 
@@ -107,14 +106,14 @@ A confidence interval for a population mean is of the following form
 
 Although you can do this calculate by hand, the `infer` package provides a set of
 commands consistent with the `tidyverse` framework, thus making it easy to follow 
-a similar workflow. You can use these commands to find a single confidence 
+a similar syntax. You can use these commands to find a single confidence 
 interval:
 
-Command | Purpose
+Function | Purpose
 ------- | -------
 `specify` | Identify your variable of interest using the `formula` argument
-`generate` | The amount of repetitions you want to do
-`calculate` | The type of statistic you are looking for
+`generate` | The number of samples you want to generate
+`calculate` | The sample statistic you want to do inference with, or you can also think of this as the population parameter you want to do inference for
 `get_ci` | Find the confidence interval
 
 This code will find the 95 percent confidence interval for the average living area
@@ -125,7 +124,7 @@ samp %>%
   specify(formula = area ~ NULL) %>%
   generate(reps = 1000, type = "bootstrap") %>%
   calculate(stat = "mean") %>%
-  get_ci(level = .95)
+  get_ci(level = 0.95)
 ```
 
 Note that within `generate`, there are two argument included here. The first, 
@@ -183,7 +182,7 @@ find the corresponding critical value for a 95 percent confidence interval, as
 opposed to the `get_ci` method within `infer`, which can only compute a single 
 interval at a time.
 
-Note: `qnorm` is set to .975 for a two-sided 95 percent confidence interval since
+Note: `qnorm` is set to 0.975 for a two-sided 95 percent confidence interval since
 the upper bound is at the 97.5 percentile.
 
 ```{r calculate-50-cis}
@@ -191,7 +190,7 @@ ci <- ames %>%
         rep_sample_n(size = n, reps = 50, replace = TRUE) %>%
         summarise(x_bar = mean(area), 
                   se = sd(area) / sqrt(n),
-                  me = qnorm(.975) * se,
+                  me = qnorm(0.975) * se,
                   lower = x_bar - me,
                   upper = x_bar + me)
 ```
@@ -269,8 +268,7 @@ ggplot(data = ci_data, aes(x = bound, y = replicate,
 
 ## More Practice
 
-1.  Find a singular two-sided confidence interval with a percentage of your choosing
-(other than 95%) and interpret it.
+1.  Find a confidence interval with a percentage of your choosing (other than 95%) and interpret it.
 
 1.  Calculate 50 confidence intervals at the confidence level you chose in the 
     previous question, and plot all intervals on one plot, and calculate the proportion 

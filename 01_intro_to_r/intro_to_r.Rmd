@@ -12,7 +12,7 @@ output:
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
-library(oilabs)
+library(openintro)
 ```
 
 
@@ -58,8 +58,8 @@ R is an open-source programming language, meaning that users can contribute
 packages that make our lives easier, and we can use them for free. For this lab,
 and many others in the future, we will use the following R packages:
 
-- The suite of *tidyverse* packages: for data wrangling and data visualization
-- *oilabs*: for data and custom functions with the OpenIntro labs
+- The suite of **tidyverse** packages: for data wrangling and data visualization
+- **openintro**: for data and custom functions with the OpenIntro resources
 
 If these packages are not already available in your R environment, 
 install them by typing the following three lines of code into
@@ -69,7 +69,7 @@ inspecting the *Packages* tab in the lower right panel of RStudio.
 
 ```{r install-packages, message = FALSE, eval=FALSE}
 install.packages("tidyverse")
-install.packages("oilabs")
+install.packages("openintro")
 ```
 
 You may need to select a server from which to download; any of them will work.
@@ -78,7 +78,7 @@ the `library` function. Run the following three lines in your console.
 
 ```{r load-packages, message = FALSE, eval=TRUE}
 library(tidyverse)
-library(oilabs)
+library(openintro)
 ```
 
 You only need to *install* packages once, but you need to *load* 
@@ -459,18 +459,15 @@ from a lab written by Mark Hansen of UCLA Statistics.
 That was a short introduction to R and RStudio, but we will provide you with more
 functions and a more complete sense of the language as the course progresses. 
 
-In this course we will be using the suite of R packages from the *tidyverse*. If 
-you are googling for R code, make sureto also include these package names in your
-search query. For example, instead of googling "scatterplot in R", google 
-"scatterplot in R with the tidyverse".
+In this course we will be using the suite of R packages from the **tidyverse**. 
+The book [R For Data Science](https://r4ds.had.co.nz/) by Grolemund and Wickham is a fantastic resource for data analysis in R with the tidyverse. 
+If you are googling for R code, make sureto also include these package names in your search query. For example, instead of googling "scatterplot in R", google "scatterplot in R with the tidyverse".
 
 These cheatsheets may come in handy throughout the semester:
 
-- [RMarkdown cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)
-- [Data transformation cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf)
-- [Data visualization cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
-
-The book titled "Getting used to R, RStudio, and R Markdown" by Chester Ismay, which can be freely accessed [here](https://ismayc.github.io/rbasics-book), is also a wonderful resource for for new users of R, RStudio, and R Markdown. It includes examples showing working with R Markdown files in RStudio recorded as GIFs.
+- [RMarkdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
+- [Data transformation cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
+- [Data visualization cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf)
 
 Note that some of the code on these cheatsheets may be too advanced for this course.
 However the majority of it will become useful throughout the semester.
