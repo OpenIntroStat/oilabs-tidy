@@ -11,17 +11,16 @@ output:
 
 ```{r global-options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(dplyr)
-library(ggplot2)
-library(oilabs)
+library(tidyverse)
+library(openintro)
 ```
 
 Some define statistics as the field that focuses on turning information into
 knowledge. The first step in that process is to summarize and describe the raw
 information -- the data. In this lab we explore flights, specifically a random
 sample of domestic flights that departed from the three major 
-New York City airport in 2013. We will generate simple graphical and numerical 
-summaries of data on these flights and explore delay times. As this is a large 
+New York City airports in 2013. We will generate simple graphical and numerical 
+summaries of data on these flights and explore delay times. Since this is a large 
 data set, along the way you'll also learn the indispensable skills of data 
 processing and subsetting.
 
@@ -30,16 +29,14 @@ processing and subsetting.
 
 ### Load packages
 
-In this lab we will explore the data using the dplyr package and visualize it 
-using the ggplot2 package for data visualization. The data can be found in the
-companion package for OpenIntro labs, oilabs.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of 
+packages. The data can be found in the companion package for OpenIntro labs, **openintro**.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
-library(dplyr)
-library(ggplot2)
-library(oilabs)
+library(tidyverse)
+library(openintro)
 ```
 
 ### Creating a reproducible lab report
@@ -56,10 +53,10 @@ reports for this lab, and all future labs:
 The [Bureau of Transportation Statistics](http://www.rita.dot.gov/bts/about/) 
 (BTS) is a statistical agency that is a part of the Research and Innovative 
 Technology Administration (RITA). As its name implies, BTS collects and makes 
-available transportation data, such as the flights data we will be working with 
+transportation data available, such as the flights data we will be working with 
 in this lab.
 
-We begin by loading the `nycflights` data frame. Type the following in your console
+Begin by loading the `nycflights` data frame. Type the following in your console
 to load the data:
 
 ```{r load-data, eval = TRUE}
@@ -106,19 +103,19 @@ is coded according to the following system.
     + `YV`:          Mesa Airlines Inc.
 
 
-A very useful function for taking a quick peek at your data frame and viewing
-its dimensions and data types is `str`, which stands for **str**ucture.
+Remember that you can use `glimpse` to take a quick peek at your data to 
+understand its contents better.
 
-```{r str}
-str(nycflights)
+```{r glimpse}
+glimpse(nycflights)
 ```
 
 The `nycflights` data frame is a massive trove of information. Let's think about 
 some questions we might want to answer with these data:
 
 - How delayed were flights that were headed to Los Angeles?
-- How do departure delays vary over months?
-- Which of the three major NYC airports has a better on time percentage for 
+- How do departure delays vary by month?
+- Which of the three major NYC airports has the best on time percentage for 
 departing flights?
 
 
@@ -126,7 +123,7 @@ departing flights?
 
 ### Lab report
 To record your analysis in a reproducible format, you can adapt the general Lab 
-Report template from the oilabs package. Watch the video above to learn how.
+Report template from the **openintro** package. Watch the video above to learn how.
 
 ### Departure delays
 
@@ -134,7 +131,8 @@ Let's start by examing the distribution of departure delays of all flights with 
 histogram.
 
 ```{r hist-dep-delay}
-qplot(x = dep_delay, data = nycflights, geom = "histogram")
+ggplot(data = nycflights, aes(x = dep_delay)) +
+  geom_histogram()
 ```
 
 This function says to plot the `dep_delay` variable from the `nycflights` data 
@@ -147,24 +145,27 @@ data is split between the different bins. You can easily define the binwidth you
 want to use:
 
 ```{r hist-dep-delay-bins}
-qplot(x = dep_delay, data = nycflights, geom = "histogram", binwidth = 15)
-qplot(x = dep_delay, data = nycflights, geom = "histogram", binwidth = 150)
+ggplot(data = nycflights, aes(x = dep_delay)) +
+  geom_histogram(binwidth = 15)
+ggplot(data = nycflights, aes(x = dep_delay)) +
+  geom_histogram(binwidth = 150)
 ```
 
 1.  Look carefully at these three histograms. How do they compare? Are features
 revealed in one that are obscured in another?
 
-If we want to focus only on departure delays of flights headed to Los Angeles, 
-we need to first `filter` the data for flights with that destination (`dest == "LAX"`)
+If you want to visualize only on delays of flights headed to Los Angeles, you need 
+to first `filter` the data for flights with that destination (`dest == "LAX"`)
 and then make a histogram of the departure delays of only those flights.
 
 ```{r lax-flights-hist}
 lax_flights <- nycflights %>%
   filter(dest == "LAX")
-qplot(x = dep_delay, data = lax_flights, geom = "histogram")
+ggplot(data = lax_flights, aes(x = dep_delay)) +
+  geom_histogram()
 ```
 
-Let's decipher these two commands (OK, so it might look like three lines, but
+Let's decipher these two commands (OK, so it might look like four lines, but
 the first two physical lines of code are actually part of the same command. It's 
 common to add a break to a new line after `%>%` to help readability).
 
@@ -172,7 +173,7 @@ common to add a break to a new line after `%>%` to help readability).
 save the result as a new data frame called `lax_flights`.
     + `==` means "if it's equal to".
     + `LAX` is in quotation marks since it is a character string.
-- Command 2: Basically the same `qplot` call from earlier for making a histogram, 
+- Command 2: Basically the same `ggplot` call from earlier for making a histogram, 
 except that it uses the smaller data frame for flights headed to LAX instead of all
 flights.
 
@@ -180,7 +181,7 @@ flights.
 **Logical operators: ** Filtering for certain observations (e.g. flights from a 
 particular airport) is often of interest in data frames where we might want to 
 examine observations with certain characteristics separately from the rest of 
-the data. To do so we use the `filter` function and a series of 
+the data. To do so, you can use the `filter` function and a series of 
 **logical operators**. The most commonly used logical operators for data 
 analysis are as follows:
 
@@ -190,18 +191,18 @@ analysis are as follows:
 - `>=` or `<=` means "greater than or equal to" or "less than or equal to"
 </div>
 
-We can also obtain numerical summaries for these flights:
+You can also obtain numerical summaries for these flights:
 
 ```{r lax-flights-summ}
 lax_flights %>%
   summarise(mean_dd = mean(dep_delay), median_dd = median(dep_delay), n = n())
 ```
 
-Note that in the `summarise` function we created a list of three different
-numerical summaries that we were interested in. The names of these elements are 
-user defined, like `mean_dd`, `median_dd`, `n`, and you could customize these names 
+Note that in the `summarise` function you created a list of three different
+numerical summaries that you were interested in. The names of these elements are 
+user defined, like `mean_dd`, `median_dd`, `n`, and you can customize these names 
 as you like (just don't use spaces in your names). Calculating these summary 
-statistics also require that you know the function calls. Note that `n()` reports
+statistics also requires that you know the function calls. Note that `n()` reports
 the sample size.
 
 <div id="boxedtext">
@@ -216,11 +217,11 @@ single numerical variable are as follows:
 - `min`
 - `max`
 
-Note that each of these functions take a single vector as an argument, and 
+Note that each of these functions takes a single vector as an argument and 
 returns a single value. 
 </div>
 
-We can also filter based on multiple criteria. Suppose we are interested in
+You can also filter based on multiple criteria. Suppose you are interested in
 flights headed to San Francisco (SFO) in February:
 
 ```{r sfo-feb-flights}
@@ -228,9 +229,9 @@ sfo_feb_flights <- nycflights %>%
   filter(dest == "SFO", month == 2)
 ```
 
-Note that we can separate the conditions using commas if we want flights that
-are both headed to SFO **and** in February. If we are interested in either
-flights headed to SFO **or** in February we can use the `|` instead of the comma.
+Note that you can separate the conditions using commas if you want flights that
+are both headed to SFO **and** in February. If you are interested in either
+flights headed to SFO **or** in February, you can use the `|` instead of the comma.
 
 1.  Create a new data frame that includes flights headed to SFO in February, 
     and save this data frame as `sfo_feb_flights`. How many flights 
@@ -240,10 +241,9 @@ flights headed to SFO **or** in February we can use the `|` instead of the comma
     histogram and appropriate summary statistics. **Hint:** The summary 
     statistics you use should depend on the shape of the distribution.
     
-Another useful technique is quickly calculating summary 
-statistics for various groups in your data frame. For example, we can modify the 
-above command using the `group_by` function to get the same summary stats for 
-each origin airport:
+Another useful technique is quickly calculating summary statistics for various 
+groups in your data frame. For example, we can modify the above command using 
+the `group_by` function to get the same summary stats for each origin airport:
 
 ```{r summary-custom-list-origin}
 sfo_feb_flights %>%
@@ -251,25 +251,25 @@ sfo_feb_flights %>%
   summarise(median_dd = median(dep_delay), iqr_dd = IQR(dep_delay), n_flights = n())
 ```
 
-Here, we first grouped the data by `origin`, and then calculated the summary 
+Here, we first grouped the data by `origin` and then calculated the summary 
 statistics.
 
 1.  Calculate the median and interquartile range for `arr_delay`s of flights in
     in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier
     has the most variable arrival delays?
 
-### Departure delays over months
+### Departure delays by month
 
 Which month would you expect to have the highest average delay departing from an
 NYC airport?
 
-Let's think about how we would answer this question:
+Let's think about how you could answer this question:
 
 - First, calculate monthly averages for departure delays. With the new language
-we are learning, we need to
+you are learning, you could
     + `group_by` months, then
     + `summarise` mean departure delays.
-- Then, we need to `arrange` these average delays in `desc`ending order
+- Then, you could to `arrange` these average delays in `desc`ending order
 
 ```{r mean-dep-delay-months}
 nycflights %>%
@@ -278,7 +278,7 @@ nycflights %>%
   arrange(desc(mean_dd))
 ```
 
-1.  Suppose you really dislike departure delays, and you want to schedule 
+1.  Suppose you really dislike departure delays and you want to schedule 
     your travel in a month that minimizes your potential departure delay leaving 
     NYC. One option is to choose the month with the lowest mean departure delay.
     Another option is to choose the month with the lowest median departure delay. 
@@ -295,12 +295,12 @@ Which month has the highest average departure delay from an NYC airport? What
 
 Suppose you will be flying out of NYC and want to know which of the 
 three major NYC airports has the best on time departure rate of departing flights. 
-Suppose also that for you a flight that is delayed for less than 5 minutes is 
-basically "on time". You consider any flight delayed for 5 minutes of more to be 
+Also supposed that for you, a flight that is delayed for less than 5 minutes is 
+basically "on time."" You consider any flight delayed for 5 minutes of more to be 
 "delayed".
 
 In order to determine which airport has the best on time departure rate, 
-we need to 
+you can 
 
 - first classify each flight as "on time" or "delayed",
 - then group flights by origin airport,
@@ -317,7 +317,7 @@ nycflights <- nycflights %>%
 ```
 
 The first argument in the `mutate` function is the name of the new variable
-we want to create, in this case `dep_type`. Then if `dep_delay < 5` we classify 
+we want to create, in this case `dep_type`. Then if `dep_delay < 5`, we classify 
 the flight as `"on time"` and `"delayed"` if not, i.e. if the flight is delayed 
 for 5 or more minutes.
 
@@ -336,11 +336,12 @@ nycflights %>%
 1.  If you were selecting an airport simply based on on time departure 
     percentage, which NYC airport would you choose to fly out of?
 
-We can also visualize the distribution of on on time departure rate across 
+You can also visualize the distribution of on on time departure rate across 
 the three airports using a segmented bar plot.
 
 ```{r viz-origin-dep-type}
-qplot(x = origin, fill = dep_type, data = nycflights, geom = "bar")
+ggplot(data = nycflights, aes(x = origin, fill = dep_type)) +
+  geom_bar()
 ```
 
 * * *
@@ -354,7 +355,7 @@ qplot(x = origin, fill = dep_type, data = nycflights, geom = "bar")
     
 1.  Make a scatterplot of `avg_speed` vs. `distance`. Describe the relationship
     between average speed and distance.
-    **Hint:** Use `geom = "point"`.
+    **Hint:** Use `geom_point()`.
 
 1.  Replicate the following plot. **Hint:** The data frame plotted only
     contains flights from American Airlines, Delta Airlines, and United
@@ -365,5 +366,11 @@ qplot(x = origin, fill = dep_type, data = nycflights, geom = "bar")
 ```{r plot-to-replicate, echo=FALSE, eval=TRUE, fig.width=7, fig.height=4}
 dl_aa_ua <- nycflights %>%
   filter(carrier == "AA" | carrier == "DL" | carrier == "UA")
-qplot(x = dep_delay, y = arr_delay, data = dl_aa_ua, color = carrier)
+ggplot(data = dl_aa_ua, aes(x = dep_delay, y = arr_delay, color = carrier)) +
+  geom_point()
 ```
+
+<div id="license">
+This is a product of OpenIntro that is released under a 
+[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
+</div>
