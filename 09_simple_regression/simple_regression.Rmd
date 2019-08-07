@@ -40,6 +40,10 @@ library(tidyverse)
 library(openintro)
 ```
 
+```{r}
+hfi <- read_csv("hfi_cc_2018.csv")
+```
+
 ### Creating a reproducible lab report
 
 To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
