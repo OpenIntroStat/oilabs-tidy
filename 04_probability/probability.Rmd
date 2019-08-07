@@ -12,7 +12,7 @@ output:
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
-library(oilabs)
+library(openintro)
 ```
 
 ## The Hot Hand
@@ -36,18 +36,18 @@ data in order to determine if the hot hand phenomenon appears to be real.
 ### Load packages
 
 In this lab, we will explore and visualize the data using the `tidyverse` suite of 
-packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
+packages. The data can be found in the companion package for OpenIntro labs, **openintro**.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
-library(oilabs)
+library(openintro)
 ```
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `oilabs` package. 
+To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
 
 ### Data
 
@@ -298,7 +298,5 @@ a hot hand.
 
 <div id="license">
 This is a product of OpenIntro that is released under a 
-[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
-This lab was adapted for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel
-from a lab written by Mark Hansen of UCLA Statistics.
+[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
 </div>
