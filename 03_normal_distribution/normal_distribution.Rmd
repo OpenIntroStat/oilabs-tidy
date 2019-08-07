@@ -29,14 +29,12 @@ Either you can use `glimpse` like before, or `head` to do this.
 
 ```{r load-data}
 library(tidyverse)
-library(oilabs)
-fastfood <- read_csv("fastfood_calories.csv")
+library(openintro)
 head(fastfood)
 ```
 
-You'll see that for every observation there are 18 measurements, many of which are
-nutritional facts. Note that the first column, `X1`, is a physical index for each
-observation.
+You'll see that for every observation there are 17 measurements, many of which are
+nutritional facts.
 
 You'll be focusing on just three columns to get started: restaurant, calories, 
 calories from fat.
@@ -237,6 +235,4 @@ theoretical probabilities will be.
 <div id="license">
 This is a product of OpenIntro that is released under a 
 [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
-This lab was adapted for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel
-from a lab written by Mark Hansen of UCLA Statistics.
 </div>
