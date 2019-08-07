@@ -30,27 +30,23 @@ about freedom.
 
 ### Load packages
 
-In this lab, you will explore and visualize the data using the `tidyverse` suite of 
-packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
+In this lab, you will explore and visualize the data using the **tidyverse** suite of 
+packages. The data can be found in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
-library(oilabs)
-```
-
-```{r read-csv}
-hfi <- read_csv("hfi_cc_2018.csv")
+library(openintro)
 ```
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `oilabs` package. 
+To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
 
 ### The data
 
-Let's load up the data.
+Let's load the data.
 
 ```{r load-data}
 data(hfi)
@@ -284,7 +280,5 @@ another name commonly used for normal probability plots.
 
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
-Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
-This lab was adapted for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel 
-from a lab written by the faculty and TAs of UCLA Statistics.
+Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
 </div>
