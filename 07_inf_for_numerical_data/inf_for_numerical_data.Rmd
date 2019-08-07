@@ -12,31 +12,29 @@ output:
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
-library(oilabs)
-library(infer)
 library(openintro)
+library(infer)
 ```
 
 ## Getting Started
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
-packages, and perform statistical inference using `infer`. The data can be found
-in the companion package for OpenIntro labs, `oilabs`.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of 
+packages, and perform statistical inference using **infer**. The data can be found
+in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
-library(oilabs)
 library(infer)
 library(openintro)
 ```
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `oilabs` package. 
+To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
 
 ### The data
 
@@ -45,7 +43,6 @@ Risk Behavior Surveillance System (YRBSS) survey, where it takes data from high
 schoolers (9th through 12th grade), to analyze health patterns. You will work 
 with a selected group of variables from a random sample of observations during 
 one of the years the YRBSS was conducted.
-
 
 Load the `yrbss` data set into your workspace.
 
@@ -144,7 +141,7 @@ After you have initialized the test, you need to simulate the test on the null
 distribution, which we will save as `null`.
 
 ```{r inf-weight-habit-ht-null, tidy=FALSE, warning = FALSE}
-null <- yrbss %>%
+null_dist <- yrbss %>%
   specify(weight ~ physical_3plus) %>%
   hypothesize(null = "independence") %>%
   generate(reps = 1000, type = "permute") %>%
@@ -161,7 +158,7 @@ is the argument when generating a null distribution for a hypothesis test.
 We can visualize this null distribution with the following code:
 
 ```{r}
-ggplot(data = null, aes(x = stat)) +
+ggplot(data = null_dist, aes(x = stat)) +
   geom_histogram()
 ```
 
@@ -172,7 +169,7 @@ Now that the test is initialized and the null distribution formed, you can calcu
 the p-value for your hypothesis test using the function `get_p_value`.
 
 ```{r inf-weight-habit-ht-pvalue}
-null %>%
+null_dist %>%
   get_p_value(obs_stat = obs_diff, direction = "two_sided")
 ```
 
@@ -196,7 +193,7 @@ the one obtained in the previous exercise.
 9.  Conduct a hypothesis test evaluating whether the average height is different
 for those who exercise at least three times a week and those who don't.
 
-10.  Now, a non-inference task: Determine the amount of different options there 
+10.  Now, a non-inference task: Determine the number of different options there 
 are in the dataset for the `hours_tv_per_school_day` there are.
 
 11. Come up with a research question evaluating the relationship between height 
@@ -208,6 +205,4 @@ assumptions, state your $\alpha$ level, and conclude in context.
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
 Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-This lab was adapted for OpenIntro by Mine &Ccedil;etinkaya-Rundel from a lab 
-written by the faculty and TAs of UCLA Statistics.
 </div>
