@@ -12,7 +12,7 @@ output:
 ```{r global-options, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
-library(oilabs)
+library(openintro)
 ```
 
 Some define statistics as the field that focuses on turning information into
@@ -29,14 +29,14 @@ processing and subsetting.
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the `tidyverse` suite of 
-packages. The data can be found in the companion package for OpenIntro labs, `oilabs`.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of 
+packages. The data can be found in the companion package for OpenIntro labs, **openintro**.
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
-library(oilabs)
+library(openintro)
 ```
 
 ### Creating a reproducible lab report
@@ -123,7 +123,7 @@ departing flights?
 
 ### Lab report
 To record your analysis in a reproducible format, you can adapt the general Lab 
-Report template from the `oilabs` package. Watch the video above to learn how.
+Report template from the **openintro** package. Watch the video above to learn how.
 
 ### Departure delays
 
@@ -369,3 +369,8 @@ dl_aa_ua <- nycflights %>%
 ggplot(data = dl_aa_ua, aes(x = dep_delay, y = arr_delay, color = carrier)) +
   geom_point()
 ```
+
+<div id="license">
+This is a product of OpenIntro that is released under a 
+[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
+</div>
