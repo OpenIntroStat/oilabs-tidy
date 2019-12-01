@@ -15,7 +15,6 @@ knitr::opts_chunk$set(eval = FALSE)
 library(tidyverse)
 library(openintro)
 library(infer)
-data(ames)
 ```
 
 In this lab, you will investigate the ways in which the statistics from a random 

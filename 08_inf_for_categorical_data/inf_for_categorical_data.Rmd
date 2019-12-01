@@ -224,7 +224,7 @@ renderPlot({
 
 * * *
 
-## More Practicexs
+## More Practice
 
 For some of the exercises below, you will conduct inference comparing two 
 proportions. In such cases, you have a response variable that is categorical, and
