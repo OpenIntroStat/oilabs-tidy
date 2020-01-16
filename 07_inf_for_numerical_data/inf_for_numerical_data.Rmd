@@ -10,10 +10,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-library(tidyverse)
-library(openintro)
-library(infer)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 ```
 
 ## Getting Started
@@ -28,8 +25,8 @@ Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
-library(infer)
 library(openintro)
+library(infer)
 ```
 
 ### Creating a reproducible lab report
@@ -95,7 +92,7 @@ yrbss <- yrbss %>%
 ```
 
 
-2.  Make a side-by-side boxplot of `physical_3plus` and `weight`. Is there a 
+1.  Make a side-by-side boxplot of `physical_3plus` and `weight`. Is there a 
 relationship between these two variables? What did you expect and why?
 
 The box plots show how the medians of the two distributions compare, but we can
@@ -115,11 +112,11 @@ significant? In order to answer this question we will conduct a hypothesis test.
 
 ## Inference
 
-3.  Are all conditions necessary for inference satisfied? Comment on each. You can 
+1.  Are all conditions necessary for inference satisfied? Comment on each. You can 
 compute the group sizes with the `summarize` command above by defining a new variable
 with the definition `n()`.
 
-4.  Write the hypotheses for testing if the average weights are different for those
+1.  Write the hypotheses for testing if the average weights are different for those
 who exercise at least times a week and those who don't.
 
 Next, we will introduce a new function, `hypothesize`, that falls into the `infer` 
@@ -163,7 +160,7 @@ ggplot(data = null_dist, aes(x = stat)) +
 ```
 
 
-5. How many of these `null` permutations have a difference of at least `obs_stat`?
+1. How many of these `null` permutations have a difference of at least `obs_stat`?
 
 Now that the test is initialized and the null distribution formed, you can calculate
 the p-value for your hypothesis test using the function `get_p_value`.
@@ -175,7 +172,7 @@ null_dist %>%
 
 This the standard workflow for performing hypothesis tests.
 
-6.  Construct and record a confidence interval for the difference between the 
+1.  Construct and record a confidence interval for the difference between the 
 weights of those who exercise at least three times a week and those who don't, and
 interpret this interval in context of the data.
 
@@ -183,26 +180,25 @@ interpret this interval in context of the data.
 
 ## More Practice
 
-7.  Calculate a 95% confidence interval for the average height in meters (`height`)
+1.  Calculate a 95% confidence interval for the average height in meters (`height`)
 and interpret it in context.
 
-8.  Calculate a new confidence interval for the same parameter at the 90% 
+1.  Calculate a new confidence interval for the same parameter at the 90% 
 confidence level. Comment on the width of this interval versus 
 the one obtained in the previous exercise.
 
-9.  Conduct a hypothesis test evaluating whether the average height is different
+1.  Conduct a hypothesis test evaluating whether the average height is different
 for those who exercise at least three times a week and those who don't.
 
-10.  Now, a non-inference task: Determine the number of different options there 
+1.  Now, a non-inference task: Determine the number of different options there 
 are in the dataset for the `hours_tv_per_school_day` there are.
 
-11. Come up with a research question evaluating the relationship between height 
+1. Come up with a research question evaluating the relationship between height 
 or weight and sleep. Formulate the question in a way that it can be answered using
 a hypothesis test and/or a confidence interval. Report the statistical results, 
 and also provide an explanation in plain language. Be sure to check all 
 assumptions, state your $\alpha$ level, and conclude in context.
 
-<div id="license">
-This is a product of OpenIntro that is released under a [Creative Commons 
-Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-</div>
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

@@ -11,15 +11,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = TRUE, results = FALSE)
-library(tidyverse)
-library(openintro)
-library(infer)
-
-global_monitor <- tibble(
-  scientist_work = c(rep("Benefits", 80000), rep("Doesn't benefit", 20000))
-)
-
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 set.seed(1234)
 ```
 
@@ -31,7 +23,7 @@ to learn about the properties of the estimate, such as its distribution.
 <div id="boxedtext">
 **Setting a seed:** We will take some random samples and build sampling distributions
 in this lab, which means you should set a seed at the start of your lab. If this
-concept is new to you, review the lab concerning probability.
+concept is new to you, review the lab on probability.
 </div>
 
 ## Getting Started
@@ -39,8 +31,7 @@ concept is new to you, review the lab concerning probability.
 ### Load packages
 
 In this lab, we will explore and visualize the data using the **tidyverse** suite of packages. 
-The data can be found in the companion package for OpenIntro resources, **openintro**.
-Lastly, we will use the **infer** package for resampling.
+We will also use the **infer** package for resampling.
 
 Let's load the packages.
 
@@ -59,12 +50,25 @@ Template... then select Lab Report from the **openintro** package.
 
 A 2019 Gallup report states the following:
 
->The premise that scientific progress benefits people has been embodied in discoveries throughout the ages -- from the development of vaccinations to the explosion of technology in the past few decades, resulting in billions of supercomputers now resting in the hands and pockets of people worldwide. Still, not everyone around the world feels science benefits them personally.[Source: [World Science Day: Is Knowledge Power?](https://news.gallup.com/opinion/gallup/268121/world-science-day-knowledge-power.aspx)]
+>The premise that scientific progress benefits people has been embodied in discoveries throughout the ages -- from the development of vaccinations to the explosion of technology in the past few decades, resulting in billions of supercomputers now resting in the hands and pockets of people worldwide. Still, not everyone around the world feels science benefits them personally. 
+>
+>**Source:** [World Science Day: Is Knowledge Power?](https://news.gallup.com/opinion/gallup/268121/world-science-day-knowledge-power.aspx)
 
 The Wellcome Global Monitor finds that 20% of people globally do not believe that the work scientists do benefits people like them.
-In this lab, you will assume this 20% is a true population proportion and learn about how sample proportions can vary from sample to sample by taking smaller samples from the population. The data can be found in the `global_monitor` dataset in the **openintro** package, and responses to the question *"Do you believe that the work scientists do benefit people like you?"* is stored in the `scientist_work` in this data frame.
+In this lab, you will assume this 20% is a true population proportion and learn about how sample proportions can vary from sample to sample by taking smaller samples from the population. 
+We will first create our population assuming a population size of 100,000. 
+This means 20,000 (20%) of the population think the work scientists do does not 
+benefit them personally and the remaining 80,000 think it does.
 
-We can quickly visualize the distribution of these responses:
+```{r}
+global_monitor <- tibble(
+  scientist_work = c(rep("Benefits", 80000), rep("Doesn't benefit", 20000))
+)
+```
+
+The name of the data frame is `global_monitor` and the name of the variable that contains responses to the question *"Do you believe that the work scientists do benefit people like you?"* is `scientist_work`.
+
+We can quickly visualize the distribution of these responses using a bar plot.
 
 ```{r bar-plot-pop, fig.height=2.5, fig.width=10}
 ggplot(global_monitor, aes(x = scientist_work)) +
@@ -76,7 +80,7 @@ ggplot(global_monitor, aes(x = scientist_work)) +
   coord_flip() 
 ```
 
-We can also obtain summary statistics:
+We can also obtain summary statistics to confirm we constructed the data frame correctly.
 
 ```{r summ-stat-pop, results = TRUE}
 global_monitor %>%
@@ -113,7 +117,7 @@ Working with these 50 names is considerably simpler than working with all 100,00
 
 If you're interested in estimating the proportion of all people who do not believe that the work scientists do benefits them, but you do not have access to the population data, your best single guess is the sample mean.
 
-```{r phat-samp1, results=FALSE}
+```{r phat-samp1}
 samp1 %>%
   count(scientist_work) %>%
   mutate(p_hat = n /sum(n))
@@ -195,6 +199,7 @@ global_monitor %>%
   mutate(p_hat = n /sum(n)) %>%
   filter(scientist_work == "Doesn't benefit")
 ```
+
 as well as store the resulting sample proportions each time in a separate vector.
 
 Note that for each of the 15,000 times we computed a proportion, we did so from a **different** sample!
@@ -351,13 +356,13 @@ You are welcome to use the app for exploration.
     new object called `sample_props150`. Describe the shape of this sampling 
     distribution and compare it to the sampling distribution for a sample 
     size of 15. Based on this sampling distribution, what would you guess to 
-    be the true proportion of those who think the work scientists do enchances their lives?
+    be the true proportion of those who think the work scientists do enchances 
+    their lives?
 
 1.  Of the sampling distributions from 2 and 3, which has a smaller spread?  If
     you're concerned with making estimates that are more often close to the 
     true value, would you prefer a sampling distribution with a large or small spread?
 
-<div id="license">
-This is a product of OpenIntro that is released under a [Creative Commons 
-Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-</div>
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

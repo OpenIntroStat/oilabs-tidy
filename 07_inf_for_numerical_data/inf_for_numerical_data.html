@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -1343,7 +1342,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -1477,7 +1476,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -1539,6 +1537,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -1567,6 +1566,12 @@ summary {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -1649,8 +1654,8 @@ div.tocify {
 <p>In this lab, we will explore and visualize the data using the <strong>tidyverse</strong> suite of packages, and perform statistical inference using <strong>infer</strong>. The data can be found in the companion package for OpenIntro resources, <strong>openintro</strong>.</p>
 <p>Let’s load the packages.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(infer)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(openintro)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(openintro)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(infer)</a></code></pre></div>
 </div>
 <div id="creating-a-reproducible-lab-report" class="section level3">
 <h3>Creating a reproducible lab report</h3>
@@ -1682,7 +1687,7 @@ div.tocify {
 <p>First, let’s create a new variable <code>physical_3plus</code>, which will be coded as either “yes” if they are physically active for at least 3 days a week, and “no” if not.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">yrbss &lt;-<span class="st"> </span>yrbss <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">physical_3plus =</span> <span class="kw">ifelse</span>(yrbss<span class="op">$</span>physically_active_7d <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>))</a></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li>Make a side-by-side boxplot of <code>physical_3plus</code> and <code>weight</code>. Is there a relationship between these two variables? What did you expect and why?</li>
 </ol>
 <p>The box plots show how the medians of the two distributions compare, but we can also compare the means of the distributions using the following to first group the data by the <code>physical_3plus</code> variable, and then calculate the mean <code>weight</code> in these groups using the <code>mean</code> function while ignoring missing values by setting the <code>na.rm</code> argument to <code>TRUE</code>.</p>
@@ -1693,7 +1698,7 @@ div.tocify {
 </div>
 <div id="inference" class="section level2">
 <h2>Inference</h2>
-<ol start="3" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li><p>Are all conditions necessary for inference satisfied? Comment on each. You can compute the group sizes with the <code>summarize</code> command above by defining a new variable with the definition <code>n()</code>.</p></li>
 <li><p>Write the hypotheses for testing if the average weights are different for those who exercise at least times a week and those who don’t.</p></li>
 </ol>
@@ -1714,30 +1719,29 @@ div.tocify {
 <p>We can visualize this null distribution with the following code:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> null_dist, <span class="kw">aes</span>(<span class="dt">x =</span> stat)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
-<ol start="5" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li>How many of these <code>null</code> permutations have a difference of at least <code>obs_stat</code>?</li>
 </ol>
 <p>Now that the test is initialized and the null distribution formed, you can calculate the p-value for your hypothesis test using the function <code>get_p_value</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">null_dist <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">get_p_value</span>(<span class="dt">obs_stat =</span> obs_diff, <span class="dt">direction =</span> <span class="st">&quot;two_sided&quot;</span>)</a></code></pre></div>
 <p>This the standard workflow for performing hypothesis tests.</p>
-<ol start="6" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li>Construct and record a confidence interval for the difference between the weights of those who exercise at least three times a week and those who don’t, and interpret this interval in context of the data.</li>
 </ol>
 <hr />
 </div>
 <div id="more-practice" class="section level2">
 <h2>More Practice</h2>
-<ol start="7" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li><p>Calculate a 95% confidence interval for the average height in meters (<code>height</code>) and interpret it in context.</p></li>
 <li><p>Calculate a new confidence interval for the same parameter at the 90% confidence level. Comment on the width of this interval versus the one obtained in the previous exercise.</p></li>
 <li><p>Conduct a hypothesis test evaluating whether the average height is different for those who exercise at least three times a week and those who don’t.</p></li>
 <li><p>Now, a non-inference task: Determine the number of different options there are in the dataset for the <code>hours_tv_per_school_day</code> there are.</p></li>
 <li><p>Come up with a research question evaluating the relationship between height or weight and sleep. Formulate the question in a way that it can be answered using a hypothesis test and/or a confidence interval. Report the statistical results, and also provide an explanation in plain language. Be sure to check all assumptions, state your <span class="math inline">\(\alpha\)</span> level, and conclude in context.</p></li>
 </ol>
-<div id="license">
-<p>This is a product of OpenIntro that is released under a <a href="http://creativecommons.org/licenses/by-sa/3.0">Creative Commons Attribution-ShareAlike 3.0 Unported</a>.</p>
-</div>
+<hr />
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 
 
