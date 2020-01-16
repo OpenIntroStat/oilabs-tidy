@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 ```
 
 The Human Freedom Index is a report that attempts to summarize the idea of "freedom"
@@ -40,21 +40,14 @@ library(tidyverse)
 library(openintro)
 ```
 
-```{r}
-hfi <- read_csv("hfi_cc_2018.csv")
-```
-
 ### Creating a reproducible lab report
 
 To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
 
 ### The data
 
-Let's load the data.
-
-```{r load-data}
-data(hfi)
-```
+The data we're working with is in the openintro package and it's called `hfi`, 
+short for Human Freedom Index.
 
 1.  What are the dimensions of the dataset?
 
@@ -280,9 +273,6 @@ another name commonly used for normal probability plots.
 -   What's one freedom relationship you were most surprised about and why? Display
     the model diagnostics for the regression model analyzing this relationship.
     
-</div>
+* * *
 
-<div id="license">
-This is a product of OpenIntro that is released under a [Creative Commons 
-Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-</div>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

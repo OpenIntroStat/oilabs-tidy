@@ -8,10 +8,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-library(tidyverse)
-library(openintro)
-library(GGally)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 ```
 
 ## Grading the professor
@@ -58,12 +55,10 @@ The data were gathered from end of semester student evaluations for a large
 sample of professors from the University of Texas at Austin. In addition, six 
 students rated the professors' physical appearance. The result is a data frame 
 where each row contains a different course and columns represent variables about 
-the courses and professors.
+the courses and professors. It's called `evals`.
 
-Let's load the data:
-
-```{r load-data, message=FALSE}
-data(evals)
+```{r}
+glimpse(evals)
 ```
 
 We have observations on 21 different variables, some categorical and some 
@@ -287,9 +282,8 @@ summary(m_full)
 19. Would you be comfortable generalizing your conclusions to apply to professors
     generally (at any university)? Why or why not?
 
-<div id="license">
-This is a product of OpenIntro that is released under a [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). This lab was written by 
-Mine &Ccedil;etinkaya-Rundel and Andrew Bray.
-</div>
-
 ## References
+
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

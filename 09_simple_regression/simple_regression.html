@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -1343,7 +1342,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -1477,7 +1476,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -1539,6 +1537,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -1567,6 +1566,12 @@ summary {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -1659,15 +1664,14 @@ div.tocify {
 </div>
 <div id="the-data" class="section level3">
 <h3>The data</h3>
-<p>Let’s load the data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">data</span>(hfi)</a></code></pre></div>
+<p>The data we’re working with is in the openintro package and it’s called <code>hfi</code>, short for Human Freedom Index.</p>
 <ol style="list-style-type: decimal">
 <li><p>What are the dimensions of the dataset?</p></li>
 <li><p>What type of plot would you use to display the relationship between the personal freedom score, <code>pf_score</code>, and one of the other numerical variables? Plot this relationship using the variable <code>pf_expression_control</code> as the predictor. Does the relationship look linear? If you knew a country’s <code>pf_expression_control</code>, or its score out of 10, with 0 being the most, of political pressures and controls on media content, would you be comfortable using a linear model to predict the personal freedom score?</p></li>
 </ol>
 <p>If the relationship looks linear, we can quantify the strength of the relationship with the correlation coefficient.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">hfi <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">cor</span>(pf_expression_control, pf_score, <span class="dt">use =</span> <span class="st">&quot;complete.obs&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">hfi <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">cor</span>(pf_expression_control, pf_score, <span class="dt">use =</span> <span class="st">&quot;complete.obs&quot;</span>))</a></code></pre></div>
 <p>Here, we set the <code>use</code> argument to “complete.obs” since there are some observations of NA.</p>
 </div>
 </div>
@@ -1681,14 +1685,14 @@ div.tocify {
 <li>Looking at your plot from the previous exercise, describe the relationship between these two variables. Make sure to discuss the form, direction, and strength of the relationship as well as any unusual observations.</li>
 </ol>
 <p>Just as you’ve used the mean and standard deviation to summarize a single variable, you can summarize the relationship between these two variables by finding the line that best follows their association. Use the following interactive function to select the line that you think does the best job of going through the cloud of points.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">#this isn't working, wondering if we should just remove rows with NA</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot_ss</span>(<span class="dt">x =</span> pf_expression_control, <span class="dt">y =</span> pf_score, <span class="dt">data =</span> hfi)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#this isn't working, wondering if we should just remove rows with NA</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">plot_ss</span>(<span class="dt">x =</span> pf_expression_control, <span class="dt">y =</span> pf_score, <span class="dt">data =</span> hfi)</a></code></pre></div>
 <p>After running this command, you’ll be prompted to click two points on the plot to define a line. Once you’ve done that, the line you specified will be shown in black and the residuals in blue. Note that there are 30 residuals, one for each of the 30 observations. Recall that the residuals are the difference between the observed values and the values predicted by the line:</p>
 <p><span class="math display">\[
   e_i = y_i - \hat{y}_i
 \]</span></p>
 <p>The most common way to do linear regression is to select the line that minimizes the sum of squared residuals. To visualize the squared residuals, you can rerun the plot command and add the argument <code>showSquares = TRUE</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">plot_ss</span>(<span class="dt">x =</span> pf_expression_control, <span class="dt">y =</span> pf_score, <span class="dt">data =</span> hfi, <span class="dt">showSquares =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">plot_ss</span>(<span class="dt">x =</span> pf_expression_control, <span class="dt">y =</span> pf_score, <span class="dt">data =</span> hfi, <span class="dt">showSquares =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Note that the output from the <code>plot_ss</code> function provides you with the slope and intercept of your line as well as the sum of squares.</p>
 <ol style="list-style-type: decimal">
 <li>Using <code>plot_ss</code>, choose a line that does a good job of minimizing the sum of squares. Run the function several times. What was the smallest sum of squares that you got? How does it compare to your neighbors?</li>
@@ -1697,10 +1701,10 @@ div.tocify {
 <div id="the-linear-model" class="section level2">
 <h2>The linear model</h2>
 <p>It is rather cumbersome to try to get the correct least squares line, i.e. the line that minimizes the sum of squared residuals, through trial and error. Instead, you can use the <code>lm</code> function in R to fit the linear model (a.k.a. regression line).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(pf_score <span class="op">~</span><span class="st"> </span>pf_expression_control, <span class="dt">data =</span> hfi)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(pf_score <span class="op">~</span><span class="st"> </span>pf_expression_control, <span class="dt">data =</span> hfi)</a></code></pre></div>
 <p>The first argument in the function <code>lm</code> is a formula that takes the form <code>y ~ x</code>. Here it can be read that we want to make a linear model of <code>pf_score</code> as a function of <code>pf_expression_control</code>. The second argument specifies that R should look in the <code>hfi</code> data frame to find the two variables.</p>
 <p>The output of <code>lm</code> is an object that contains all of the information we need about the linear model that was just fit. We can access this information using the summary function.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">summary</span>(m1)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">summary</span>(m1)</a></code></pre></div>
 <p>Let’s consider this output piece by piece. First, the formula used to describe the model is shown at the top. After the formula you find the five-number summary of the residuals. The “Coefficients” table shown next is key; its first column displays the linear model’s y-intercept and the coefficient of <code>at_bats</code>. With this table, we can write down the least squares regression line for the linear model:</p>
 <p><span class="math display">\[
   \hat{y} = 4.61707 + 0.49143 \times pf\_expression\_control
@@ -1713,9 +1717,11 @@ div.tocify {
 <div id="prediction-and-prediction-errors" class="section level2">
 <h2>Prediction and prediction errors</h2>
 <p>Let’s create a scatterplot with the least squares line for <code>m1</code> laid on top.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> hfi, <span class="kw">aes</span>(<span class="dt">x =</span> pf_expression_control, <span class="dt">y =</span> pf_score)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> hfi, <span class="kw">aes</span>(<span class="dt">x =</span> pf_expression_control, <span class="dt">y =</span> pf_score)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 80 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 80 rows containing missing values (geom_point).</code></pre>
 <p>Here, we are literally adding a layer on top of our plot. <code>geom_smooth</code> creates the line by fitting a linear model. It can also show us the standard error <code>se</code> associated with our line, but we’ll suppress that for now.</p>
 <p>This line can be used to predict <span class="math inline">\(y\)</span> at any value of <span class="math inline">\(x\)</span>. When predictions are made for values of <span class="math inline">\(x\)</span> that are beyond the range of the observed data, it is referred to as <em>extrapolation</em> and is not usually recommended. However, predictions made within the range of the data are more reliable. They’re also used to compute the residuals.</p>
 <ol style="list-style-type: decimal">
@@ -1726,23 +1732,23 @@ div.tocify {
 <h2>Model diagnostics</h2>
 <p>To assess whether the linear model is reliable, we need to check for (1) linearity, (2) nearly normal residuals, and (3) constant variability.</p>
 <p><strong>Linearity</strong>: You already checked if the relationship between <code>pf_score</code> and `pf_expression_control’ is linear using a scatterplot. We should also verify this condition with a plot of the residuals vs. fitted (predicted) values.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> m1, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Fitted values&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Residuals&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> m1, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Fitted values&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Residuals&quot;</span>)</a></code></pre></div>
 <p>Notice here that <code>m1</code> can also serve as a data set because stored within it are the fitted values (<span class="math inline">\(\hat{y}\)</span>) and the residuals. Also note that we’re getting fancy with the code here. After creating the scatterplot on the first layer (first line of code), we overlay a horizontal dashed line at <span class="math inline">\(y = 0\)</span> (to help us check whether residuals are distributed around 0), and we also reanme the axis labels to be more informative.</p>
 <ol style="list-style-type: decimal">
 <li>Is there any apparent pattern in the residuals plot? What does this indicate about the linearity of the relationship between the two variables?</li>
 </ol>
 <p></br></p>
 <p><strong>Nearly normal residuals</strong>: To check this condition, we can look at a histogram</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> m1, <span class="kw">aes</span>(<span class="dt">x =</span> .resid)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Residuals&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> m1, <span class="kw">aes</span>(<span class="dt">x =</span> .resid)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">25</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Residuals&quot;</span>)</a></code></pre></div>
 <p>or a normal probability plot of the residuals.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> m1, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">stat_qq</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> m1, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">stat_qq</span>()</a></code></pre></div>
 <p>Note that the syntax for making a normal probability plot is a bit different than what you’re used to seeing: we set <code>sample</code> equal to the residuals instead of <code>x</code>, and we set a statistical method <code>qq</code>, which stands for “quantile-quantile”, another name commonly used for normal probability plots.</p>
 <ol style="list-style-type: decimal">
 <li>Based on the histogram and the normal probability plot, does the nearly normal residuals condition appear to be met?</li>
@@ -1757,15 +1763,14 @@ div.tocify {
 <div id="more-practice" class="section level2">
 <h2>More Practice</h2>
 <div class="oyo">
+
 <ul>
 <li><p>Choose another freedom variable and a variable you think would strongly correlate with it.. Produce a scatterplot of the two variables and fit a linear model. At a glance, does there seem to be a linear relationship?</p></li>
 <li><p>How does this relationship compare to the relationship between <code>pf_expression_control</code> and <code>pf_score</code>? Use the <span class="math inline">\(R^2\)</span> values from the two model summaries to compare. Does your independent variable seem to predict your dependent one better? Why or why not?</p></li>
 <li><p>What’s one freedom relationship you were most surprised about and why? Display the model diagnostics for the regression model analyzing this relationship.</p></li>
 </ul>
-</div>
-<div id="license">
-<p>This is a product of OpenIntro that is released under a <a href="http://creativecommons.org/licenses/by-sa/3.0">Creative Commons Attribution-ShareAlike 3.0 Unported</a>.</p>
-</div>
+<hr />
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 
 
