@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 library(tidyverse)
 library(openintro)
 ```
@@ -100,7 +100,7 @@ ggplot(data = kobe_streak, aes(x = length)) +
   geom_bar()
 ```
 
-2.  Describe the distribution of Kobe's streak lengths from the 2009 NBA finals. 
+1.  Describe the distribution of Kobe's streak lengths from the 2009 NBA finals. 
     What was his typical streak length? How long was his longest streak of 
     baskets? Make sure to include the accompanying plot in your answer.
 
@@ -202,7 +202,7 @@ think of the outcome space as a bag of 10 chips, where 2 chips are labeled
 "head" and 8 chips "tail". Therefore at each draw, the probability of drawing a 
 chip that says "head"" is 20%, and "tail" is 80%.
 
-3.  In your simulation of flipping the unfair coin 100 times, how many flips 
+1.  In your simulation of flipping the unfair coin 100 times, how many flips 
     came up heads? Include the code for sampling the unfair coin in your response.
     Since the markdown file will run the code, and generate a new sample each time
     you *Knit* it, you should also "set a seed" **before** you sample. Read more 
@@ -251,7 +251,7 @@ sim_basket <- sample(shot_outcomes, size = 1, replace = TRUE)
 To make a valid comparison between Kobe and your simulated independent shooter, 
 you need to align both their shooting percentage and the number of attempted shots.
 
-4.  What change needs to be made to the `sample` function so that it reflects a 
+1.  What change needs to be made to the `sample` function so that it reflects a 
     shooting percentage of 45%? Make this adjustment, then run a simulation to 
     sample 133 shots. Assign the output of this simulation to a new object called
     `sim_basket`.
@@ -275,28 +275,24 @@ a hot hand.
 
 ### Comparing Kobe Bryant to the Independent Shooter
 
-5.  Using `calc_streak`, compute the streak lengths of `sim_basket`, and
+1.  Using `calc_streak`, compute the streak lengths of `sim_basket`, and
     save the results in a data frame called `sim_streak`.
 
-6.  Describe the distribution of streak lengths. What is the typical streak 
+1.  Describe the distribution of streak lengths. What is the typical streak 
     length for this simulated independent shooter with a 45% shooting percentage?
     How long is the player's longest streak of baskets in 133 shots? Make sure
     to include a plot in your answer.
 
-7.  If you were to run the simulation of the independent shooter a second time, 
+1.  If you were to run the simulation of the independent shooter a second time, 
     how would you expect its streak distribution to compare to the distribution 
     from the question above? Exactly the same? Somewhat similar? Totally 
     different? Explain your reasoning.
 
-8.  How does Kobe Bryant's distribution of streak lengths compare to the 
+1.  How does Kobe Bryant's distribution of streak lengths compare to the 
     distribution of streak lengths for the simulated shooter? Using this 
     comparison, do you have evidence that the hot hand model fits Kobe's 
     shooting patterns? Explain.
 
+* * *
 
-</div>
-
-<div id="license">
-This is a product of OpenIntro that is released under a 
-[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-</div>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

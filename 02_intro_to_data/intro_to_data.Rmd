@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r global-options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 library(tidyverse)
 library(openintro)
 ```
@@ -59,7 +59,7 @@ in this lab.
 Begin by loading the `nycflights` data frame. Type the following in your console
 to load the data:
 
-```{r load-data, eval = TRUE}
+```{r load-data}
 data(nycflights)
 ```
 
@@ -195,7 +195,9 @@ You can also obtain numerical summaries for these flights:
 
 ```{r lax-flights-summ}
 lax_flights %>%
-  summarise(mean_dd = mean(dep_delay), median_dd = median(dep_delay), n = n())
+  summarise(mean_dd   = mean(dep_delay), 
+            median_dd = median(dep_delay), 
+            n         = n())
 ```
 
 Note that in the `summarise` function you created a list of three different
@@ -363,14 +365,13 @@ ggplot(data = nycflights, aes(x = origin, fill = dep_type)) +
     the plot, determine (roughly) what the cutoff point is for departure
     delays where you can still expect to get to your destination on time.
 
-```{r plot-to-replicate, echo=FALSE, eval=TRUE, fig.width=7, fig.height=4}
+```{r plot-to-replicate, echo=FALSE, fig.show="asis", fig.width=7, fig.height=4}
 dl_aa_ua <- nycflights %>%
   filter(carrier == "AA" | carrier == "DL" | carrier == "UA")
 ggplot(data = dl_aa_ua, aes(x = dep_delay, y = arr_delay, color = carrier)) +
   geom_point()
 ```
 
-<div id="license">
-This is a product of OpenIntro that is released under a 
-[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
-</div>
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

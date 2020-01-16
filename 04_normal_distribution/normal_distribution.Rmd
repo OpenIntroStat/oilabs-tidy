@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r echo = FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 ```
 
 In this lab, you'll investigate the probability distribution that is most central
@@ -27,7 +27,7 @@ Let's take a quick peek at the first few rows of the data.
 
 Either you can use `glimpse` like before, or `head` to do this.
 
-```{r load-data}
+```{r load-data, results=TRUE}
 library(tidyverse)
 library(openintro)
 head(fastfood)
@@ -231,8 +231,6 @@ theoretical probabilities will be.
     Use a histogram to confirm your findings.
 
 
+* * *
 
-<div id="license">
-This is a product of OpenIntro that is released under a 
-[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
-</div>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
