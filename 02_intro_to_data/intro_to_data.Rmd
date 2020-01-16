@@ -56,7 +56,7 @@ Technology Administration (RITA). As its name implies, BTS collects and makes
 transportation data available, such as the flights data we will be working with 
 in this lab.
 
-Begin by loading the `nycflights` data frame. Type the following in your console
+First, we'll view the `nycflights` data frame. Type the following in your console
 to load the data:
 
 ```{r load-data}

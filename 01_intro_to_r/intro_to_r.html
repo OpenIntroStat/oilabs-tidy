@@ -1682,8 +1682,8 @@ div.tocify {
 </div>
 <div id="dr.arbuthnots-baptism-records" class="section level2">
 <h2>Dr. Arbuthnot’s Baptism Records</h2>
-<p>To get started, run the following command to load the data.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">data</span>(arbuthnot)</a></code></pre></div>
+<p>To get started, let’s take a peek at the data.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">arbuthnot</a></code></pre></div>
 <p>You can run the command by</p>
 <ul>
 <li>clicking on the green arrow at the top right of the code chunk in the R Markdown (Rmd) file, or</li>
@@ -1692,7 +1692,7 @@ div.tocify {
 <li>typing the code in the console.</li>
 </ul>
 <p>This command instructs R to load some data: the Arbuthnot baptism counts for boys and girls. You should see that the environment area in the upper righthand corner of the RStudio window now lists a data set called <code>arbuthnot</code> that has 82 observations on 3 variables. As you interact with R, you will create a series of objects. Sometimes you load them as we have done here, and sometimes you create them yourself as the byproduct of a computation or some analysis you have performed.</p>
-<p>The Arbuthnot data set refers to the work of Dr. John Arbuthnot, an 18<sup>th</sup> century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. We can view the data by typing its name into the console.</p>
+<p>The Arbuthnot data set refers to the work of Dr. John Arbuthnot, an 18<sup>th</sup> century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. Once again, we can view the data by typing its name into the console.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">arbuthnot</a></code></pre></div>
 <p>However, printing the whole dataset in the console is not that useful. One advantage of RStudio is that it comes with a built-in data viewer. Click on the name <code>arbuthnot</code> in the <em>Environment</em> pane (upper right window) that lists the objects in your environment. This will bring up an alternative display of the data set in the <em>Data Viewer</em> (upper left window). You can close the data viewer by clicking on the <code>x</code> in the upper lefthand corner.</p>
 <p>What you should see are four columns of numbers, each row representing a different year: the first entry in each row is simply the row number (an index we can use to access the data from individual years if we want), the second is the year, and the third and fourth are the numbers of boys and girls baptized that year, respectively. Use the scrollbar on the right side of the console window to examine the complete data set.</p>
@@ -1701,7 +1701,7 @@ div.tocify {
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">glimpse</span>(arbuthnot)</a></code></pre></div>
 <p>It is better practice to type this command into your console, since it is not necessary code to include in your solution file.</p>
 <p>This command should output the following</p>
-<p>Rows: 82 Columns: 3 $ year <int> 1629, 1630, 1631, 1632, 1633, 1634, 1635, 1636, 1637, 1638, 163… $ boys <int> 5218, 4858, 4422, 4994, 5158, 5035, 5106, 4917, 4703, 5359, 536… $ girls <int> 4683, 4457, 4102, 4590, 4839, 4820, 4928, 4605, 4457, 4952, 478…</p>
+<p>Observations: 82 Variables: 3 $ year <int> 1629, 1630, 1631, 1632, 1633, 1634, 1635, 1636, 1637, 1638, 163… $ boys <int> 5218, 4858, 4422, 4994, 5158, 5035, 5106, 4917, 4703, 5359, 536… $ girls <int> 4683, 4457, 4102, 4590, 4839, 4820, 4928, 4605, 4457, 4952, 478…</p>
 <p>We can see that there are 82 observations and 3 variables in this dataset. The variable names are <code>year</code>, <code>boys</code>, and <code>girls</code>. At this point, you might notice that many of the commands in R look a lot like functions from math class; that is, invoking R commands means supplying a function with some number of arguments. The <code>glimpse</code> command, for example, took a single argument, the name of a data frame.</p>
 </div>
 <div id="some-exploration" class="section level2">

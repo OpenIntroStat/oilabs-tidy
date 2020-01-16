@@ -90,10 +90,10 @@ If at any point you need to start over, you  can Run All Chunks above the chunk 
 
 ## Dr. Arbuthnot's Baptism Records
 
-To get started, run the following command to load the data.
+To get started, let's take a peek at the data.
 
-```{r load-abrbuthnot-data,results="asis"}
-data(arbuthnot)
+```{r load-abrbuthnot-data}
+arbuthnot
 ```
 
 You can run the command by
@@ -109,7 +109,7 @@ As you interact with R, you will create a series of objects.
 Sometimes you load them as we have done here, and sometimes you create them yourself as the byproduct of a computation or some analysis you have performed.
 
 The Arbuthnot data set refers to the work of Dr. John Arbuthnot, an 18<sup>th</sup> century physician, writer, and mathematician. 
-He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. We can view the data by typing its name into the console.
+He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. Once again, we can view the data by typing its name into the console.
 
 ```{r view-data}
 arbuthnot
