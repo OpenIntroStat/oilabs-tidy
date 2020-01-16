@@ -38,3 +38,9 @@ Your feedback is most welcomed! If you have suggestions for minor updates (fixin
 typos, etc.) please do not hesitate to issue a pull request. If you have ideas for
 major revamp of a lab (replacing outdated code with modern version, overhaul in 
 pedagogy, etc.) please create an issue so to start the conversation.
+
+
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+
