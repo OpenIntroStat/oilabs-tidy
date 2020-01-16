@@ -27,8 +27,8 @@ creating new ones, please let us know!
 4. [Probability](http://openintrostat.github.io/oiLabs-tidy/04_probability/04_probability.html)
 5. [Sampling distributions](https://openintro.shinyapps.io/sampling_distributions/)
 6. [Confidence intervals](https://openintro.shinyapps.io/confidence_intervals/)
-7. [Inference for numerical data](http://openintrostat.github.io/oiLabs-tidy/07_inf_for_numerical_data/07_inf_for_numerical_data.html)
-8. [Inference for categorical data](https://openintro.shinyapps.io/inf_for_categorical_data/)
+7. [Inference for categorical data](https://openintro.shinyapps.io/inf_for_categorical_data/)
+8. [Inference for numerical data](http://openintrostat.github.io/oiLabs-tidy/07_inf_for_numerical_data/07_inf_for_numerical_data.html)
 9. [Simple linear regression](http://openintrostat.github.io/oiLabs-tidy/09_simple_regression/09_simple_regression.html)
 10. [Multiple linear regression](http://openintrostat.github.io/oiLabs-tidy/10_multiple_regression/10_multiple_regression.html)
 
