@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 ```
 
 ## Getting Started
@@ -24,7 +24,7 @@ in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
 
-```{r load-packages, message=FALSE, eval=TRUE}
+```{r load-packages}
 library(tidyverse)
 library(openintro)
 library(infer)
@@ -38,13 +38,8 @@ To create your new lab report, start by opening a new R Markdown document... Fro
 
 You will be analyzing the same dataset as in the previous lab, where you delved 
 into a sample from the Youth Risk Behavior Surveillance System (YRBSS) survey,
-which uses data from high schoolers to help discover health patterns.
-
-Load the `yrbss` data set into your workspace.
-
-```{r load-data}
-data(yrbss)
-```
+which uses data from high schoolers to help discover health patterns. The 
+dataset is called `yrbss`.
 
 1.   What are the counts within each category for the amount of days these students
 have texted while driving within the past 30 days?
@@ -82,20 +77,12 @@ The inferential tools for estimating population proportion are analogous to
 those used for means in the last chapter: the confidence interval and the 
 hypothesis test.
 
-1.  Write out the conditions for inference to construct a 95% confidence
-    interval for the proportion of non-helmet wearers that have texted while
-    driving for the past 30 days. Are you confident all conditions are met?
-
-If the conditions for inference are reasonable, we can either calculate
-the standard error and construct the interval by hand, or allow the `infer`
-package to do it for us.
-
-```{r nohelmet-text-ci, tidy = FALSE}
+```{r nohelmet-text-ci}
 no_helmet %>%
-  specify(formula = text_ind ~ NULL, success = "yes") %>%
+  specify(response = text_ind, success = "yes") %>%
   generate(reps = 1000, type = "bootstrap") %>%
   calculate(stat = "prop") %>%
-  get_ci(level = .95)
+  get_ci(level = 0.95)
 ```
 
 Note that since the goal is to construct an interval estimate for a 
@@ -107,15 +94,14 @@ proportion.
 
 
 1.  What is the margin of error for the estimate of the proportion of non-helmet 
-wearers that have texted while driving each day for the past 30 days based on 
-this survey?
+    wearers that have texted while driving each day for the past 30 days based on 
+    this survey?
 
-1.  Using the `infer` package, calculate confidence intervals for the 
-    proportion of atheists in 2012 in two other categorical variables, and 
-    report the associated margins of error. Be sure to note whether the 
-    conditions for inference are met, and interpet the interval in context of the
-    data. It may be helpful to create new data sets for each of the two countries
-    first, and then use these data sets to construct the confidence intervals.
+1.  Using the `infer` package, calculate confidence intervals for two other 
+    categorical variables (you'll need to decide which level to call "success", 
+    and report the associated margins of error. Interpet the interval in context 
+    of the data. It may be helpful to create new data sets for each of the two 
+    countries first, and then use these data sets to construct the confidence intervals.
 
 ## How does the proportion affect the margin of error?
 
@@ -244,7 +230,7 @@ both variables within `specify`.
     you could detect a change (at a significance level of 0.05) simply by chance?
     *Hint:* Review the definition of the Type 1 error.
 
-1.   Suppose you're hired by the local government to estimate the proportion of 
+1.  Suppose you're hired by the local government to estimate the proportion of 
     residents that attend a religious service on a weekly basis. According to 
     the guidelines, the estimate must have a margin of error no greater than 
     1% with 95% confidence. You have no idea what to expect for $p$. How many 
@@ -253,7 +239,7 @@ both variables within `specify`.
     *Hint:* Refer to your plot of the relationship between $p$ and margin of 
     error. This question does not require using a dataset.
 
-<div id="license">
-This is a product of OpenIntro that is released under a [Creative Commons 
-Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-</div>
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+
