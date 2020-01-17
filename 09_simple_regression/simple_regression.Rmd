@@ -42,7 +42,7 @@ library(openintro)
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the **openintro** package. 
+To create your new lab report, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
 
 ### The data
 

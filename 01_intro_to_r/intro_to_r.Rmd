@@ -85,6 +85,8 @@ We will be using R Markdown to create reproducible lab reports. See the followin
 [**Using R Markdown for Lab Reports in RStudio**](https://youtu.be/o0h-eVABe9M)
 <iframe width="560" height="315" src="https://www.youtube.com/embed/o0h-eVABe9M" frameborder="0" allowfullscreen></iframe>
 
+In a nuthshell, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Lab 1` from the list of templates.
+
 Going forward you should refrain from typing your code directly in the console, and instead type any code (final correct answer, or anything you're just trying out) in the R Markdown file and run the chunk using either the Run button on the chunk  (green sideways triangle) or by highlighting the code and clicking Run on the top  right corner of the R Markdown editor. 
 If at any point you need to start over, you  can Run All Chunks above the chunk you're working in by clicking on the down arrow in the code chunk.
 

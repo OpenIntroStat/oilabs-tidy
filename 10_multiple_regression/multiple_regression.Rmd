@@ -46,8 +46,7 @@ This is the first time we're using the `GGally` package. You will be using the
 
 ### Creating a reproducible lab report
 
-To create your new lab report, start by opening a new R Markdown document... From Template... then select Lab Report from the `openintro` package. Make sure that all 
-necessary packages loaded in your R Markdown document.
+To create your new lab report, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
 
 ### The data
 

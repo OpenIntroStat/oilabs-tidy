@@ -1648,13 +1648,26 @@ div.tocify {
 
 
 <p>In this lab, you’ll investigate the probability distribution that is most central to statistics: the normal distribution. If you are confident that your data are nearly normal, that opens the door to many powerful statistical methods. Here we’ll use the graphical tools of R to assess the normality of our data and also learn how to generate random numbers from a normal distribution.</p>
-<div id="the-data" class="section level2">
-<h2>The Data</h2>
+<div id="getting-started" class="section level2">
+<h2>Getting Started</h2>
+<div id="load-packages" class="section level3">
+<h3>Load packages</h3>
+<p>In this lab, we will explore and visualize the data using the <strong>tidyverse</strong> suite of packages as well as the <strong>openintro</strong> package.</p>
+<p>Let’s load the packages.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(openintro)</a></code></pre></div>
+</div>
+<div id="creating-a-reproducible-lab-report" class="section level3">
+<h3>Creating a reproducible lab report</h3>
+<p>To create your new lab report, in RStudio, go to New File -&gt; R Markdown… Then, choose From Template and then choose <code>Lab Report for OpenIntro Statistics Labs</code> from the list of templates.</p>
+</div>
+<div id="the-data" class="section level3">
+<h3>The data</h3>
 <p>This week you’ll be working with fast food data. This data set contains data on 515 menu items from some of the most popular fast food restaurants worldwide. Let’s take a quick peek at the first few rows of the data.</p>
 <p>Either you can use <code>glimpse</code> like before, or <code>head</code> to do this.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(openintro)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">head</span>(fastfood)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(openintro)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">head</span>(fastfood)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 17
 ##   restaurant item  calories cal_fat total_fat sat_fat trans_fat cholesterol
 ##   &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -1670,25 +1683,26 @@ div.tocify {
 <p>You’ll see that for every observation there are 17 measurements, many of which are nutritional facts.</p>
 <p>You’ll be focusing on just three columns to get started: restaurant, calories, calories from fat.</p>
 <p>Let’s first focus on just products from McDonalds and Dairy Queen.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mcdonalds &lt;-<span class="st"> </span>fastfood <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(restaurant <span class="op">==</span><span class="st"> &quot;McDonalds&quot;</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">dairy_queen &lt;-<span class="st"> </span>fastfood <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(restaurant <span class="op">==</span><span class="st"> &quot;Dairy Queen&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mcdonalds &lt;-<span class="st"> </span>fastfood <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(restaurant <span class="op">==</span><span class="st"> &quot;McDonalds&quot;</span>)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">dairy_queen &lt;-<span class="st"> </span>fastfood <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(restaurant <span class="op">==</span><span class="st"> &quot;Dairy Queen&quot;</span>)</a></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>Make a plot (or plots) to visualize the distributions of the amount of calories from fat of the options from these two restaurants. How do their centers, shapes, and spreads compare?</li>
 </ol>
+</div>
 </div>
 <div id="the-normal-distribution" class="section level2">
 <h2>The normal distribution</h2>
 <p>In your description of the distributions, did you use words like <em>bell-shaped</em> or <em>normal</em>? It’s tempting to say so when faced with a unimodal symmetric distribution.</p>
 <p>To see how accurate that description is, you can plot a normal distribution curve on top of a histogram to see how closely the data follow a normal distribution. This normal curve should have the same mean and standard deviation as the data. You’ll be focusing on calories from fat from Dairy Queen products, so let’s store them as a separate object and then calculate some statistics that will be referenced later.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">dqmean &lt;-<span class="st"> </span><span class="kw">mean</span>(dairy_queen<span class="op">$</span>cal_fat)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">dqsd   &lt;-<span class="st"> </span><span class="kw">sd</span>(dairy_queen<span class="op">$</span>cal_fat)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">dqmean &lt;-<span class="st"> </span><span class="kw">mean</span>(dairy_queen<span class="op">$</span>cal_fat)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">dqsd   &lt;-<span class="st"> </span><span class="kw">sd</span>(dairy_queen<span class="op">$</span>cal_fat)</a></code></pre></div>
 <p>Next, you make a density histogram to use as the backdrop and use the <code>lines</code> function to overlay a normal probability curve. The difference between a frequency histogram and a density histogram is that while in a frequency histogram the <em>heights</em> of the bars add up to the total number of observations, in a density histogram the <em>areas</em> of the bars add up to 1. The area of each bar can be calculated as simply the height <em>times</em> the width of the bar. Using a density histogram allows us to properly overlay a normal distribution curve over the histogram since the curve is a normal probability density function that also has area under the curve of 1. Frequency and density histograms both display the same exact shape; they only differ in their y-axis. You can verify this by comparing the frequency histogram you constructed earlier and the density histogram created by the commands below.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> dairy_queen, <span class="kw">aes</span>(<span class="dt">x =</span> cal_fat)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">        </span><span class="kw">geom_blank</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">        </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">        </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">args =</span> <span class="kw">c</span>(<span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd), <span class="dt">col =</span> <span class="st">&quot;tomato&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> dairy_queen, <span class="kw">aes</span>(<span class="dt">x =</span> cal_fat)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">        </span><span class="kw">geom_blank</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">        </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">        </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">args =</span> <span class="kw">c</span>(<span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd), <span class="dt">col =</span> <span class="st">&quot;tomato&quot;</span>)</a></code></pre></div>
 <p>After initializing a blank plot with <code>geom_blank()</code>, the <code>ggplot2</code> package (within the <code>tidyverse</code>) allows us to add additional layers. The first layer is a density histogram. The second layer is a statistical function – the density of the normal curve, <code>dnorm</code>. We specify that we want the curve to have the same mean and standard deviation as the column of female heights. The argument <code>col</code> simply sets the color for the line to be drawn. If we left it out, the line would be drawn in black.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Based on the this plot, does it appear that the data follow a nearly normal distribution?</li>
@@ -1697,19 +1711,19 @@ div.tocify {
 <div id="evaluating-the-normal-distribution" class="section level2">
 <h2>Evaluating the normal distribution</h2>
 <p>Eyeballing the shape of the histogram is one way to determine if the data appear to be nearly normally distributed, but it can be frustrating to decide just how close the histogram is to the curve. An alternative approach involves constructing a normal probability plot, also called a normal Q-Q plot for “quantile-quantile”.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> dairy_queen, <span class="kw">aes</span>(<span class="dt">sample =</span> cal_fat)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;qq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> dairy_queen, <span class="kw">aes</span>(<span class="dt">sample =</span> cal_fat)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;qq&quot;</span>)</a></code></pre></div>
 <p>This time, you can use the <code>geom_line()</code> layer, while specifying that you will be creating a Q-Q plot with the <code>stat</code> argument. It’s important to note that here, instead of using <code>x</code> instead <code>aes()</code>, you need to use <code>sample</code>.</p>
 <p>The x-axis values correspond to the quantiles of a theoretically normal curve with mean 0 and standard deviation 1 (i.e., the standard normal distribution). The y-axis values correspond to the quantiles of the original unstandardized sample data. However, even if we were to standardize the sample data values, the Q-Q plot would look identical. A data set that is nearly normal will result in a probability plot where the points closely follow a diagonal line. Any deviations from normality leads to deviations of these points from that line.</p>
 <p>The plot for Dairy Queen’s calories from fat shows points that tend to follow the line but with some errant points towards the upper tail. You’re left with the same problem that we encountered with the histogram above: how close is close enough?</p>
 <p>A useful way to address this question is to rephrase it as: what do probability plots look like for data that I <em>know</em> came from a normal distribution? We can answer this by simulating data from a normal distribution using <code>rnorm</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">sim_norm &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="kw">nrow</span>(dairy_queen), <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">sim_norm &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="kw">nrow</span>(dairy_queen), <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</a></code></pre></div>
 <p>The first argument indicates how many numbers you’d like to generate, which we specify to be the same number of menu items in the <code>dairy_queen</code> data set using the <code>nrow()</code> function. The last two arguments determine the mean and standard deviation of the normal distribution from which the simulated sample will be generated. You can take a look at the shape of our simulated data set, <code>sim_norm</code>, as well as its normal probability plot.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Make a normal probability plot of <code>sim_norm</code>. Do all of the points fall on the line? How does this plot compare to the probability plot for the real data? (Since <code>sim_norm</code> is not a dataframe, it can be put directly into the <code>sample</code> argument and the <code>data</code> argument can be dropped.)</li>
 </ol>
 <p>Even better than comparing the original plot to a single plot generated from a normal distribution is to compare it to many more plots using the following function. It shows the Q-Q plot corresponding to the original data in the top left corner, and the Q-Q plots of 8 different simulated normal data. It may be helpful to click the zoom button in the plot window.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">qqnormsim</span>(<span class="dt">sample =</span> cal_fat, <span class="dt">data =</span> dairy_queen)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">qqnormsim</span>(<span class="dt">sample =</span> cal_fat, <span class="dt">data =</span> dairy_queen)</a></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Does the normal probability plot for the calories from fat look similar to the plots created for the simulated data? That is, do the plots provide evidence that the female heights are nearly normal?</p></li>
 <li><p>Using the same technique, determine whether or not the calories from McDonald’s menu appear to come from a normal distribution.</p></li>
@@ -1720,12 +1734,12 @@ div.tocify {
 <p>Okay, so now you have a slew of tools to judge whether or not a variable is normally distributed. Why should you care?</p>
 <p>It turns out that statisticians know a lot about the normal distribution. Once you decide that a random variable is approximately normal, you can answer all sorts of questions about that variable related to probability. Take, for example, the question of, “What is the probability that a randomly chosen Dairy Queen product has more than 600 calories from fat?”</p>
 <p>If we assume that the calories from fat from Dairy Queen’s menu are normally distributed (a very close approximation is also okay), we can find this probability by calculating a Z score and consulting a Z table (also called a normal probability table). In R, this is done in one step with the function <code>pnorm()</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="dv">600</span>, <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="dv">600</span>, <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</a></code></pre></div>
 <p>Note that the function <code>pnorm()</code> gives the area under the normal curve below a given value, <code>q</code>, with a given mean and standard deviation. Since we’re interested in the probability that a Dairy Queen item has more than 600 calories from fat, we have to take one minus that probability.</p>
 <p>Assuming a normal distribution has allowed us to calculate a theoretical probability. If we want to calculate the probability empirically, we simply need to determine how many observations fall above 600 then divide this number by the total sample size.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">dairy_queen <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(cal_fat <span class="op">&gt;</span><span class="st"> </span><span class="dv">600</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">percent =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(dairy_queen))</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">dairy_queen <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(cal_fat <span class="op">&gt;</span><span class="st"> </span><span class="dv">600</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">percent =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(dairy_queen))</a></code></pre></div>
 <p>Although the probabilities are not exactly the same, they are reasonably close. The closer that your distribution is to being normal, the more accurate the theoretical probabilities will be.</p>
 <ol start="6" style="list-style-type: decimal">
 <li>Write out two probability questions that you would like to answer about any of the restaurants in this dataset. Calculate those probabilities using both the theoretical normal distribution as well as the empirical distribution (four probabilities in all). Which one had a closer agreement between the two methods?</li>

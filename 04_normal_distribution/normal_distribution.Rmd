@@ -19,7 +19,24 @@ nearly normal, that opens the door to many powerful statistical methods.  Here
 we'll use the graphical tools of R to assess the normality of our data and also 
 learn how to generate random numbers from a normal distribution.
 
-## The Data
+## Getting Started
+
+### Load packages
+
+In this lab, we will explore and visualize the data using the **tidyverse** suite of packages as well as the **openintro** package.
+
+Let's load the packages.
+
+```{r load-packages, message=FALSE}
+library(tidyverse)
+library(openintro)
+```
+
+### Creating a reproducible lab report
+
+To create your new lab report, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
+
+### The data
 
 This week you'll be working with fast food data.  This data set contains data on
 515 menu items from some of the most popular fast food restaurants worldwide.
