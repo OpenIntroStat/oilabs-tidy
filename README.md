@@ -21,7 +21,7 @@ creating new ones, please let us know!
 
 ## Labs
 
-1. [Intro to R](http://openintrostat.github.io/oiLabs-tidy/blob/master/01_intro_to_r/intro_to_r.html)
+1. [Intro to R](http://openintrostat.github.io/oiLabs-tidy/01_intro_to_r/intro_to_r.html)
 2. [Intro to data](http://openintrostat.github.io/oiLabs-tidy/02_intro_to_data/02_intro_to_data.html)
 3. [Normal distribution](http://openintrostat.github.io/oiLabs-tidy/03_normal_distribution/03_normal_distribution.html)
 4. [Probability](http://openintrostat.github.io/oiLabs-tidy/04_probability/04_probability.html)
