@@ -232,7 +232,7 @@ In the remainder of this section, you will work on getting a sense of the effect
     if you increase the number of simulations? (You do not need to include plots 
     in your answer.)
     
-```{r shiny, echo=FALSE, eval=TRUE}
+```{r shiny, echo=FALSE, eval=TRUE, results = TRUE}
 shinyApp(
   ui <- fluidPage(
     
@@ -320,7 +320,7 @@ shinyApp(
     })
   },
   
-  options = list(height = 500) 
+  options = list(height = 900) 
 )
 ```
 

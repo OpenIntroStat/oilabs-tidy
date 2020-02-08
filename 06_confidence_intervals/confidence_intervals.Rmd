@@ -179,7 +179,7 @@ In the next part of the lab, you will collect many samples to learn more about h
 Doing this would require learning programming concepts like iteration so that you can automate repeating running the code you've developed so far many times to obtain many (50) confidence intervals. 
 In order to keep the programming simpler, we are providing the interactive app below that basically does this for you and created a plot similar to Figure 5.6 on [OpenIntro Statistics, 4th Edition (page 182)](https://www.openintro.org/os).
 
-```{r shiny, echo=FALSE, eval=TRUE}
+```{r shiny, echo=FALSE, eval=TRUE, results = TRUE}
 store_ci <- function(i, n, reps, conf_level, success) {
   us_adults %>%
     sample_n(size = n) %>%
