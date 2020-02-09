@@ -25,8 +25,8 @@ creating new ones, please let us know!
 2. [Intro to data](http://openintrostat.github.io/oiLabs-tidy/02_intro_to_data/intro_to_data.html)
 4. [Probability](http://openintrostat.github.io/oiLabs-tidy/03_probability/probability.html)
 3. [Normal distribution](http://openintrostat.github.io/oiLabs-tidy/04_normal_distribution/normal_distribution.html)
-5. Foundations of inference
-  a. [Sampling distributions](https://openintro.shinyapps.io/sampling_distributions/)
+5. Foundations of inference  
+  a. [Sampling distributions](https://openintro.shinyapps.io/sampling_distributions/)  
   b. [Confidence intervals](https://openintro.shinyapps.io/confidence_intervals/)
 6. [Inference for categorical data](https://openintro.shinyapps.io/inf_for_categorical_data/)
 7. [Inference for numerical data](http://openintrostat.github.io/oiLabs-tidy/07_inf_for_numerical_data/inf_for_numerical_data.html)
