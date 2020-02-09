@@ -23,8 +23,8 @@ creating new ones, please let us know!
 
 1. [Intro to R](http://openintrostat.github.io/oiLabs-tidy/01_intro_to_r/intro_to_r.html)
 2. [Intro to data](http://openintrostat.github.io/oiLabs-tidy/02_intro_to_data/intro_to_data.html)
-3. [Normal distribution](http://openintrostat.github.io/oiLabs-tidy/03_normal_distribution/normal_distribution.html)
-4. [Probability](http://openintrostat.github.io/oiLabs-tidy/04_probability/probability.html)
+4. [Probability](http://openintrostat.github.io/oiLabs-tidy/03_probability/probability.html)
+3. [Normal distribution](http://openintrostat.github.io/oiLabs-tidy/04_normal_distribution/normal_distribution.html)
 5. [Sampling distributions](https://openintro.shinyapps.io/sampling_distributions/)
 6. [Confidence intervals](https://openintro.shinyapps.io/confidence_intervals/)
 7. [Inference for categorical data](https://openintro.shinyapps.io/inf_for_categorical_data/)
