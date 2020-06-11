@@ -19,7 +19,7 @@ It serves as a rough objective measure for the relationships between the differe
 types of freedom - whether it's political, religious, economical or personal freedom -
 and other social and economic circumstances. The Human Freedom Index is an annually
 co-published report by the Cato Institute, the Fraser Institute, and the Liberales
-Institut at the Friedrich Naumann Fourndation for Freedom.
+Institut at the Friedrich Naumann Foundation for Freedom.
 
 In this lab, you'll be analyzing data from Human Freedom Index reports from 2008-2016.
 Your aim will be to summarize a few of the relationships within the data both 
