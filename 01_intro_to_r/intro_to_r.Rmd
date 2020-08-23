@@ -271,8 +271,8 @@ indicate that the first number displayed on that line would correspond to the
 
 ### Data visualization
 
-R has some powerful functions for making graphics. We can create a simple plot
-of the number of girls baptized per year with the command
+`R` has some powerful functions for making graphics. We can create a simple plot
+of the number of girls baptized per year with the following code:
 
 ```{r plot-girls-vs-year}
 ggplot(data = arbuthnot, aes(x = year, y = girls)) + 
@@ -280,45 +280,60 @@ ggplot(data = arbuthnot, aes(x = year, y = girls)) +
 ```
 
 
-We use the `ggplot()` function to build plots. 
-If you run the plotting code in your console, you should see the plot appear
-under the *Plots* tab of the lower right panel of RStudio. Notice that the
-command above again looks like a function, this time with arguments separated by
+In this code, we use the `ggplot()` function to build a plot. If you run this 
+code chunk, a plot will appear below the code chunk. The R Markdown document 
+displays the plot below the code that was used to generate it, to give you an
+idea of what the plot would look like in a final report. 
+
+The command above also looks like a mathematical function. This time, however, 
+the function requires multiple inputs (arguments), which are separated by
 commas. 
 
 With `ggplot()`:
 
-- The first argument is always the dataset. 
-- Next, you provide the variables from the dataset to be assigned to `aes`thetic
-elements of the plot, e.g. the x and the y axes. 
-- Finally, you use another layer, separated by a `+` to specify the `geom`etric
-object for the plot. Since we want to scatterplot, we use `geom_point()`.
+- The first argument is always the name of the dataset you wish to use for
+plotting. 
+- Next, you provide the variables from the dataset to be assigned to different 
+`aes`thetic elements of the plot, such as the x and the y axes. 
 
-For instance, if you wanted to visualize the above plot using a line graph, you
-would replace `geom_point()` with `geom_line()`.
+These commands will build a blank plot, with the variables you assigned to the 
+x and y axes. Next, you need to tell `ggplot()` what type of visualization you 
+would like to add to the blank template. You add another layer to the `ggplot()`
+by:
+
+- adding a `+` at the end of the line, to indicate that you are adding a layer
+- then specify the `geom`etric object to be used to create the plot.
+
+Since we want to scatterplot, we use `geom_point()`. This tells `ggplot()` that 
+each data point should be represented by one point on the plot. If you wanted to
+visualize the above plot using a line graph instead of a scatterplot, you
+would replace `geom_point()` with `geom_line()`. This tells `ggplot()` to draw 
+a line from each observation with the next observation (sequentially). 
 
 ```{r plot-girls-vs-year-line}
-ggplot(data = arbuthnot, aes(x = year, y = girls)) + 
+ggplot(data = arbuthnot, aes(x = year, y = girls)) +
   geom_line()
 ```
 
-You might wonder how you are supposed to know the syntax for the `ggplot`
-function. Thankfully, R documents all of its functions extensively. To learn
-what a function does and its arguments that are available to you, just type in a
-question mark followed by the name of the function that you're interested in. 
-Try the following in your console:
-
-```{r plot-help, tidy = FALSE}
-?ggplot
-```
-
-Notice that the help file replaces the plot in the lower right panel. You can
-toggle between plots and help files using the tabs at the top of that panel. 
+Use the plot to address the following question:
 
 1. Is there an apparent trend in the number of girls baptized over the years? 
    How would you describe it? (To ensure that your lab report is comprehensive,
    be sure to include the code needed to make the plot as well as your written
    interpretation.)
+
+You might wonder how you are supposed to know the syntax for the `ggplot()`
+function. Thankfully, `R` documents all of its functions extensively. To learn
+what a function does and how to use it (e.g. the function's arguments), just
+type in a question mark followed by the name of the function that you're
+interested in into the console. Type the following in your console:
+
+```{r plot-help, tidy = FALSE}
+?ggplot
+```
+
+Notice that the help file comes to the forefront, replacing the plot in the
+lower right panel. You can toggle between the tabs by clicking on their names. 
 
 ### R as a big calculator
 
