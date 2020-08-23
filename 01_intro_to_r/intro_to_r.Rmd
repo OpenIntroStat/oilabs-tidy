@@ -337,35 +337,42 @@ lower right panel. You can toggle between the tabs by clicking on their names.
 
 ### R as a big calculator
 
-Now, suppose we want to plot the total number of baptisms. 
-To compute this, we could use the fact that R is really just a big calculator. 
-We can type in mathematical expressions like
+Now, suppose we want to plot the total number of baptisms. To compute this, we
+could use the fact that we can use `R` as a big calculator. To do this, we can
+type in mathematical expressions such as the below calculation into the console.
 
 ```{r calc-total-bapt-numbers}
 5218 + 4683
 ```
 
-to see the total number of baptisms in 1629. We could repeat this once for each
-year, but there is a faster way. If we add the vector for baptisms for boys to
-that of girls, R will compute all sums simultaneously.
+This calculation would provide us with the total number of baptisms in 1629. We
+could then repeat this calculation once for each year. This would probably take 
+us a while, but luckily there is a faster way! If we add the vector for baptisms
+for boys to that of girls, `R` can compute each of these sums simultaneously.
 
 ```{r calc-total-bapt-vars}
 arbuthnot$boys + arbuthnot$girls
 ```
 
-What you will see are 82 numbers (in that packed display, because we aren’t
-looking at a data frame here), each one representing the sum we’re after. Take a
-look at a few of them and verify that they are right.
+What you will see is a list of 82 numbers. These numbers appear as a list, 
+because we are working with vectors rather than a data frame. Each number 
+represents the sum of how many boys and girls were baptised that year. You can 
+take a look at the first few rows of the `boys` and `girls` columns to see if 
+the calculation is right.
 
 ### Adding a new variable to the data frame
 
-We'll be using this new vector to generate some plots, so we'll want to save it
-as a permanent column in our data frame.
+We are interested in using this new vector of the total number of baptisms to
+generate some plots, so we'll want to save it as a permanent column in our data
+frame. We can do this using the following code:
 
 ```{r calc-total-bapt-vars-save}
 arbuthnot <- arbuthnot %>%
   mutate(total = boys + girls)
 ```
+
+This code has a lot of new pieces to it, so let's break it down.  
+
 
 The `%>%` operator is called the **piping** operator. It takes the output of the
 previous expression and pipes it into the first argument of the function in the
