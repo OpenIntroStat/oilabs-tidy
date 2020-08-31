@@ -243,7 +243,7 @@ frame and produced a display of the dataset as an output.
 Let's start to examine the data a little more closely. We can access the data in
 a single column of a data frame by extracting the column with a `$`. For
 example, the code below extracts the `boys` column from the `arbuthnot` 
-dataframe.  
+data frame.  
 
 ```{r view-boys}
 arbuthnot$boys
@@ -258,7 +258,7 @@ find the variable that comes after me."
     
 Notice that the way `R` has printed these data is different. When we looked at
 the complete data frame, we saw 82 rows, one on each line of the display. 
-These data have been extracted from the dataframe, so they are no longer
+These data have been extracted from the data frame, so they are no longer
 structured in a table with other variables. Instead, these data are displayed 
 one right after another. Objects that print out in this way are called
 *vectors*; similar to the vectors you have seen in mathematics courses, vectors 
@@ -356,7 +356,7 @@ arbuthnot$boys + arbuthnot$girls
 
 What you will see is a list of 82 numbers. These numbers appear as a list, 
 because we are working with vectors rather than a data frame. Each number 
-represents the sum of how many boys and girls were baptised that year. You can 
+represents the sum of how many boys and girls were baptized that year. You can 
 take a look at the first few rows of the `boys` and `girls` columns to see if 
 the calculation is right.
 
@@ -371,13 +371,18 @@ arbuthnot <- arbuthnot %>%
   mutate(total = boys + girls)
 ```
 
-This code has a lot of new pieces to it, so let's break it down.  
+This code has a lot of new pieces to it, so let's break it down. In the first 
+line we are doing two things, (1) adding a new `total` column to this updated
+data frame, and (2) overwriting the existing `arbutnot` data frame with an updated
+data frame that includes the new `total` column. We are able to chain these two
+processes together using the **piping** (`%>%`) operator. The piping operator
+takes the output of the previous expression and "pipes it" into the first
+argument of the next expression. 
 
-
-The `%>%` operator is called the **piping** operator. It takes the output of the
-previous expression and pipes it into the first argument of the function in the
-following one. To continue our analogy with mathematical functions,
-`x %>% f(y)` is equivalent to `f(x, y)`.
+To continue our analogy with mathematical functions, `x %>% f(y)` is equivalent
+to `f(x, y)`. Connecting `arbuthnot` and `mutate(total = boys + girls)` with the
+pipe operator is the same as typing `mutate(arbuthnot, total = boys + girls)`,
+where `arbuthnot` becomes the first argument included in the `mutate()` function. 
 
 <div id="boxedtext">
 **A note on piping: ** Note that we can read these two lines of code as the
@@ -396,15 +401,15 @@ This is equivalent to going through each row and adding up the `boys` and
 </div>
 
 <div id="boxedtext">
-**Where is the new variable? ** When you make changes to variables in your
+**Where is the new variable?** When you make changes to variables in your
 dataset, click on the name of the dataset again to update it in the data viewer.
 </div>
 
 You'll see that there is now a new column called `total` that has been tacked
 onto the data frame. The special symbol `<-` performs an *assignment*, taking
-the output of one line of code and saving it into an object in your environment. 
-In this case, you already have an object called `arbuthnot`, so this command
-updates that data set with the new mutated column.
+the output of the piping operations and saving it into an object in your
+environment. In this case, you already have an object called `arbuthnot` in your 
+environment, so this command updates that data set with the new mutated column.
 
 You can make a line plot of the total number of baptisms per year with the
 following code: 
@@ -414,66 +419,71 @@ ggplot(data = arbuthnot, aes(x = year, y = total)) +
   geom_line()
 ```
 
-Similarly to you we computed the total number of births, you can compute the
-ratio of the number of boys to the number of girls baptized in 1629 with
+In an similar fashion, once you know the total number of baptisms for boys and 
+girls in 1629, you can compute the ratio of the number of boys to the number of
+girls baptized with the following code:
 
 ```{r calc-prop-boys-to-girls-numbers}
 5218 / 4683
 ```
 
-or you can act on the complete columns with the expression
+Alternatively, you could calculate this ratio for every year by acting on the 
+complete `boys` and `girls` columns, and then save those calculations into a 
+new variable named `boy_to_girl_ratio`: 
 
 ```{r calc-prop-boys-to-girls-vars}
 arbuthnot <- arbuthnot %>%
   mutate(boy_to_girl_ratio = boys / girls)
 ```
 
-You can also compute the proportion of newborns that are boys in 1629
+You can also compute the proportion of newborns that are boys in 1629 with the 
+following code:
 
 ```{r calc-prop-boys-numbers}
 5218 / (5218 + 4683)
 ```
 
-or you can compute this for all years simultaneously and append it to the
-dataset
+Or you can compute this for all years simultaneously and add it as a new 
+variable named `boy_ratio` to the dataset: 
 
 ```{r calc-prop-boys-vars}
 arbuthnot <- arbuthnot %>%
   mutate(boy_ratio = boys / total)
 ```
 
-Note that we are using the new `total` variable we created earlier in our
-calculations.
+Notice that rather than dividing by `boys + girls` we are using the `total`
+variable we created earlier in our calculations! 
 
 3. Now, generate a plot of the proportion of boys born over time. What do you
 see? 
 
 <div id="boxedtext">
-**Tip: ** If you use the up and down arrow keys, you can scroll through your
-previous commands, your so-called command history. You can also access it by
-clicking on the history tab in the upper right panel. 
-This will save you a lot of typing in the future.
+**Tip: ** If you use the up and down arrow keys in the console, you can scroll
+through your previous commands, your so-called command history. You can also
+access your command history by clicking on the history tab in the upper right
+panel. This can save you a lot of typing in the future.
 </div>
 
 Finally, in addition to simple mathematical operators like subtraction and
 division, you can ask R to make comparisons like greater than, `>`, less than,
-`<`, and equality, `==`. For example, we can ask if the number of births of boys
-outnumber that of girls in each year with the expression
+`<`, and equality, `==`. For example, we can create a new variable called 
+`more_boys` that tells us whether the number of births of boys outnumbered that
+of girls in each year with the following code:
 
 ```{r boys-more-than-girls}
 arbuthnot <- arbuthnot %>%
   mutate(more_boys = boys > girls)
 ```
 
-This command adds a new variable to the `arbuthnot` dataframe containing the
+This command adds a new variable to the `arbuthnot` data frame containing the
 values of either `TRUE` if that year had more boys than girls, or `FALSE` if
 that year did not (the answer may surprise you). This variable contains a
 different kind of data than we have encountered so far. All other columns in the
 `arbuthnot` data frame have values that are numerical (the year, the number of
 boys and girls). Here, we've asked R to create *logical* data, data where the
 values are either `TRUE` or `FALSE`. In general, data analysis will involve many
-different kinds of data types, and one reason for using R is that it is able to
-represent and compute with many of them.
+different kinds of data types, and one reason for using `R` is that it is able 
+to represent and compute with many of them.
 
 ## More Practice
 
@@ -483,16 +493,20 @@ steps, but for present day birth records in the United States. The data are
 stored in a data frame called `present`.
 
 To find the minimum and maximum values of columns, you can use the functions
-`min` and `max` within a `summarize()` call, which you will learn more about in
-the following lab. 
+`min()` and `max()` within a `summarize()` call, which you will learn more about
+in the following lab. 
 
 Here's an example of how to find the minimum and maximum amount of boy births in
 a year:
 
 ```{r summarize min and max}
 arbuthnot %>%
-  summarize(min = min(boys), max = max(boys))
+  summarize(min = min(boys),
+            max = max(boys)
+            )
 ```
+
+Answer the following questions with the `present` data frame: 
 
 1.  What years are included in this data set? What are the dimensions of the 
     data frame? What are the variable (column) names?
@@ -503,16 +517,16 @@ arbuthnot %>%
     see? Does Arbuthnot's observation about boys being born in greater
     proportion than girls hold up in the U.S.? Include the plot in your
     response. *Hint:* You should be able to reuse your code from Exercise 3
-    above, just replace the dataframe name.
+    above, just replace the name of the data frame.
 
 1.  In what year did we see the most total number of births in the U.S.? *Hint:*
     First calculate the totals and save it as a new variable. Then, sort your
-    dataset in descending order based on the total column. You can do this
+    dataset in descending order based on the `total` column. You can do this
     interactively in the data viewer by clicking on the arrows next to the 
     variable names. To include the sorted result in your report you will need 
-    to use two new functions: `arrange` (for sorting). We can arrange the data 
-    in a descending order with another function: `desc` (for descending order).
-    The sample code is provided below.
+    to use two new functions. First we use `arrange()` to sorting the variable.
+    Then we can arrange the data in a descending order with another function, 
+    `desc()`, for descending order. The sample code is provided below.
     
 ```{r sample-arrange, eval=FALSE}
 present %>%
