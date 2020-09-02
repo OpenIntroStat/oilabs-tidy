@@ -17,9 +17,8 @@ knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message =
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the **tidyverse** suite of 
-packages, and perform statistical inference using **infer**. The data can be found
-in the companion package for OpenIntro resources, **openintro**.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of packages, and perform statistical inference using **infer**.
+The data can be found in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
 
@@ -31,15 +30,12 @@ library(infer)
 
 ### Creating a reproducible lab report
 
-To create your new lab report, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
+To create your new lab report, in RStudio, go to New File -\> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
 
 ### The data
 
-Every two years, the Centers for Disease Control and Prevention conduct the Youth
-Risk Behavior Surveillance System (YRBSS) survey, where it takes data from high 
-schoolers (9th through 12th grade), to analyze health patterns. You will work 
-with a selected group of variables from a random sample of observations during 
-one of the years the YRBSS was conducted.
+Every two years, the Centers for Disease Control and Prevention conduct the Youth Risk Behavior Surveillance System (YRBSS) survey, where it takes data from high schoolers (9th through 12th grade), to analyze health patterns.
+You will work with a selected group of variables from a random sample of observations during one of the years the YRBSS was conducted.
 
 Load the `yrbss` data set into your workspace.
 
@@ -47,18 +43,16 @@ Load the `yrbss` data set into your workspace.
 data(yrbss)
 ```
 
-There are observations on 13 different variables, some categorical and some 
-numerical. The meaning of each variable can be found by bringing up the help file:
+There are observations on 13 different variables, some categorical and some numerical.
+The meaning of each variable can be found by bringing up the help file:
 
 ```{r help-nc}
 ?yrbss
 ```
 
-
 1.  What are the cases in this data set? How many cases are there in our sample?
 
-Remember that you can answer this question by viewing the data in the data viewer or
-by using the following command:
+Remember that you can answer this question by viewing the data in the data viewer or by using the following command:
 
 ```{r str}
 glimpse(yrbss)
@@ -66,8 +60,7 @@ glimpse(yrbss)
 
 ## Exploratory data analysis
 
-You will first start with analyzing the weight of the participants in kilograms:
-`weight`.
+You will first start with analyzing the weight of the participants in kilograms: `weight`.
 
 Using visualization and summary statistics, describe the distribution of weights.
 The `summary` function can be useful.
@@ -78,28 +71,19 @@ summary(yrbss$weight)
 
 1.  How many observations are we missing weights from?
 
-Next, consider the possible relationship between a high schooler's weight and their
-physical activity. Plotting the data is a useful first step because it helps 
-us quickly visualize trends, identify strong associations, and develop research
-questions.
+Next, consider the possible relationship between a high schooler's weight and their physical activity.
+Plotting the data is a useful first step because it helps us quickly visualize trends, identify strong associations, and develop research questions.
 
-First, let's create a new variable `physical_3plus`, which will be coded as either
-"yes" if they are physically active for at least 3 days a week, and "no" if not.
+First, let's create a new variable `physical_3plus`, which will be coded as either "yes" if they are physically active for at least 3 days a week, and "no" if not.
 
 ```{r create new var}
 yrbss <- yrbss %>% 
   mutate(physical_3plus = ifelse(yrbss$physically_active_7d > 2, "yes", "no"))
 ```
 
+1.  Make a side-by-side boxplot of `physical_3plus` and `weight`. Is there a relationship between these two variables? What did you expect and why?
 
-1.  Make a side-by-side boxplot of `physical_3plus` and `weight`. Is there a 
-relationship between these two variables? What did you expect and why?
-
-The box plots show how the medians of the two distributions compare, but we can
-also compare the means of the distributions using the following to 
-first group the data by the `physical_3plus` variable, and then calculate the mean
-`weight` in these groups using the `mean` function while ignoring missing values
-by setting the `na.rm` argument to `TRUE`.
+The box plots show how the medians of the two distributions compare, but we can also compare the means of the distributions using the following to first group the data by the `physical_3plus` variable, and then calculate the mean `weight` in these groups using the `mean` function while ignoring missing values by setting the `na.rm` argument to `TRUE`.
 
 ```{r by-means}
 yrbss %>%
@@ -107,20 +91,19 @@ yrbss %>%
   summarise(mean_weight = mean(weight, na.rm = TRUE))
 ```
 
-There is an observed difference, but is this difference statistically 
-significant? In order to answer this question we will conduct a hypothesis test.
+There is an observed difference, but is this difference statistically significant?
+In order to answer this question we will conduct a hypothesis test.
 
 ## Inference
 
-1.  Are all conditions necessary for inference satisfied? Comment on each. You can 
-compute the group sizes with the `summarize` command above by defining a new variable
-with the definition `n()`.
+1.  Are all conditions necessary for inference satisfied?
+    Comment on each.
+    You can compute the group sizes with the `summarize` command above by defining a new variable with the definition `n()`.
 
-1.  Write the hypotheses for testing if the average weights are different for those
-who exercise at least times a week and those who don't.
+2.  Write the hypotheses for testing if the average weights are different for those who exercise at least times a week and those who don't.
 
-Next, we will introduce a new function, `hypothesize`, that falls into the `infer` 
-workflow. You will use this method for conducting hypothesis tests. 
+Next, we will introduce a new function, `hypothesize`, that falls into the `infer` workflow.
+You will use this method for conducting hypothesis tests.
 
 But first, we need to initialize the test, which we will save as `obs_diff`.
 
@@ -130,12 +113,10 @@ obs_diff <- yrbss %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
-Notice how you can use the functions `specify` and `calculate` again like you did
-for calculating confidence intervals. Here, though, the statistic you are searching
-for is the difference in means, with the order being `yes - no != 0`.
+Notice how you can use the functions `specify` and `calculate` again like you did for calculating confidence intervals.
+Here, though, the statistic you are searching for is the difference in means, with the order being `yes - no != 0`.
 
-After you have initialized the test, you need to simulate the test on the null
-distribution, which we will save as `null`.
+After you have initialized the test, you need to simulate the test on the null distribution, which we will save as `null`.
 
 ```{r inf-weight-habit-ht-null, tidy=FALSE, warning = FALSE}
 null_dist <- yrbss %>%
@@ -146,11 +127,9 @@ null_dist <- yrbss %>%
 ```
 
 Here, `hypothesize` is used to set the null hypothesis as a test for independence.
-In one sample cases, the `null` argument can be set to "point" to test a hypothesis
-relative to a point estimate.
+In one sample cases, the `null` argument can be set to "point" to test a hypothesis relative to a point estimate.
 
-Also, note that the `type` argument within `generate` is set to `permute`, which 
-is the argument when generating a null distribution for a hypothesis test.
+Also, note that the `type` argument within `generate` is set to `permute`, which is the argument when generating a null distribution for a hypothesis test.
 
 We can visualize this null distribution with the following code:
 
@@ -159,11 +138,9 @@ ggplot(data = null_dist, aes(x = stat)) +
   geom_histogram()
 ```
 
+1.  How many of these `null` permutations have a difference of at least `obs_stat`?
 
-1. How many of these `null` permutations have a difference of at least `obs_stat`?
-
-Now that the test is initialized and the null distribution formed, you can calculate
-the p-value for your hypothesis test using the function `get_p_value`.
+Now that the test is initialized and the null distribution formed, you can calculate the p-value for your hypothesis test using the function `get_p_value`.
 
 ```{r inf-weight-habit-ht-pvalue}
 null_dist %>%
@@ -172,33 +149,26 @@ null_dist %>%
 
 This the standard workflow for performing hypothesis tests.
 
-1.  Construct and record a confidence interval for the difference between the 
-weights of those who exercise at least three times a week and those who don't, and
-interpret this interval in context of the data.
+1.  Construct and record a confidence interval for the difference between the weights of those who exercise at least three times a week and those who don't, and interpret this interval in context of the data.
 
-* * *
+------------------------------------------------------------------------
 
 ## More Practice
 
-1.  Calculate a 95% confidence interval for the average height in meters (`height`)
-and interpret it in context.
+1.  Calculate a 95% confidence interval for the average height in meters (`height`) and interpret it in context.
 
-1.  Calculate a new confidence interval for the same parameter at the 90% 
-confidence level. Comment on the width of this interval versus 
-the one obtained in the previous exercise.
+2.  Calculate a new confidence interval for the same parameter at the 90% confidence level.
+    Comment on the width of this interval versus the one obtained in the previous exercise.
 
-1.  Conduct a hypothesis test evaluating whether the average height is different
-for those who exercise at least three times a week and those who don't.
+3.  Conduct a hypothesis test evaluating whether the average height is different for those who exercise at least three times a week and those who don't.
 
-1.  Now, a non-inference task: Determine the number of different options there 
-are in the dataset for the `hours_tv_per_school_day` there are.
+4.  Now, a non-inference task: Determine the number of different options there are in the dataset for the `hours_tv_per_school_day` there are.
 
-1. Come up with a research question evaluating the relationship between height 
-or weight and sleep. Formulate the question in a way that it can be answered using
-a hypothesis test and/or a confidence interval. Report the statistical results, 
-and also provide an explanation in plain language. Be sure to check all 
-assumptions, state your $\alpha$ level, and conclude in context.
+5.  Come up with a research question evaluating the relationship between height or weight and sleep.
+    Formulate the question in a way that it can be answered using a hypothesis test and/or a confidence interval.
+    Report the statistical results, and also provide an explanation in plain language.
+    Be sure to check all assumptions, state your $\alpha$ level, and conclude in context.
 
-* * *
+------------------------------------------------------------------------
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){style="border-width:0"}</a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

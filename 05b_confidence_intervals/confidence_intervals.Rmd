@@ -14,17 +14,16 @@ output:
 knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 ```
 
-If you have access to data on an entire population, say the opinion of every adult in the United States on whether or not they think climate change is affecting their local community, it's straightforward to answer questions like, "What percent of US adults think climate change is affecting their local community?". 
+If you have access to data on an entire population, say the opinion of every adult in the United States on whether or not they think climate change is affecting their local community, it's straightforward to answer questions like, "What percent of US adults think climate change is affecting their local community?".
 Similarly, if you had demographic information on the population you could examine how, if at all, this opinion varies among young and old adults and adults with different leanings.
-If you have access to only a sample of the population, as is often the case, the task becomes more complicated. 
+If you have access to only a sample of the population, as is often the case, the task becomes more complicated.
 What is your best guess for this proportion if you only have data from a small sample of adults?
 This type of situation requires that you use your sample to make inference on what your population looks like.
 
-<div id="boxedtext">
-**Setting a seed:** You will take random samples and build sampling distributions
-in this lab, which means you should set a seed on top of your lab. If this concept
-is new to you, review the lab on probability.
-</div>
+::: {#boxedtext}
+**Setting a seed:** You will take random samples and build sampling distributions in this lab, which means you should set a seed on top of your lab.
+If this concept is new to you, review the lab on probability.
+:::
 
 ## Getting Started
 
@@ -42,7 +41,7 @@ library(infer)
 
 ### Creating a reproducible lab report
 
-To create your new lab report, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
+To create your new lab report, in RStudio, go to New File -\> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
 
 ### The data
 
@@ -52,10 +51,10 @@ To keep our computation simple, we will assume a total population size of 100,00
 
 > Roughly six-in-ten U.S. adults (62%) say climate change is currently affecting their local community either a great deal or some, according to a new Pew Research Center survey.
 >
->**Source:** [Most Americans say climate change impacts their community, but effects vary by region](https://www.pewresearch.org/fact-tank/2019/12/02/most-americans-say-climate-change-impacts-their-community-but-effects-vary-by-region/)
+> **Source:** [Most Americans say climate change impacts their community, but effects vary by region](https://www.pewresearch.org/fact-tank/2019/12/02/most-americans-say-climate-change-impacts-their-community-but-effects-vary-by-region/)
 
-In this lab, you will assume this 62% is a true population proportion and learn about how sample proportions can vary from sample to sample by taking smaller samples from the population. 
-We will first create our population assuming a population size of 100,000. 
+In this lab, you will assume this 62% is a true population proportion and learn about how sample proportions can vary from sample to sample by taking smaller samples from the population.
+We will first create our population assuming a population size of 100,000.
 This means 62,000 (62%) of the adult population think climate change impacts their community, and the remaining 38,000 does not think so.
 
 ```{r}
@@ -94,48 +93,51 @@ samp <- us_adults %>%
   sample_n(size = n)
 ```
 
-1.  What percent of the adults in your sample think climate change affects their 
-    local community? **Hint:** Just like we did with the population, we can calculate 
-    the proportion of those **in this sample** who think climate change affects their 
-    local community.
+1.  What percent of the adults in your sample think climate change affects their local community?
+    **Hint:** Just like we did with the population, we can calculate the proportion of those **in this sample** who think climate change affects their local community.
 
-1.  Would you expect another student's sample proportion to be identical to yours? 
-    Would you expect it to be similar? Why or why not?
+2.  Would you expect another student's sample proportion to be identical to yours?
+    Would you expect it to be similar?
+    Why or why not?
 
 ## Confidence intervals
 
-Return for a moment to the question that first motivated this lab: based on this sample, what can you infer about the population? 
-With just one sample, the best estimate of the proportion of US adults who think climate change affects their local community would be the sample proportion, usually denoted as $\hat{p}$ (here we are calling it `p_hat`). 
-That serves as a good **point estimate**, but it would be useful to also communicate how uncertain you are of that estimate. 
+Return for a moment to the question that first motivated this lab: based on this sample, what can you infer about the population?
+With just one sample, the best estimate of the proportion of US adults who think climate change affects their local community would be the sample proportion, usually denoted as $\hat{p}$ (here we are calling it `p_hat`).
+That serves as a good **point estimate**, but it would be useful to also communicate how uncertain you are of that estimate.
 This uncertainty can be quantified using a **confidence interval**.
 
-One way of calculating a confidence interval for a population proportion is based on the Central Limit Theorem, as $\hat{p} \pm z^\star SE_{\hat{p}}$ is, or more precisely, as
-\[ \hat{p} \pm z^\star \sqrt{ \frac{\hat{p} (1-\hat{p})}{n} } \]
+One way of calculating a confidence interval for a population proportion is based on the Central Limit Theorem, as $\hat{p} \pm z^\star SE_{\hat{p}}$ is, or more precisely, as $$ \hat{p} \pm z^\star \sqrt{ \frac{\hat{p} (1-\hat{p})}{n} } $$
 
-Another way is using simulation, or to be more specific, using **bootstrapping**. 
-The term **bootstrapping** comes from the phrase "pulling oneself up by one’s bootstraps", which is a metaphor for accomplishing an impossible task without any outside help.
-In this case the impossible task is estimating a population parameter (the unknown population proportion), and we’ll accomplish it using data from only the given sample.
-Note that this notion of saying something about a population parameter using only information from an observed sample is the crux of statistical inference, it is not limited to bootstrapping. 
+Another way is using simulation, or to be more specific, using **bootstrapping**.
+The term **bootstrapping** comes from the phrase "pulling oneself up by one's bootstraps", which is a metaphor for accomplishing an impossible task without any outside help.
+In this case the impossible task is estimating a population parameter (the unknown population proportion), and we'll accomplish it using data from only the given sample.
+Note that this notion of saying something about a population parameter using only information from an observed sample is the crux of statistical inference, it is not limited to bootstrapping.
 
-In essence, bootstrapping assumes that there are more of observations in the populations like the ones in the observed sample. 
-So we "reconstruct" the population by resampling from our sample, with replacement. 
+In essence, bootstrapping assumes that there are more of observations in the populations like the ones in the observed sample.
+So we "reconstruct" the population by resampling from our sample, with replacement.
 The bootstrapping scheme is as follows:
 
-- **Step 1.** Take a bootstrap sample - a random sample taken **with replacement** from the original sample, of the same size as the original sample.
-- **Step 2.** Calculate the bootstrap statistic - a statistic such as mean, median, proportion, slope, etc. computed on the bootstrap samples.
-- **Step 3.** Repeat steps (1) and (2) many times to create a bootstrap distribution - a distribution of bootstrap statistics.
-- **Step 4.** Calculate the bounds of the XX% confidence interval as the middle XX% j knof the bootstrap distribution.
+-   **Step 1.** Take a bootstrap sample - a random sample taken **with replacement** from the original sample, of the same size as the original sample.
+-   **Step 2.** Calculate the bootstrap statistic - a statistic such as mean, median, proportion, slope, etc. computed on the bootstrap samples.
+-   **Step 3.** Repeat steps (1) and (2) many times to create a bootstrap distribution - a distribution of bootstrap statistics.
+-   **Step 4.** Calculate the bounds of the XX% confidence interval as the middle XX% j knof the bootstrap distribution.
 
 Instead of coding up each of these steps, we will construct confidence intervals using the **infer** package.
 
 Below is an overview of the functions we will use to construct this confidence interval:
 
-Function    | Purpose
------------ | -------
-`specify`   | Identify your variable of interest
-`generate`  | The number of samples you want to generate
-`calculate` | The sample statistic you want to do inference with, or you can also think of this as the population parameter you want to do inference for
-`get_ci`    | Find the confidence interval
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+| Function    | Purpose                                                                                                                                    |
++=============+============================================================================================================================================+
+| `specify`   | Identify your variable of interest                                                                                                         |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+| `generate`  | The number of samples you want to generate                                                                                                 |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+| `calculate` | The sample statistic you want to do inference with, or you can also think of this as the population parameter you want to do inference for |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+| `get_ci`    | Find the confidence interval                                                                                                               |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------+
 
 This code will find the 95 percent confidence interval for proportion of US adults who think climate change affects their local community.
 
@@ -147,9 +149,9 @@ samp %>%
   get_ci(level = 0.95)
 ```
 
-- In `specify` we specify the `response` variable and the level of that variable we are calling a `success`.
-- In `generate` we provide the number of resamples we want from the population in the `reps` argument (this should be a reasonably large number) as well as the type of resampling we want to do, which is `"bootstrap"` in the case of constructing a confidence interval.
-- Then, we `calculate` the sample statistic of interest for each of these resamples, which is `prop`ortion.
+-   In `specify` we specify the `response` variable and the level of that variable we are calling a `success`.
+-   In `generate` we provide the number of resamples we want from the population in the `reps` argument (this should be a reasonably large number) as well as the type of resampling we want to do, which is `"bootstrap"` in the case of constructing a confidence interval.
+-   Then, we `calculate` the sample statistic of interest for each of these resamples, which is `prop`ortion.
 
 Feel free to test out the rest of the arguments for these functions, since these commands will be used together to calculate confidence intervals and solve inference problems for the rest of the semester.
 But we will also walk you through more examples in future chapters.
@@ -160,15 +162,14 @@ To recap: even though we don't know what the full population looks like, we're 9
 
 1.  In the interpretation above, we used the phrase "95% confident". What does "95% confidence" mean?
 
-In this case, you have the rare luxury of knowing the true population proportion (62%) since you have data on the entire population. 
+In this case, you have the rare luxury of knowing the true population proportion (62%) since you have data on the entire population.
 
-1.  Does your confidence interval capture the true population proportion of US adults 
-    who think climate change affects their local community? If you are working on this 
-    lab in a classroom, does your neighbor's interval capture this value? 
+1.  Does your confidence interval capture the true population proportion of US adults who think climate change affects their local community?
+    If you are working on this lab in a classroom, does your neighbor's interval capture this value?
 
-1.  Each student should have gotten a slightly different confidence interval. What 
-    proportion of those intervals would you expect to capture the true population 
-    mean? Why?
+2.  Each student should have gotten a slightly different confidence interval.
+    What proportion of those intervals would you expect to capture the true population mean?
+    Why?
 
 In the next part of the lab, you will collect many samples to learn more about how sample proportions and confidence intervals constructed based on those samples vary from one sample to another.
 
@@ -176,7 +177,7 @@ In the next part of the lab, you will collect many samples to learn more about h
 -   Calculate the sample proportion, and use these to calculate and store the lower and upper bounds of the confidence intervals.
 -   Repeat these steps 50 times.
 
-Doing this would require learning programming concepts like iteration so that you can automate repeating running the code you've developed so far many times to obtain many (50) confidence intervals. 
+Doing this would require learning programming concepts like iteration so that you can automate repeating running the code you've developed so far many times to obtain many (50) confidence intervals.
 In order to keep the programming simpler, we are providing the interactive app below that basically does this for you and created a plot similar to Figure 5.6 on [OpenIntro Statistics, 4th Edition (page 182)](https://www.openintro.org/os).
 
 ```{r shiny, echo=FALSE, eval=TRUE, results = TRUE}
@@ -288,46 +289,31 @@ shinyApp(
 )
 ```
 
+1.  Given a sample size of 60, 1000 bootstrap samples for each interval, and 50 confidence intervals constructed (the default values for the above app), what proportion of your confidence intervals include the true population proportion? Is this proportion exactly equal to the confidence level? If not, explain why. Make sure to include your plot in your answer.
 
-1.  Given a sample size of 60, 1000 bootstrap samples for each interval, and 50 
-    confidence intervals constructed (the default values for the above app), what 
-    proportion of your confidence intervals include the true population proportion? 
-    Is this proportion exactly equal to the confidence level? If not, explain why. 
-    Make sure to include your plot in your answer.
-
-* * *
+------------------------------------------------------------------------
 
 ## More Practice
 
-1.  Choose a different confidence level than 95%. Would you expect a confidence 
-    interval at this level to me wider or narrower than the confidence interval 
-    you calculated at the 95% confidence level? Explain your reasoning.
+1.  Choose a different confidence level than 95%.
+    Would you expect a confidence interval at this level to me wider or narrower than the confidence interval you calculated at the 95% confidence level?
+    Explain your reasoning.
 
-1.  Using code from the **infer** package and data fromt the one sample you have 
-    (`samp`), find a confidence interval for the proportion 
-    of US Adults who think climate change is affecting their local community with a 
-    confidence level of your choosing (other than 95%) and interpret it.
+2.  Using code from the **infer** package and data fromt the one sample you have (`samp`), find a confidence interval for the proportion of US Adults who think climate change is affecting their local community with a confidence level of your choosing (other than 95%) and interpret it.
 
-1.  Using the app, calculate 50 confidence intervals at the confidence level you chose 
-    in the previous question, and plot all intervals on one plot, and calculate 
-    the proportion of intervals that include the true population proportion. 
-    How does this percentage compare to the confidence level selected for the 
-    intervals?
-    
-1.  Lastly, try one more (different) confidence level. First, state how you expect the
-    width of this interval to compare to previous ones you calculated. Then, 
-    calculate the bounds of the interval using the **infer** package and data 
-    from `samp` and interpret it. Finally, use the app to generate many intervals 
-    and calculate the proportion of intervals that are capture the true population 
-    proportion.
+3.  Using the app, calculate 50 confidence intervals at the confidence level you chose in the previous question, and plot all intervals on one plot, and calculate the proportion of intervals that include the true population proportion.
+    How does this percentage compare to the confidence level selected for the intervals?
 
-1.  Using the app, experiment with different sample sizes and comment on how the 
-    widths of intervals change as sample size changes (increases and decreases).
-    
-1.  Finally, given a sample size (say, 60), how does the width of the interval change 
-    as you increase the number of bootstrap samples. **Hint:** Does changing the 
-    number of bootstap samples affect the standard error?
+4.  Lastly, try one more (different) confidence level.
+    First, state how you expect the width of this interval to compare to previous ones you calculated.
+    Then, calculate the bounds of the interval using the **infer** package and data from `samp` and interpret it.
+    Finally, use the app to generate many intervals and calculate the proportion of intervals that are capture the true population proportion.
 
-* * *
+5.  Using the app, experiment with different sample sizes and comment on how the widths of intervals change as sample size changes (increases and decreases).
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+6.  Finally, given a sample size (say, 60), how does the width of the interval change as you increase the number of bootstrap samples.
+    **Hint:** Does changing the number of bootstap samples affect the standard error?
+
+------------------------------------------------------------------------
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){style="border-width:0"}</a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

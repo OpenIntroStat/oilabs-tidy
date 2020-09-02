@@ -13,11 +13,9 @@ output:
 knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
 ```
 
-In this lab, you'll investigate the probability distribution that is most central
-to statistics: the normal distribution.  If you are confident that your data are 
-nearly normal, that opens the door to many powerful statistical methods.  Here 
-we'll use the graphical tools of R to assess the normality of our data and also 
-learn how to generate random numbers from a normal distribution.
+In this lab, you'll investigate the probability distribution that is most central to statistics: the normal distribution.
+If you are confident that your data are nearly normal, that opens the door to many powerful statistical methods.
+Here we'll use the graphical tools of R to assess the normality of our data and also learn how to generate random numbers from a normal distribution.
 
 ## Getting Started
 
@@ -34,12 +32,12 @@ library(openintro)
 
 ### Creating a reproducible lab report
 
-To create your new lab report, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
+To create your new lab report, in RStudio, go to New File -\> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
 
 ### The data
 
-This week you'll be working with fast food data.  This data set contains data on
-515 menu items from some of the most popular fast food restaurants worldwide.
+This week you'll be working with fast food data.
+This data set contains data on 515 menu items from some of the most popular fast food restaurants worldwide.
 Let's take a quick peek at the first few rows of the data.
 
 Either you can use `glimpse` like before, or `head` to do this.
@@ -50,11 +48,9 @@ library(openintro)
 head(fastfood)
 ```
 
-You'll see that for every observation there are 17 measurements, many of which are
-nutritional facts.
+You'll see that for every observation there are 17 measurements, many of which are nutritional facts.
 
-You'll be focusing on just three columns to get started: restaurant, calories, 
-calories from fat.
+You'll be focusing on just three columns to get started: restaurant, calories, calories from fat.
 
 Let's first focus on just products from McDonalds and Dairy Queen.
 
@@ -65,40 +61,28 @@ dairy_queen <- fastfood %>%
   filter(restaurant == "Dairy Queen")
 ```
 
-1.  Make a plot (or plots) to visualize the distributions of the amount of calories
-from fat of the options from these two restaurants.  How do their centers, shapes,
-and spreads compare?
+1.  Make a plot (or plots) to visualize the distributions of the amount of calories from fat of the options from these two restaurants. How do their centers, shapes, and spreads compare?
 
 ## The normal distribution
 
-In your description of the distributions, did you use words like *bell-shaped* 
-or *normal*?  It's tempting to say so when faced with a unimodal symmetric 
-distribution.
+In your description of the distributions, did you use words like *bell-shaped* or *normal*?
+It's tempting to say so when faced with a unimodal symmetric distribution.
 
-To see how accurate that description is, you can plot a normal distribution curve 
-on top of a histogram to see how closely the data follow a normal distribution. 
-This normal curve should have the same mean and standard deviation as the data. 
-You'll be focusing on calories from fat from Dairy Queen products, so let's store
-them as a separate object and then calculate some statistics that will be referenced 
-later. 
+To see how accurate that description is, you can plot a normal distribution curve on top of a histogram to see how closely the data follow a normal distribution.
+This normal curve should have the same mean and standard deviation as the data.
+You'll be focusing on calories from fat from Dairy Queen products, so let's store them as a separate object and then calculate some statistics that will be referenced later.
 
 ```{r female-hgt-mean-sd}
 dqmean <- mean(dairy_queen$cal_fat)
 dqsd   <- sd(dairy_queen$cal_fat)
 ```
 
-Next, you make a density histogram to use as the backdrop and use the `lines` 
-function to overlay a normal probability curve. The difference between a 
-frequency histogram and a density histogram is that while in a frequency 
-histogram the *heights* of the bars add up to the total number of observations, 
-in a density histogram the *areas* of the bars add up to 1. The area of each bar
-can be calculated as simply the height *times* the width of the bar. Using a 
-density histogram allows us to properly overlay a normal distribution curve over
-the histogram since the curve is a normal probability density function that also
-has area under the curve of 1. Frequency and density histograms both display the
-same exact shape; they only differ in their y-axis. You can verify this by
-comparing the frequency histogram you constructed earlier and the density
-histogram created by the commands below.
+Next, you make a density histogram to use as the backdrop and use the `lines` function to overlay a normal probability curve.
+The difference between a frequency histogram and a density histogram is that while in a frequency histogram the *heights* of the bars add up to the total number of observations, in a density histogram the *areas* of the bars add up to 1.
+The area of each bar can be calculated as simply the height *times* the width of the bar.
+Using a density histogram allows us to properly overlay a normal distribution curve over the histogram since the curve is a normal probability density function that also has area under the curve of 1.
+Frequency and density histograms both display the same exact shape; they only differ in their y-axis.
+You can verify this by comparing the frequency histogram you constructed earlier and the density histogram created by the commands below.
 
 ```{r hist-height}
 ggplot(data = dairy_queen, aes(x = cal_fat)) +
@@ -107,113 +91,84 @@ ggplot(data = dairy_queen, aes(x = cal_fat)) +
         stat_function(fun = dnorm, args = c(mean = dqmean, sd = dqsd), col = "tomato")
 ```
 
-After initializing a blank plot with `geom_blank()`, the `ggplot2` package (within
-the `tidyverse`) allows us to add additional layers. The first layer is a density 
-histogram. The second layer is a statistical function -- the density of the normal
-curve, `dnorm`. We specify that we want the curve to have the same mean and 
-standard deviation as the column of female heights. The argument `col` simply sets
-the color for the line to be drawn. If we left it out, the line would be drawn in
-black.
+After initializing a blank plot with `geom_blank()`, the `ggplot2` package (within the `tidyverse`) allows us to add additional layers.
+The first layer is a density histogram.
+The second layer is a statistical function -- the density of the normal curve, `dnorm`.
+We specify that we want the curve to have the same mean and standard deviation as the column of female heights.
+The argument `col` simply sets the color for the line to be drawn.
+If we left it out, the line would be drawn in black.
 
-2.  Based on the this plot, does it appear that the data follow a nearly normal 
-    distribution?
-
+2.  Based on the this plot, does it appear that the data follow a nearly normal distribution?
 
 ## Evaluating the normal distribution
 
-Eyeballing the shape of the histogram is one way to determine if the data appear
-to be nearly normally distributed, but it can be frustrating to decide just how 
-close the histogram is to the curve. An alternative approach involves 
-constructing a normal probability plot, also called a normal Q-Q plot for 
-"quantile-quantile".
+Eyeballing the shape of the histogram is one way to determine if the data appear to be nearly normally distributed, but it can be frustrating to decide just how close the histogram is to the curve.
+An alternative approach involves constructing a normal probability plot, also called a normal Q-Q plot for "quantile-quantile".
 
 ```{r qq}
 ggplot(data = dairy_queen, aes(sample = cal_fat)) + 
   geom_line(stat = "qq")
 ```
 
-This time, you can use the `geom_line()` layer, while specifying that you will 
-be creating a Q-Q plot with the `stat` argument. It's important to note that here,
-instead of using `x` instead `aes()`, you need to use `sample`.
+This time, you can use the `geom_line()` layer, while specifying that you will be creating a Q-Q plot with the `stat` argument.
+It's important to note that here, instead of using `x` instead `aes()`, you need to use `sample`.
 
-The x-axis values correspond to the quantiles of a theoretically normal curve 
-with mean 0 and standard deviation 1 (i.e., the standard normal distribution).  The 
-y-axis values correspond to the quantiles of the original unstandardized sample 
-data. However, even if we were to standardize the sample data values, the Q-Q
-plot would look identical. A data set that is nearly normal will result in a
-probability plot where the points closely follow a diagonal line.  Any deviations
-from normality leads to deviations of these points from that line.
+The x-axis values correspond to the quantiles of a theoretically normal curve with mean 0 and standard deviation 1 (i.e., the standard normal distribution).
+The y-axis values correspond to the quantiles of the original unstandardized sample data.
+However, even if we were to standardize the sample data values, the Q-Q plot would look identical.
+A data set that is nearly normal will result in a probability plot where the points closely follow a diagonal line.
+Any deviations from normality leads to deviations of these points from that line.
 
-The plot for Dairy Queen's calories from fat shows points that tend to follow the
-line but with some errant points towards the upper tail.  You're left with the same
-problem that we encountered with the histogram above: how close is close enough?
+The plot for Dairy Queen's calories from fat shows points that tend to follow the line but with some errant points towards the upper tail.
+You're left with the same problem that we encountered with the histogram above: how close is close enough?
 
-A useful way to address this question is to rephrase it as: what do probability 
-plots look like for data that I *know* came from a normal distribution?  We can 
-answer this by simulating data from a normal distribution using `rnorm`.
+A useful way to address this question is to rephrase it as: what do probability plots look like for data that I *know* came from a normal distribution?
+We can answer this by simulating data from a normal distribution using `rnorm`.
 
 ```{r sim-norm}
 sim_norm <- rnorm(n = nrow(dairy_queen), mean = dqmean, sd = dqsd)
 ```
 
-The first argument indicates how many numbers you'd like to generate, which we 
-specify to be the same number of menu items in the `dairy_queen` data set using the 
-`nrow()` function.  The last two arguments determine the mean and standard 
-deviation of the normal distribution from which the simulated sample will be 
-generated.  You can take a look at the shape of our simulated data set, `sim_norm`, 
-as well as its normal probability plot.
+The first argument indicates how many numbers you'd like to generate, which we specify to be the same number of menu items in the `dairy_queen` data set using the `nrow()` function.
+The last two arguments determine the mean and standard deviation of the normal distribution from which the simulated sample will be generated.
+You can take a look at the shape of our simulated data set, `sim_norm`, as well as its normal probability plot.
 
-3.  Make a normal probability plot of `sim_norm`.  Do all of the points fall on 
-    the line?  How does this plot compare to the probability plot for the real 
-    data? (Since `sim_norm` is not a dataframe, it can be put directly into the 
-    `sample` argument and the `data` argument can be dropped.)
+3.  Make a normal probability plot of `sim_norm`. Do all of the points fall on the line? How does this plot compare to the probability plot for the real data? (Since `sim_norm` is not a dataframe, it can be put directly into the `sample` argument and the `data` argument can be dropped.)
 
-Even better than comparing the original plot to a single plot generated from a 
-normal distribution is to compare it to many more plots using the following 
-function. It shows the Q-Q plot corresponding to the original data in the top
-left corner, and the Q-Q plots of 8 different simulated normal data.  It may be
-helpful to click the zoom button in the plot window.
+Even better than comparing the original plot to a single plot generated from a normal distribution is to compare it to many more plots using the following function.
+It shows the Q-Q plot corresponding to the original data in the top left corner, and the Q-Q plots of 8 different simulated normal data.
+It may be helpful to click the zoom button in the plot window.
 
 ```{r qqnormsim}
 qqnormsim(sample = cal_fat, data = dairy_queen)
 ```
 
-4.  Does the normal probability plot for the calories from fat look similar to the plots 
-    created for the simulated data?  That is, do the plots provide evidence that the
-    female heights are nearly normal?
+4.  Does the normal probability plot for the calories from fat look similar to the plots created for the simulated data?
+    That is, do the plots provide evidence that the female heights are nearly normal?
 
-5.  Using the same technique, determine whether or not the calories from McDonald's
-    menu appear to come from a normal distribution.
+5.  Using the same technique, determine whether or not the calories from McDonald's menu appear to come from a normal distribution.
 
 ## Normal probabilities
 
-Okay, so now you have a slew of tools to judge whether or not a variable is 
-normally distributed.  Why should you care?
+Okay, so now you have a slew of tools to judge whether or not a variable is normally distributed.
+Why should you care?
 
-It turns out that statisticians know a lot about the normal distribution.  Once 
-you decide that a random variable is approximately normal, you can answer all 
-sorts of questions about that variable related to probability.  Take, for 
-example, the question of, "What is the probability that a randomly chosen Dairy 
-Queen product has more than 600 calories from fat?"
+It turns out that statisticians know a lot about the normal distribution.
+Once you decide that a random variable is approximately normal, you can answer all sorts of questions about that variable related to probability.
+Take, for example, the question of, "What is the probability that a randomly chosen Dairy Queen product has more than 600 calories from fat?"
 
-If we assume that the calories from fat from Dairy Queen's menu are normally 
-distributed (a very close approximation is also okay), we can find this probability
-by calculating a Z score and consulting a Z table (also called a normal probability
-table).  In R, this is done in one step with the function `pnorm()`.
+If we assume that the calories from fat from Dairy Queen's menu are normally distributed (a very close approximation is also okay), we can find this probability by calculating a Z score and consulting a Z table (also called a normal probability table).
+In R, this is done in one step with the function `pnorm()`.
 
 ```{r pnorm}
 1 - pnorm(q = 600, mean = dqmean, sd = dqsd)
 ```
 
-Note that the function `pnorm()` gives the area under the normal curve below a 
-given value, `q`, with a given mean and standard deviation.  Since we're 
-interested in the probability that a Dairy Queen item has more than 600 calories
-from fat, we have to take one minus that probability.
+Note that the function `pnorm()` gives the area under the normal curve below a given value, `q`, with a given mean and standard deviation.
+Since we're interested in the probability that a Dairy Queen item has more than 600 calories from fat, we have to take one minus that probability.
 
-Assuming a normal distribution has allowed us to calculate a theoretical 
-probability.  If we want to calculate the probability empirically, we simply 
-need to determine how many observations fall above 600 then divide this number 
-by the total sample size.
+Assuming a normal distribution has allowed us to calculate a theoretical probability.
+If we want to calculate the probability empirically, we simply need to determine how many observations fall above 600 then divide this number by the total sample size.
 
 ```{r probability}
 dairy_queen %>% 
@@ -221,33 +176,26 @@ dairy_queen %>%
   summarise(percent = n() / nrow(dairy_queen))
 ```
 
-Although the probabilities are not exactly the same, they are reasonably close. 
-The closer that your distribution is to being normal, the more accurate the 
-theoretical probabilities will be.
+Although the probabilities are not exactly the same, they are reasonably close.
+The closer that your distribution is to being normal, the more accurate the theoretical probabilities will be.
 
-6.  Write out two probability questions that you would like to answer about any 
-    of the restaurants in this dataset.  Calculate those probabilities using both
-    the theoretical normal distribution as well as the empirical distribution 
-    (four probabilities in all).  Which one had a closer agreement between the 
-    two methods?
+6.  Write out two probability questions that you would like to answer about any of the restaurants in this dataset. Calculate those probabilities using both the theoretical normal distribution as well as the empirical distribution (four probabilities in all). Which one had a closer agreement between the two methods?
 
-* * *
+------------------------------------------------------------------------
 
 ## More Practice
 
-7.  Now let's consider some of the other variables in the dataset.  Out of all the
-    different restaurants, which ones' distribution is the closest to normal for sodium?
-   
-8.  Note that some of the normal probability plots for sodium distributions seem
-    to have a stepwise pattern. why do you think this might be the case?
+7.  Now let's consider some of the other variables in the dataset.
+    Out of all the different restaurants, which ones' distribution is the closest to normal for sodium?
 
-9.  As you can see, normal probability plots can be used both to assess 
-    normality and visualize skewness.  Make a normal probability plot for the total
-    carbohydrates from a restaurant of your choice.  Based on this normal 
-    probability plot, is this variable left skewed, symmetric, or right skewed?  
+8.  Note that some of the normal probability plots for sodium distributions seem to have a stepwise pattern.
+    why do you think this might be the case?
+
+9.  As you can see, normal probability plots can be used both to assess normality and visualize skewness.
+    Make a normal probability plot for the total carbohydrates from a restaurant of your choice.
+    Based on this normal probability plot, is this variable left skewed, symmetric, or right skewed?\
     Use a histogram to confirm your findings.
 
+------------------------------------------------------------------------
 
-* * *
-
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){style="border-width:0"}</a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

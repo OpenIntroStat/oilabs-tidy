@@ -18,9 +18,8 @@ knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message =
 
 ### Load packages
 
-In this lab, we will explore and visualize the data using the **tidyverse** suite of 
-packages, and perform statistical inference using **infer**. The data can be found
-in the companion package for OpenIntro resources, **openintro**.
+In this lab, we will explore and visualize the data using the **tidyverse** suite of packages, and perform statistical inference using **infer**.
+The data can be found in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
 
@@ -32,32 +31,27 @@ library(infer)
 
 ### Creating a reproducible lab report
 
-To create your new lab report, in RStudio, go to New File -> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
+To create your new lab report, in RStudio, go to New File -\> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
 
 ### The data
 
-You will be analyzing the same dataset as in the previous lab, where you delved 
-into a sample from the Youth Risk Behavior Surveillance System (YRBSS) survey,
-which uses data from high schoolers to help discover health patterns. The 
-dataset is called `yrbss`.
+You will be analyzing the same dataset as in the previous lab, where you delved into a sample from the Youth Risk Behavior Surveillance System (YRBSS) survey, which uses data from high schoolers to help discover health patterns.
+The dataset is called `yrbss`.
 
-1.   What are the counts within each category for the amount of days these students
-have texted while driving within the past 30 days?
+1.  What are the counts within each category for the amount of days these students have texted while driving within the past 30 days?
 
-1.  What is the proportion of people who have texted while driving every day in 
-the past 30 days and never wear helmets?
+2.  What is the proportion of people who have texted while driving every day in the past 30 days and never wear helmets?
 
-Remember that you can use `filter` to limit the dataset to just non-helmet
-wearers. Here, we will name the dataset `no_helmet`.
+Remember that you can use `filter` to limit the dataset to just non-helmet wearers.
+Here, we will name the dataset `no_helmet`.
 
 ```{r no helmet}
 no_helmet <- yrbss %>%
   filter(helmet_12m == "never")
 ```
 
-Also, it may be easier to calculate the proportion if you create a new variable
-that specifies whether the individual has texted every day while driving over the 
-past 30 days or not. We will call this variable `text_ind`.
+Also, it may be easier to calculate the proportion if you create a new variable that specifies whether the individual has texted every day while driving over the past 30 days or not.
+We will call this variable `text_ind`.
 
 ```{r indicator-texting}
 no_helmet <- no_helmet %>%
@@ -66,16 +60,10 @@ no_helmet <- no_helmet %>%
 
 ## Inference on proportions
 
-When summarizing the YRBSS, the Centers for Disease Control and Prevention seeks 
-insight into the population *parameters*. To do this, you can answer the question,
-"What proportion of people in your sample reported that they have texted while 
-driving each day for the past 30 days?" with a statistic; while the question 
-"What proportion of people on earth have texted while driving each day for the 
-past 30 days?" is answered with an estimate of the parameter.
+When summarizing the YRBSS, the Centers for Disease Control and Prevention seeks insight into the population *parameters*.
+To do this, you can answer the question, "What proportion of people in your sample reported that they have texted while driving each day for the past 30 days?" with a statistic; while the question "What proportion of people on earth have texted while driving each day for the past 30 days?" is answered with an estimate of the parameter.
 
-The inferential tools for estimating population proportion are analogous to 
-those used for means in the last chapter: the confidence interval and the 
-hypothesis test.
+The inferential tools for estimating population proportion are analogous to those used for means in the last chapter: the confidence interval and the hypothesis test.
 
 ```{r nohelmet-text-ci}
 no_helmet %>%
@@ -85,62 +73,42 @@ no_helmet %>%
   get_ci(level = 0.95)
 ```
 
-Note that since the goal is to construct an interval estimate for a 
-proportion, it's necessary to both include the `success` argument within `specify`,
-which accounts for the proportion of non-helmet wearers than have consistently texted
-while driving the past 30 days, in this example, and that `stat` within `calculate`
-is here "prop", signaling that you are trying to do some sort of inference on a 
-proportion.
+Note that since the goal is to construct an interval estimate for a proportion, it's necessary to both include the `success` argument within `specify`, which accounts for the proportion of non-helmet wearers than have consistently texted while driving the past 30 days, in this example, and that `stat` within `calculate` is here "prop", signaling that you are trying to do some sort of inference on a proportion.
 
+1.  What is the margin of error for the estimate of the proportion of non-helmet wearers that have texted while driving each day for the past 30 days based on this survey?
 
-1.  What is the margin of error for the estimate of the proportion of non-helmet 
-    wearers that have texted while driving each day for the past 30 days based on 
-    this survey?
-
-1.  Using the `infer` package, calculate confidence intervals for two other 
-    categorical variables (you'll need to decide which level to call "success", 
-    and report the associated margins of error. Interpet the interval in context 
-    of the data. It may be helpful to create new data sets for each of the two 
-    countries first, and then use these data sets to construct the confidence intervals.
+2.  Using the `infer` package, calculate confidence intervals for two other categorical variables (you'll need to decide which level to call "success", and report the associated margins of error. Interpet the interval in context of the data. It may be helpful to create new data sets for each of the two countries first, and then use these data sets to construct the confidence intervals.
 
 ## How does the proportion affect the margin of error?
 
-Imagine you've set out to survey 1000 people on two questions: are you at least
-6-feet tall? and are you left-handed? Since both of these sample proportions were 
-calculated from the same sample size, they should have the same margin of 
-error, right? Wrong! While the margin of error does change with sample size, 
-it is also affected by the proportion.
+Imagine you've set out to survey 1000 people on two questions: are you at least 6-feet tall?
+and are you left-handed?
+Since both of these sample proportions were calculated from the same sample size, they should have the same margin of error, right?
+Wrong!
+While the margin of error does change with sample size, it is also affected by the proportion.
 
-Think back to the formula for the standard error: $SE = \sqrt{p(1-p)/n}$. This 
-is then used in the formula for the margin of error for a 95% confidence 
-interval: 
-$$
+Think back to the formula for the standard error: $SE = \sqrt{p(1-p)/n}$.
+This is then used in the formula for the margin of error for a 95% confidence interval: $$
 ME = 1.96\times SE = 1.96\times\sqrt{p(1-p)/n} \,.
-$$
-Since the population proportion $p$ is in this $ME$ formula, it should make sense
-that the margin of error is in some way dependent on the population proportion. 
+$$ Since the population proportion $p$ is in this $ME$ formula, it should make sense that the margin of error is in some way dependent on the population proportion.
 We can visualize this relationship by creating a plot of $ME$ vs. $p$.
 
-Since sample size is irrelevant to this discussion, let's just set it to
-some value ($n = 1000$) and use this value in the following calculations:
+Since sample size is irrelevant to this discussion, let's just set it to some value ($n = 1000$) and use this value in the following calculations:
 
 ```{r n-for-me-plot}
 n <- 1000
 ```
 
-The first step is to make a variable `p` that is a sequence from 0 to 1 with 
-each number incremented by 0.01. You can then create a variable of the margin of 
-error (`me`) associated with each of these values of `p` using the familiar 
-approximate formula ($ME = 2 \times SE$).
+The first step is to make a variable `p` that is a sequence from 0 to 1 with each number incremented by 0.01.
+You can then create a variable of the margin of error (`me`) associated with each of these values of `p` using the familiar approximate formula ($ME = 2 \times SE$).
 
 ```{r p-me}
 p <- seq(from = 0, to = 1, by = 0.01)
 me <- 2 * sqrt(p * (1 - p)/n)
 ```
 
-Lastly, you can plot the two variables against each other to reveal their 
-relationship. To do so, we need to first put these variables in a data frame that
-you can call in the `ggplot` function.
+Lastly, you can plot the two variables against each other to reveal their relationship.
+To do so, we need to first put these variables in a data frame that you can call in the `ggplot` function.
 
 ```{r me-plot}
 dd <- data.frame(p = p, me = me)
@@ -149,29 +117,21 @@ ggplot(data = dd, aes(x = p, y = me)) +
   labs(x = "Population Proportion", y = "Margin of Error")
 ```
 
-1.  Describe the relationship between `p` and `me`. Include the margin of
-    error vs. population proportion plot you constructed in your answer. For
-    a given sample size, for which value of `p` is margin of error maximized?
+1.  Describe the relationship between `p` and `me`. Include the margin of error vs. population proportion plot you constructed in your answer. For a given sample size, for which value of `p` is margin of error maximized?
 
 ## Success-failure condition
 
-We have emphasized that you must always check conditions before making 
-inference. For inference on proportions, the sample proportion can be assumed 
-to be nearly normal if it is based upon a random sample of independent 
-observations and if both $np \geq 10$ and $n(1 - p) \geq 10$. This rule of 
-thumb is easy enough to follow, but it makes you wonder: what's so special 
-about the number 10?
+We have emphasized that you must always check conditions before making inference.
+For inference on proportions, the sample proportion can be assumed to be nearly normal if it is based upon a random sample of independent observations and if both $np \geq 10$ and $n(1 - p) \geq 10$.
+This rule of thumb is easy enough to follow, but it makes you wonder: what's so special about the number 10?
 
-The short answer is: nothing. You could argue that you would be fine with 9 or 
-that you really should be using 11. What is the "best" value for such a rule of 
-thumb is, at least to some degree, arbitrary. However, when $np$ and $n(1-p)$ 
-reaches 10 the sampling distribution is sufficiently normal to use confidence 
-intervals and hypothesis tests that are based on that approximation.
+The short answer is: nothing.
+You could argue that you would be fine with 9 or that you really should be using 11.
+What is the "best" value for such a rule of thumb is, at least to some degree, arbitrary.
+However, when $np$ and $n(1-p)$ reaches 10 the sampling distribution is sufficiently normal to use confidence intervals and hypothesis tests that are based on that approximation.
 
-You can investigate the interplay between $n$ and $p$ and the shape of the 
-sampling distribution by using simulations. Play around with the following
-app to investigate how the shape, center, and spread of the distribution of
-$\hat{p}$ changes as $n$ and $p$ changes.
+You can investigate the interplay between $n$ and $p$ and the shape of the sampling distribution by using simulations.
+Play around with the following app to investigate how the shape, center, and spread of the distribution of $\hat{p}$ changes as $n$ and $p$ changes.
 
 ```{r sf-app, echo=FALSE, eval=TRUE}
 inputPanel(
@@ -199,47 +159,39 @@ renderPlot({
 })
 ```
 
-1.  Describe the sampling distribution of sample proportions at $n = 300$ and 
-    $p = 0.1$. Be sure to note the center, spread, and shape.
+1.  Describe the sampling distribution of sample proportions at $n = 300$ and $p = 0.1$.
+    Be sure to note the center, spread, and shape.
 
-1.  Keep $n$ constant and change $p$. How does the shape, center, and spread 
-    of the sampling distribution vary as $p$ changes. You might want to adjust
-    min and max for the $x$-axis for a better view of the distribution.
-    
-1.  Now also change $n$. How does $n$ appear to affect the distribution of $\hat{p}$?
+2.  Keep $n$ constant and change $p$.
+    How does the shape, center, and spread of the sampling distribution vary as $p$ changes.
+    You might want to adjust min and max for the $x$-axis for a better view of the distribution.
 
-* * *
+3.  Now also change $n$.
+    How does $n$ appear to affect the distribution of $\hat{p}$?
+
+------------------------------------------------------------------------
 
 ## More Practice
 
-For some of the exercises below, you will conduct inference comparing two 
-proportions. In such cases, you have a response variable that is categorical, and
-an explanatory variable that is also categorical, and you are comparing the 
-proportions of success of the response variable across the levels of the 
-explanatory variable. This means that when using `infer`, you need to include
-both variables within `specify`.
+For some of the exercises below, you will conduct inference comparing two proportions.
+In such cases, you have a response variable that is categorical, and an explanatory variable that is also categorical, and you are comparing the proportions of success of the response variable across the levels of the explanatory variable.
+This means that when using `infer`, you need to include both variables within `specify`.
 
-1.  Is there convincing evidence that those who sleep 10+ hours per day are more
-    likely to strength train every day of the week? As always, write out the 
-    hypotheses for any tests you conduct and outline the status of the conditions
-    for inference. If you find a significant difference, also quantify this 
-    difference with a confidence interval. 
+1.  Is there convincing evidence that those who sleep 10+ hours per day are more likely to strength train every day of the week?
+    As always, write out the hypotheses for any tests you conduct and outline the status of the conditions for inference.
+    If you find a significant difference, also quantify this difference with a confidence interval.
 
-1.  Let's say there has been no difference in likeliness to strength train every
-    day of the week for those who sleep 10+ hours. What is the probablity that
-    you could detect a change (at a significance level of 0.05) simply by chance?
+2.  Let's say there has been no difference in likeliness to strength train every day of the week for those who sleep 10+ hours.
+    What is the probablity that you could detect a change (at a significance level of 0.05) simply by chance?
     *Hint:* Review the definition of the Type 1 error.
 
-1.  Suppose you're hired by the local government to estimate the proportion of 
-    residents that attend a religious service on a weekly basis. According to 
-    the guidelines, the estimate must have a margin of error no greater than 
-    1% with 95% confidence. You have no idea what to expect for $p$. How many 
-    people would you have to sample to ensure that you are within the 
-    guidelines?\
-    *Hint:* Refer to your plot of the relationship between $p$ and margin of 
-    error. This question does not require using a dataset.
+3.  Suppose you're hired by the local government to estimate the proportion of residents that attend a religious service on a weekly basis.
+    According to the guidelines, the estimate must have a margin of error no greater than 1% with 95% confidence.
+    You have no idea what to expect for $p$.
+    How many people would you have to sample to ensure that you are within the guidelines?\
+    *Hint:* Refer to your plot of the relationship between $p$ and margin of error.
+    This question does not require using a dataset.
 
-* * *
+------------------------------------------------------------------------
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){style="border-width:0"}</a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
