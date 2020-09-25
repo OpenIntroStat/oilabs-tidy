@@ -163,7 +163,7 @@ Because this command is used to explore the data, it is not necessary for your s
 
 This command should output the following
 
-```{r glimpse-data-result, echo=FALSE, results="asis"}
+```{r glimpse-data-result, echo=FALSE}
 glimpse(arbuthnot)
 ```
 
