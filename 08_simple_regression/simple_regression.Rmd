@@ -10,7 +10,11 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
+knitr::opts_chunk$set(eval = TRUE, 
+                      results = FALSE, 
+                      fig.show = "hide", 
+                      message = FALSE, 
+                      warning = FALSE)
 ```
 
 The Human Freedom Index is a report that attempts to summarize the idea of "freedom" through a bunch of different variables for many countries around the globe.
@@ -25,13 +29,16 @@ Your aim will be to summarize a few of the relationships within the data both gr
 ### Load packages
 
 In this lab, you will explore and visualize the data using the **tidyverse** suite of packages.
-The data can be found in the companion package for OpenIntro resources, **openintro**.
+You will also use the **statsr** package to select a regression line that minimizes the sum of squared residuals.  
+The data can be found in the **openintro** package, a companion package for OpenIntro resources. 
 
 Let's load the packages.
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
 library(openintro)
+library(statsr)
+## This requires that you have installed the statsr package!
 ```
 
 ### Creating a reproducible lab report
@@ -44,7 +51,23 @@ The data we're working with is in the openintro package and it's called `hfi`, s
 
 1.  What are the dimensions of the dataset?
 
-2.  What type of plot would you use to display the relationship between the personal freedom score, `pf_score`, and one of the other numerical variables?
+2. The dataset has **a lot** of variables, but we are only interested in four: `pf_score`, `pf_expression_control`, `hf_score`, `year`, and `region`. Select these variables from the `hfi` dataframe, and assign the result to a dataframe named `hfi_small`.
+
+We can use the `drop_na()` function to get an idea of how many observations have missing data.
+The function looks row by row through the data to decide what rows should be kept.
+If there is an `NA` value in a row, that row is discarded.
+The result is a dataframe where there are no missing values for any of the variables. 
+
+3. Using the code below, how many rows in the `small_hfi` data have missing values?__
+Next, use the `drop_na()` function to created another new dataframe named `hfi_small_clean` that **does not** contain any missing values.
+
+```{r}
+drop_na(hfi) %>% 
+  dim()
+
+```
+
+4.  What type of plot would you use to display the relationship between the personal freedom score, `pf_score`, and `pf_expression_control`?
     Plot this relationship using the variable `pf_expression_control` as the predictor.
     Does the relationship look linear?
     If you knew a country's `pf_expression_control`, or its score out of 10, with 0 being the most, of political pressures and controls on media content, would you be comfortable using a linear model to predict the personal freedom score?
@@ -53,10 +76,9 @@ If the relationship looks linear, we can quantify the strength of the relationsh
 
 ```{r cor}
 hfi %>%
-  summarise(cor(pf_expression_control, pf_score, use = "complete.obs"))
+  summarise(cor(pf_expression_control, pf_score))
 ```
 
-Here, we set the `use` argument to "complete.obs" since there are some observations of NA.
 
 ## Sum of squared residuals
 
@@ -64,25 +86,35 @@ Here, we set the `use` argument to "complete.obs" since there are some observati
 In this section, you will use an interactive function to investigate what we mean by "sum of squared residuals".
 You will need to run this function in your console, not in your markdown document.
 Running the function also requires that the `hfi` dataset is loaded in your environment.
+You will also need to make sure the Plots tab in the lower right-hand corner has enough space to make a plot.
 :::
 
 Think back to the way that we described the distribution of a single variable.
 Recall that we discussed characteristics such as center, spread, and shape.
 It's also useful to be able to describe the relationship of two numerical variables, such as `pf_expression_control` and `pf_score` above.
 
-1.  Looking at your plot from the previous exercise, describe the relationship between these two variables. Make sure to discuss the form, direction, and strength of the relationship as well as any unusual observations.
+5.  Looking at your plot from the previous exercise, describe the relationship between these two variables. Make sure to discuss the form, direction, and strength of the relationship as well as any unusual observations.
 
 Just as you've used the mean and standard deviation to summarize a single variable, you can summarize the relationship between these two variables by finding the line that best follows their association.
 Use the following interactive function to select the line that you think does the best job of going through the cloud of points.
 
 ```{r plotss-expression-score, eval=FALSE}
-#this isn't working, wondering if we should just remove rows with NA
 plot_ss(x = pf_expression_control, y = pf_score, data = hfi)
 ```
 
 After running this command, you'll be prompted to click two points on the plot to define a line.
 Once you've done that, the line you specified will be shown in black and the residuals in blue.
-Note that there are 30 residuals, one for each of the 30 observations.
+
+::: {#boxedtext}
+If your plot is appearing below your code chunk and won't let you select points to make a line, take the following steps:  
+
+- Go to the Tools bar at the top of RStudio
+- Click on "Global Options..."
+- Click on the "R Markdown pane" (on the left)
+- Uncheck the box that says "Show output inline for all R Markdown documents"
+:::
+
+
 Recall that the residuals are the difference between the observed values and the values predicted by the line:
 
 $$
@@ -98,7 +130,7 @@ plot_ss(x = pf_expression_control, y = pf_score, data = hfi, showSquares = TRUE)
 
 Note that the output from the `plot_ss` function provides you with the slope and intercept of your line as well as the sum of squares.
 
-1.  Using `plot_ss`, choose a line that does a good job of minimizing the sum of squares. Run the function several times. What was the smallest sum of squares that you got? How does it compare to your neighbors?
+6.  Using `plot_ss`, choose a line that does a good job of minimizing the sum of squares. Run the function several times. What was the smallest sum of squares that you got? How does it compare to your neighbors?
 
 ## The linear model
 
@@ -109,11 +141,13 @@ Instead, you can use the `lm` function in R to fit the linear model (a.k.a. regr
 m1 <- lm(pf_score ~ pf_expression_control, data = hfi)
 ```
 
-The first argument in the function `lm` is a formula that takes the form `y ~ x`.
+The first argument in the function `lm()` is a formula that takes the form `y ~ x`.
 Here it can be read that we want to make a linear model of `pf_score` as a function of `pf_expression_control`.
 The second argument specifies that R should look in the `hfi` data frame to find the two variables.
 
-The output of `lm` is an object that contains all of the information we need about the linear model that was just fit.
+**Note:** Piping __will not__ work here, as the dataframe is not the first argument!
+
+The output of `lm()` is an object that contains all of the information we need about the linear model that was just fit.
 We can access this information using the summary function.
 
 ```{r summary-m1}
@@ -121,20 +155,24 @@ summary(m1)
 ```
 
 Let's consider this output piece by piece.
-First, the formula used to describe the model is shown at the top.
+First, the formula used to describe the model is shown at the top, in what's displayed as the "Call".
 After the formula you find the five-number summary of the residuals.
-The "Coefficients" table shown next is key; its first column displays the linear model's y-intercept and the coefficient of `at_bats`.
+The "Coefficients" table shown next is key; its first column displays the linear model's y-intercept and the coefficient of `pf_expression_control`.
 With this table, we can write down the least squares regression line for the linear model:
 
 $$
   \hat{y} = 4.61707 + 0.49143 \times pf\_expression\_control
 $$
 
+This equation tells us two things: 
+- For countries with a `pf_expression_control` of 0 (those with the largest amount of political pressure on media content), we expect their mean personal freedom score to be 4.61707. 
+- For every 1 unit increase in `pf_expression_control`, we expect a country's mean personal freedom score to increase 0.49143 units. 
+
 One last piece of information we will discuss from the summary output is the Multiple R-squared, or more simply, $R^2$.
 The $R^2$ value represents the proportion of variability in the response variable that is explained by the explanatory variable.
-For this model, 63.42% of the variability in runs is explained by at-bats.
+For this model, 63.42% of the variability in `pf_score` is explained by `pf_expression_control`.
 
-1.  Fit a new model that uses `pf_expression_control` to predict `hf_score`, or the total human freedom score. Using the estimates from the R output, write the equation of the regression line. What does the slope tell us in the context of the relationship between human freedom and the amount of political pressure on media content?
+7.  Fit a new model that uses `pf_expression_control` to predict `hf_score`, or the total human freedom score. Using the estimates from the R output, write the equation of the regression line. What does the slope tell us in the context of the relationship between human freedom and the amount of political pressure on media content?
 
 ## Prediction and prediction errors
 
@@ -143,7 +181,7 @@ Let's create a scatterplot with the least squares line for `m1` laid on top.
 ```{r reg-with-line}
 ggplot(data = hfi, aes(x = pf_expression_control, y = pf_score)) +
   geom_point() +
-  stat_smooth(method = "lm", se = FALSE)
+  geom_smooth(method = "lm", se = FALSE)
 ```
 
 Here, we are literally adding a layer on top of our plot.
@@ -155,7 +193,7 @@ When predictions are made for values of $x$ that are beyond the range of the obs
 However, predictions made within the range of the data are more reliable.
 They're also used to compute the residuals.
 
-1.  If someone saw the least squares regression line and not the actual data, how would they predict a country's personal freedom school for one with a 6.7 rating for `pf_expression_control`? Is this an overestimate or an underestimate, and by how much? In other words, what is the residual for this prediction?
+8.  If someone saw the least squares regression line and not the actual data, how would they predict a country's personal freedom school for one with a 6.7 rating for `pf_expression_control`? Is this an overestimate or an underestimate, and by how much? In other words, what is the residual for this prediction?
 
 ## Model diagnostics
 
@@ -167,20 +205,20 @@ We should also verify this condition with a plot of the residuals vs. fitted (pr
 ```{r residuals}
 ggplot(data = m1, aes(x = .fitted, y = .resid)) +
   geom_point() +
-  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
   xlab("Fitted values") +
   ylab("Residuals")
 ```
 
 Notice here that `m1` can also serve as a data set because stored within it are the fitted values ($\hat{y}$) and the residuals.
 Also note that we're getting fancy with the code here.
-After creating the scatterplot on the first layer (first line of code), we overlay a horizontal dashed line at $y = 0$ (to help us check whether residuals are distributed around 0), and we also reanme the axis labels to be more informative.
+After creating the scatterplot on the first layer (first line of code), we overlay a red horizontal dashed line at $y = 0$ (to help us check whether the residuals are distributed around 0), and we also rename the axis labels to be more informative.
 
-1.  Is there any apparent pattern in the residuals plot? What does this indicate about the linearity of the relationship between the two variables?
+9.  Is there any apparent pattern in the residuals plot? What does this indicate about the linearity of the relationship between the two variables?
 
 </br>
 
-**Nearly normal residuals**: To check this condition, we can look at a histogram
+**Nearly normal residuals**: To check this condition, we can look at a histogram of the residuals
 
 ```{r hist-res}
 ggplot(data = m1, aes(x = .resid)) +
@@ -197,13 +235,13 @@ ggplot(data = m1, aes(sample = .resid)) +
 
 Note that the syntax for making a normal probability plot is a bit different than what you're used to seeing: we set `sample` equal to the residuals instead of `x`, and we set a statistical method `qq`, which stands for "quantile-quantile", another name commonly used for normal probability plots.
 
-1.  Based on the histogram and the normal probability plot, does the nearly normal residuals condition appear to be met?
+10.  Based on the histogram and the normal probability plot, does the nearly normal residuals condition appear to be violated? Why or why not?
 
 </br>
 
 **Constant variability**:
 
-1.  Based on the residuals vs. fitted plot, does the constant variability condition appear to be met?
+11.  Based on the residuals vs. fitted plot, does the constant variability condition appear to be violated? Why or why not?
 
 ------------------------------------------------------------------------
 
@@ -211,9 +249,10 @@ Note that the syntax for making a normal probability plot is a bit different tha
 
 <div class="oyo">
 
--   Choose another freedom variable and a variable you think would strongly correlate with it..
+-   Choose another freedom variable and a variable you think would strongly correlate with it.
     Produce a scatterplot of the two variables and fit a linear model.
     At a glance, does there seem to be a linear relationship?
+    **Remember:** You'll need to go back and add that variable into the `select()` statement!
 
 -   How does this relationship compare to the relationship between `pf_expression_control` and `pf_score`?
     Use the $R^2$ values from the two model summaries to compare.
