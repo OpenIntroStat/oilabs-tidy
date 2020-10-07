@@ -54,17 +54,18 @@ The data we're working with is in the openintro package and it's called `hfi`, s
 2. The dataset has **a lot** of variables, but we are only interested in four: `pf_score`, `pf_expression_control`, `hf_score`, `year`, and `region`. Select these variables from the `hfi` dataframe, and assign the result to a dataframe named `hfi_small`.
 
 We can use the `drop_na()` function to get an idea of how many observations have missing data.
-The function looks row by row through the data to decide what rows should be kept.
-If there is an `NA` value in a row, that row is discarded.
+The function looks row by row through the data to decide which rows should be kept.
+If there is an `NA` value in a row, the row is discarded.
 The result is a dataframe where there are no missing values for any of the variables. 
 
-3. Using the code below, how many rows in the `small_hfi` data have missing values?__
+3. Using the code below, how many rows in the `hfi_small` data have missing values?__
 Next, use the `drop_na()` function to created another new dataframe named `hfi_small_clean` that **does not** contain any missing values.
 
-```{r}
-drop_na(hfi) %>% 
-  dim()
+```{r, eval = FALSE}
+dim(hfi_small)
 
+drop_na(hfi_small) %>% 
+  dim()
 ```
 
 4.  What type of plot would you use to display the relationship between the personal freedom score, `pf_score`, and `pf_expression_control`?
