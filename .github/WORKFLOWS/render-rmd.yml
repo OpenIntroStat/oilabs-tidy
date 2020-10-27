@@ -38,4 +38,3 @@ jobs:
           git config --local user.name "GitHub Actions"
           git commit -a -m 'Re-build Rmd' || echo "No changes to commit"
           git push origin || echo "No changes to commit"
-          
