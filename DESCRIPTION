@@ -1,6 +1,0 @@
-Imports: 
-    tidyverse,
-    openintro,
-    infer,
-    statsr,
-    GGally
