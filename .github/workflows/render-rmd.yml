@@ -13,7 +13,7 @@ jobs:
       - name: Install rmarkdown, remotes, and the local package
         run: |
           install.packages("remotes")
-          remotes::install_cran(c("rmarkdown", "tidyverse", "openintro", "infer", "statsr", "GGally"))
+          remotes::install_cran(c("rmarkdown", "tidyverse", "openintro", "infer", "statsr", "GGally", "skimr"))
         shell: Rscript {0}
       - name: Render Lab 01
         run: Rscript -e 'rmarkdown::render("01_intro_to_r/intro_to_r.Rmd")'

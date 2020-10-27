@@ -26,6 +26,7 @@ Let's load the packages.
 library(tidyverse)
 library(openintro)
 library(infer)
+library(skimr)
 ```
 
 ### Creating a reproducible lab report
@@ -63,7 +64,7 @@ glimpse(yrbss)
 You will first start with analyzing the weight of the participants in kilograms: `weight`.
 
 Using visualization and summary statistics, describe the distribution of weights.
-The `skim()` function from the **skimr** package produces nice summaries of the variables in the dataset, separating categorical (character) variables from quantitative variables. 
+The `skim()` function from the **skimr** package produces nice summaries of the variables in the dataset, separating categorical (character) variables from quantitative variables.
 
 ```{r summary}
 yrbss %>% 
@@ -105,7 +106,7 @@ In order to answer this question we will conduct a hypothesis test.
 
 Next, we will work through creating a permutation distribution using tools from the **infer** package.
 
-But first, we need to initialize the test, which we will save as `obs_diff`. 
+But first, we need to initialize the test, which we will save as `obs_diff`.
 
 ```{r inf-weight-habit-ht-initial, tidy=FALSE, warning = FALSE}
 obs_diff <- yrbss %>%
@@ -113,9 +114,10 @@ obs_diff <- yrbss %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
-Recall that the `specify()` function is used to specify the variables you are considering (notated `y ~x`), and you can use the `calculate()` function to specify the `stat`istic you want to calculate and the `order` of subtraction you want to use. For this hypothesis, the statistic you are searching for is the difference in means, with the order being `yes - no`.
+Recall that the `specify()` function is used to specify the variables you are considering (notated `y ~x`), and you can use the `calculate()` function to specify the `stat`istic you want to calculate and the `order` of subtraction you want to use.
+For this hypothesis, the statistic you are searching for is the difference in means, with the order being `yes - no`.
 
-After you have calculated your observed statistic, you need to create a permutation distribution. 
+After you have calculated your observed statistic, you need to create a permutation distribution.
 This is the distribution that is created by shuffling the observed weights into new `physical_3plus` groups, labeled "yes" and "no"
 
 We will save the permutation distribution as `null_dist`.
@@ -128,12 +130,12 @@ null_dist <- yrbss %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
-The `hypothesize()` function is used to declare what the null hypothesis is. 
+The `hypothesize()` function is used to declare what the null hypothesis is.
 Here, we are assuming that student's weight is independent of whether they exercise at least 3 days or not.
 
-We should also note that the `type` argument within `generate()` is set to `"permute"`. 
-This ensures that the statistics calculated by the `calculate()` function come from a reshuffling of the data (not a resampling of the data)! 
-Finally, the `specify()` and `calculate()` steps should look familiar, since they are the same as what we used to find the observed difference in means! 
+We should also note that the `type` argument within `generate()` is set to `"permute"`.
+This ensures that the statistics calculated by the `calculate()` function come from a reshuffling of the data (not a resampling of the data)!
+Finally, the `specify()` and `calculate()` steps should look familiar, since they are the same as what we used to find the observed difference in means!
 
 We can visualize this null distribution with the following code:
 
@@ -142,9 +144,9 @@ ggplot(data = null_dist, aes(x = stat)) +
   geom_histogram()
 ```
 
-5. Add a vertical red line to the plot above, demonstrating where the observed difference in means (`obs_diff`) falls on the distribution. 
+5.  Add a vertical red line to the plot above, demonstrating where the observed difference in means (`obs_diff`) falls on the distribution.
 
-6. How many of these `null_dist` permutations have a difference at least as large (or larger) as `obs_diff`?
+6.  How many of these `null_dist` permutations have a difference at least as large (or larger) as `obs_diff`?
 
 Now that you have calculated the observed statistic and generated a permutation distribution, you can calculate the p-value for your hypothesis test using the function `get_p_value()` from the infer package.
 
@@ -153,7 +155,8 @@ null_dist %>%
   get_p_value(obs_stat = obs_diff, direction = "two_sided")
 ```
 
-7. What warning message do you get? Why do you think you get this warning message? 
+7.  What warning message do you get?
+    Why do you think you get this warning message?
 
 8.  Construct and record a confidence interval for the difference between the weights of those who exercise at least three times a week and those who don't, and interpret this interval in context of the data.
 
@@ -163,14 +166,14 @@ null_dist %>%
 
 9.  Calculate a 95% confidence interval for the average height in meters (`height`) and interpret it in context.
 
-10.  Calculate a new confidence interval for the same parameter at the 90% confidence level.
+10. Calculate a new confidence interval for the same parameter at the 90% confidence level.
     Comment on the width of this interval versus the one obtained in the previous exercise.
 
-11.  Conduct a hypothesis test evaluating whether the average height is different for those who exercise at least three times a week and those who don't.
+11. Conduct a hypothesis test evaluating whether the average height is different for those who exercise at least three times a week and those who don't.
 
-12.  Now, a non-inference task: Determine the number of different options there are in the dataset for the `hours_tv_per_school_day` there are.
+12. Now, a non-inference task: Determine the number of different options there are in the dataset for the `hours_tv_per_school_day` there are.
 
-13.  Come up with a research question evaluating the relationship between height or weight and sleep.
+13. Come up with a research question evaluating the relationship between height or weight and sleep.
     Formulate the question in a way that it can be answered using a hypothesis test and/or a confidence interval.
     Report the statistical results, and also provide an explanation in plain language.
     Be sure to check all assumptions, state your $\alpha$ level, and conclude in context.
