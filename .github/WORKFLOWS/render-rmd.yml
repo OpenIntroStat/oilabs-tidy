@@ -1,0 +1,41 @@
+on:
+  push:
+    branches:
+      - master
+
+name: Render Rmd
+
+jobs:
+  render:
+    name: Render Rmd
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - name: Install rmarkdown, remotes, and the local package
+        run: |
+          install.packages("remotes")
+          remotes::install_local(".")
+          remotes::install_cran("rmarkdown")
+        shell: Rscript {0}
+      - name: Render Lab 01
+        run: Rscript -e 'rmarkdown::render("01_intro_to_r/intro_to_r.Rmd")'
+      - name: Render Lab 02
+        run: Rscript -e 'rmarkdown::render("02_intro_to_data/intro_to_data.Rmd")'
+      - name: Render Lab 03
+        run: Rscript -e 'rmarkdown::render("03_probability/probability.Rmd")'
+      - name: Render Lab 04
+        run: Rscript -e 'rmarkdown::render("04_normal_distribution/normal_distribution.Rmd")'
+      - name: Render Lab 07
+        run: Rscript -e 'rmarkdown::render("07_inf_for_numerical_data/inf_for_numerical_data.Rmd")'
+      - name: Render Lab 08
+        run: Rscript -e 'rmarkdown::render("08_simple_regression/simple_regression.Rmd")'
+      - name: Render Lab 09
+        run: Rscript -e 'rmarkdown::render("09_multiple_regression/multiple_regression.Rmd")'
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git commit -a -m 'Re-build Rmd' || echo "No changes to commit"
+          git push origin || echo "No changes to commit"
