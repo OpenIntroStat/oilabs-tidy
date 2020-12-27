@@ -29,8 +29,8 @@ Your aim will be to summarize a few of the relationships within the data both gr
 ### Load packages
 
 In this lab, you will explore and visualize the data using the **tidyverse** suite of packages.
-You will also use the **statsr** package to select a regression line that minimizes the sum of squared residuals.  
-The data can be found in the **openintro** package, a companion package for OpenIntro resources. 
+You will also use the **statsr** package to select a regression line that minimizes the sum of squared residuals.\
+The data can be found in the **openintro** package, a companion package for OpenIntro resources.
 
 Let's load the packages.
 
@@ -51,15 +51,20 @@ The data we're working with is in the openintro package and it's called `hfi`, s
 
 1.  What are the dimensions of the dataset?
 
-2. The dataset has **a lot** of variables, but we are only interested in four: `pf_score`, `pf_expression_control`, `hf_score`, `year`, and `region`. Select these variables from the `hfi` dataframe, and assign the result to a dataframe named `hfi_small`.
+2.  The dataset has **a lot** of variables, but we are only interested in four: `pf_score`, `pf_expression_control`, `hf_score`, `year`, and `region`.
+    Select these variables from the `hfi` dataframe, and assign the result to a dataframe named `hfi_small`.
+
+```{r include = FALSE}
+hfi_small <- hfi %>% 
+  select(pf_score, pf_expression_control, hf_score, year, region)
+```
 
 We can use the `drop_na()` function to get an idea of how many observations have missing data.
 The function looks row by row through the data to decide which rows should be kept.
 If there is an `NA` value in a row, the row is discarded.
-The result is a dataframe where there are no missing values for any of the variables. 
+The result is a dataframe where there are no missing values for any of the variables.
 
-3. Using the code below, how many rows in the `hfi_small` data have missing values?__
-Next, use the `drop_na()` function to created another new dataframe named `hfi_small_clean` that **does not** contain any missing values.
+3.  Using the code below, how many rows in the `hfi_small` data have missing values?\_\_ Next, use the `drop_na()` function to created another new dataframe named `hfi_small_clean` that **does not** contain any missing values.
 
 ```{r, eval = FALSE}
 dim(hfi_small)
@@ -68,18 +73,18 @@ drop_na(hfi_small) %>%
   dim()
 ```
 
-4.  What type of plot would you use to display the relationship between the personal freedom score, `pf_score`, and `pf_expression_control`?
-    Plot this relationship using the variable `pf_expression_control` as the predictor.
-    Does the relationship look linear?
-    If you knew a country's `pf_expression_control`, or its score out of 10, with 0 being the most, of political pressures and controls on media content, would you be comfortable using a linear model to predict the personal freedom score?
+```{r include = FALSE}
+hfi_small_clean <- drop_na(hfi_small)
+```
+
+4.  What type of plot would you use to display the relationship between the personal freedom score, `pf_score`, and `pf_expression_control`? Plot this relationship using the variable `pf_expression_control` as the predictor. Does the relationship look linear? If you knew a country's `pf_expression_control`, or its score out of 10, with 0 being the most, of political pressures and controls on media content, would you be comfortable using a linear model to predict the personal freedom score?
 
 If the relationship looks linear, we can quantify the strength of the relationship with the correlation coefficient.
 
 ```{r cor}
-hfi %>%
+hfi_small_clean %>%
   summarise(cor(pf_expression_control, pf_score))
 ```
-
 
 ## Sum of squared residuals
 
@@ -106,15 +111,16 @@ plot_ss(x = pf_expression_control, y = pf_score, data = hfi)
 After running this command, you'll be prompted to click two points on the plot to define a line.
 Once you've done that, the line you specified will be shown in black and the residuals in blue.
 
-::: {#boxedtext}
-If your plot is appearing below your code chunk and won't let you select points to make a line, take the following steps:  
+<div>
 
-- Go to the Tools bar at the top of RStudio
-- Click on "Global Options..."
-- Click on the "R Markdown pane" (on the left)
-- Uncheck the box that says "Show output inline for all R Markdown documents"
-:::
+If your plot is appearing below your code chunk and won't let you select points to make a line, take the following steps:
 
+-   Go to the Tools bar at the top of RStudio
+-   Click on "Global Options..."
+-   Click on the "R Markdown pane" (on the left)
+-   Uncheck the box that says "Show output inline for all R Markdown documents"
+
+</div>
 
 Recall that the residuals are the difference between the observed values and the values predicted by the line:
 
@@ -146,7 +152,7 @@ The first argument in the function `lm()` is a formula that takes the form `y ~ 
 Here it can be read that we want to make a linear model of `pf_score` as a function of `pf_expression_control`.
 The second argument specifies that R should look in the `hfi` data frame to find the two variables.
 
-**Note:** Piping __will not__ work here, as the dataframe is not the first argument!
+**Note:** Piping **will not** work here, as the dataframe is not the first argument!
 
 The output of `lm()` is an object that contains all of the information we need about the linear model that was just fit.
 We can access this information using the summary function.
@@ -165,9 +171,8 @@ $$
   \hat{y} = 4.61707 + 0.49143 \times pf\_expression\_control
 $$
 
-This equation tells us two things: 
-- For countries with a `pf_expression_control` of 0 (those with the largest amount of political pressure on media content), we expect their mean personal freedom score to be 4.61707. 
-- For every 1 unit increase in `pf_expression_control`, we expect a country's mean personal freedom score to increase 0.49143 units. 
+This equation tells us two things: - For countries with a `pf_expression_control` of 0 (those with the largest amount of political pressure on media content), we expect their mean personal freedom score to be 4.61707.
+- For every 1 unit increase in `pf_expression_control`, we expect a country's mean personal freedom score to increase 0.49143 units.
 
 One last piece of information we will discuss from the summary output is the Multiple R-squared, or more simply, $R^2$.
 The $R^2$ value represents the proportion of variability in the response variable that is explained by the explanatory variable.
@@ -200,7 +205,7 @@ They're also used to compute the residuals.
 
 To assess whether the linear model is reliable, we need to check for (1) linearity, (2) nearly normal residuals, and (3) constant variability.
 
-**Linearity**: You already checked if the relationship between `pf_score` and \`pf\_expression\_control' is linear using a scatterplot.
+**Linearity**: You already checked if the relationship between `pf_score` and \`pf_expression_control' is linear using a scatterplot.
 We should also verify this condition with a plot of the residuals vs. fitted (predicted) values.
 
 ```{r residuals}
@@ -236,13 +241,13 @@ ggplot(data = m1, aes(sample = .resid)) +
 
 Note that the syntax for making a normal probability plot is a bit different than what you're used to seeing: we set `sample` equal to the residuals instead of `x`, and we set a statistical method `qq`, which stands for "quantile-quantile", another name commonly used for normal probability plots.
 
-10.  Based on the histogram and the normal probability plot, does the nearly normal residuals condition appear to be violated? Why or why not?
+10. Based on the histogram and the normal probability plot, does the nearly normal residuals condition appear to be violated? Why or why not?
 
 </br>
 
 **Constant variability**:
 
-11.  Based on the residuals vs. fitted plot, does the constant variability condition appear to be violated? Why or why not?
+11. Based on the residuals vs. fitted plot, does the constant variability condition appear to be violated? Why or why not?
 
 ------------------------------------------------------------------------
 
