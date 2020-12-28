@@ -24,6 +24,7 @@ Here, you will analyze the data from this study in order to learn what goes into
 ### Load packages
 
 In this lab, you will explore and visualize the data using the **tidyverse** suite of packages.
+You will also use the **GGally** package for visualisation of many variables at once and the **broom** package to tidy regression output.
 The data can be found in the companion package for OpenIntro resources, **openintro**.
 
 Let's load the packages.
@@ -32,10 +33,11 @@ Let's load the packages.
 library(tidyverse)
 library(openintro)
 library(GGally)
+library(broom)
 ```
 
-This is the first time we're using the `GGally` package.
-You will be using the `ggpairs` function from this package later in the lab.
+This is the first time we're using the **GGally** package.
+You will be using the `ggpairs()` function from this package later in the lab.
 
 ### Creating a reproducible lab report
 
@@ -76,7 +78,7 @@ The meaning of each variable can be found by bringing up the help file:
 
 ## Simple linear regression
 
-The fundamental phenomenon suggested by the study is that better looking teachers are evaluated more favorably.
+The fundamental phenomenon suggested by the study is that better looking teachers are evaluated more favourably.
 Let's create a scatterplot to see if this appears to be the case:
 
 ```{r scatter-score-bty_avg}
@@ -87,7 +89,7 @@ ggplot(data = evals, aes(x = bty_avg, y = score)) +
 Before you draw conclusions about the trend, compare the number of observations in the data frame with the approximate number of points on the scatterplot.
 Is anything awry?
 
-4.  Replot the scatterplot, but this time use `geom_jitter` as your layer. What was misleading about the initial scatterplot?
+4.  Re-plot the scatterplot, but this time use `geom_jitter` as your layer. What was misleading about the initial scatterplot?
 
 ```{r scatter-score-bty_avg-jitter}
 ggplot(data = evals, aes(x = bty_avg, y = score)) +
@@ -145,10 +147,10 @@ In order to see if beauty is still a significant predictor of professor score af
 
 ```{r scatter-score-bty_avg_pic-color}
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
-summary(m_bty_gen)
+tidy(m_bty_gen)
 ```
 
-7.  P-values and parameter estimates should only be trusted if the conditions for the regression are reasonable.
+7.  p-values and parameter estimates should only be trusted if the conditions for the regression are reasonable.
     Verify that the conditions for this model are reasonable using diagnostic plots.
 
 8.  Is `bty_avg` still a significant predictor of `score`?
@@ -167,20 +169,6 @@ $$
 &= \hat{\beta}_0 + \hat{\beta}_1 \times bty\_avg\end{aligned}
 $$
 
-```{=html}
-<!-- We can plot this line and the line corresponding to those with color pictures
-with the following  -->
-```
-<!-- custom function. -->
-
-<!-- ```{r twoLines} -->
-
-<!-- ggplot(data = evals, aes(x = bty_avg, y = score, color = pic_color)) + -->
-
-<!--   geom_smooth(method = "lm", formula = y ~ x, se = FALSE) -->
-
-<!-- ``` -->
-
 9.  What is the equation of the line corresponding to those with color pictures? (*Hint:* For those with color pictures, the parameter estimate is multiplied by 1.) For two professors who received the same beauty rating, which color picture tends to have the higher course evaluation score?
 
 The decision to call the indicator variable `gendermale` instead of `genderfemale` has no deeper meaning.
@@ -196,7 +184,7 @@ In this case, that translates into considering only professors of the same rank 
 
 ## The search for the best model
 
-We will start with a full model that predicts professor score based on rank, gender, ethnicity, language of the university where they got their degree, age, proportion of students that filled out evaluations, class size, course level, number of professors, number of credits, average beauty rating, outfit, and picture color.
+We will start with a full model that predicts professor score based on rank, gender, ethnicity, language of the university where they got their degree, age, proportion of students that filled out evaluations, class size, course level, number of professors, number of credits, and average beauty rating.
 
 11. Which variable would you expect to have the highest p-value in this model? Why? *Hint:* Think about which variable would you expect to not have any association with the professor score.
 
@@ -204,9 +192,8 @@ Let's run the model...
 
 ```{r m_full, tidy = FALSE}
 m_full <- lm(score ~ rank + gender + ethnicity + language + age + cls_perc_eval 
-             + cls_students + cls_level + cls_profs + cls_credits + bty_avg 
-             + pic_outfit + pic_color, data = evals)
-summary(m_full)
+             + cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+tidy(m_full)
 ```
 
 12. Check your suspicions from the previous exercise.
@@ -214,11 +201,13 @@ summary(m_full)
 
 13. Interpret the coefficient associated with the ethnicity variable.
 
-14. Drop the variable with the highest p-value and re-fit the model.
-    Did the coefficients and significance of the other explanatory variables change?
+14. Drop one variable at a time and peek at the adjusted $R^2$.
+    Removing which variable increases adjusted $R^2$ the most?
+    variable with the highest p-value and re-fit the model.
+    Did the coefficients and significance of the other explanatory variables change with this variable removed?
     (One of the things that makes multiple regression interesting is that coefficient estimates depend on the other variables that are included in the model.) If not, what does this say about whether or not the dropped variable was collinear with the other explanatory variables?
 
-15. Using backward-selection and p-value as the selection criterion, determine the best model.
+15. Using backward-selection and adjusted $R^2$ as the selection criterion, determine the best model.
     You do not need to show all steps in your answer, just the output for the final model.
     Also, write out the linear model for predicting score based on the final model you settle on.
 
