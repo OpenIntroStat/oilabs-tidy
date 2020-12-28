@@ -29,7 +29,7 @@ Your aim will be to summarize a few of the relationships within the data both gr
 ### Load packages
 
 In this lab, you will explore and visualize the data using the **tidyverse** suite of packages.
-You will also use the **statsr** package to select a regression line that minimizes the sum of squared residuals and the **broom** package to tidy regression output.\
+You will also use the **statsr** package to select a regression line that minimizes the sum of squared residuals and the **broom** package to tidy regression output.
 The data can be found in the **openintro** package, a companion package for OpenIntro resources.
 
 Let's load the packages.
