@@ -110,9 +110,9 @@ glimpse(arbuthnot)
 
 Although we previously said that it is best practice to type all of your `R` code into the code chunk, it is better practice to type this command into your console. Generally, you should type all of the code that is necessary for your solution into the code chunk. Because this command is used to explore the data, it is not necessary for your solution code and **should not** be included in your solution file.
 
-This command should output the following
+This command should output the following:
 
-```{r glimpse-data-result, echo=FALSE}
+```{r glimpse-data-result, echo=FALSE, results = TRUE}
 glimpse(arbuthnot)
 ```
 
