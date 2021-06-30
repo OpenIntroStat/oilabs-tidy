@@ -116,7 +116,7 @@ Watch the video above to learn how.
 
 ### Departure delays
 
-Let's start by examing the distribution of departure delays of all flights with a histogram.
+Let's start by examining the distribution of departure delays of all flights with a histogram.
 
 ```{r hist-dep-delay}
 ggplot(data = nycflights, aes(x = dep_delay)) +
