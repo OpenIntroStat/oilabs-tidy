@@ -1724,7 +1724,7 @@ div.tocify {
 </div>
 <div id="departure-delays" class="section level3">
 <h3>Departure delays</h3>
-<p>Let’s start by examing the distribution of departure delays of all flights with a histogram.</p>
+<p>Let’s start by examining the distribution of departure delays of all flights with a histogram.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> nycflights, <span class="kw">aes</span>(<span class="dt">x =</span> dep_delay)) <span class="op">+</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
 <p>This function says to plot the <code>dep_delay</code> variable from the <code>nycflights</code> data frame on the x-axis. It also defines a <code>geom</code> (short for geometric object), which describes the type of plot you will produce.</p>
