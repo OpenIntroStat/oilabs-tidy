@@ -108,7 +108,7 @@ If he makes the first shot and has a hot hand (*not* independent shots), then th
 
 $$ P(\textrm{shot 2 = H} \, | \, \textrm{shot 1 = H}) = 0.60 $$
 
-As a result of these increased probabilites, you'd expect Kobe to have longer streaks.
+As a result of these increased probabilities, you'd expect Kobe to have longer streaks.
 Compare this to the skeptical perspective where Kobe does *not* have a hot hand, where each shot is independent of the next.
 If he hit his first shot, the probability that he makes the second is still 0.45.
 
