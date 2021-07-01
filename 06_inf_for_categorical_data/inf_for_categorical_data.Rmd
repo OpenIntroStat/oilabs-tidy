@@ -182,7 +182,7 @@ This means that when using `infer`, you need to include both variables within `s
     If you find a significant difference, also quantify this difference with a confidence interval.
 
 2.  Let's say there has been no difference in likeliness to strength train every day of the week for those who sleep 10+ hours.
-    What is the probablity that you could detect a change (at a significance level of 0.05) simply by chance?
+    What is the probability that you could detect a change (at a significance level of 0.05) simply by chance?
     *Hint:* Review the definition of the Type 1 error.
 
 3.  Suppose you're hired by the local government to estimate the proportion of residents that attend a religious service on a weekly basis.
