@@ -203,7 +203,7 @@ tidy(m_full)
 
 14. Drop one variable at a time and peek at the adjusted $R^2$.
     Removing which variable increases adjusted $R^2$ the most?
-    variable with the highest p-value and re-fit the model.
+    Drop the variable with the highest p-value and re-fit the model.
     Did the coefficients and significance of the other explanatory variables change with this variable removed?
     (One of the things that makes multiple regression interesting is that coefficient estimates depend on the other variables that are included in the model.) If not, what does this say about whether or not the dropped variable was collinear with the other explanatory variables?
 
