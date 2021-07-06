@@ -601,7 +601,7 @@ pre code {
 &amp;= \hat{\beta}_0 + \hat{\beta}_1 \times bty\_avg\end{aligned}
 \]</span></p>
 <ol start="9" style="list-style-type: decimal">
-<li>What is the equation of the line corresponding to those with color pictures? (<em>Hint:</em> For those with color pictures, the parameter estimate is multiplied by 1.) For two professors who received the same beauty rating, which color picture tends to have the higher course evaluation score?</li>
+<li>What is the equation of the line corresponding to male professors? (<em>Hint:</em> For male professors, the parameter estimate is multiplied by 1.) For two professors who received the same beauty rating, which gender tends to have the higher course evaluation score?</li>
 </ol>
 <p>The decision to call the indicator variable <code>gendermale</code> instead of <code>genderfemale</code> has no deeper meaning. R simply codes the category that comes first alphabetically as a <span class="math inline">\(0\)</span>. (You can change the reference level of a categorical variable, which is the level that is coded as a 0, using the<code>relevel()</code> function. Use <code>?relevel</code> to learn more.)</p>
 <ol start="10" style="list-style-type: decimal">
@@ -622,7 +622,7 @@ pre code {
 <ol start="12" style="list-style-type: decimal">
 <li><p>Check your suspicions from the previous exercise. Include the model output in your response.</p></li>
 <li><p>Interpret the coefficient associated with the ethnicity variable.</p></li>
-<li><p>Drop one variable at a time and peek at the adjusted <span class="math inline">\(R^2\)</span>. Removing which variable increases adjusted <span class="math inline">\(R^2\)</span> the most? variable with the highest p-value and re-fit the model. Did the coefficients and significance of the other explanatory variables change with this variable removed? (One of the things that makes multiple regression interesting is that coefficient estimates depend on the other variables that are included in the model.) If not, what does this say about whether or not the dropped variable was collinear with the other explanatory variables?</p></li>
+<li><p>Drop one variable at a time and peek at the adjusted <span class="math inline">\(R^2\)</span>. Removing which variable increases adjusted <span class="math inline">\(R^2\)</span> the most? Drop the variable with the highest p-value and re-fit the model. Did the coefficients and significance of the other explanatory variables change with this variable removed? (One of the things that makes multiple regression interesting is that coefficient estimates depend on the other variables that are included in the model.) If not, what does this say about whether or not the dropped variable was collinear with the other explanatory variables?</p></li>
 <li><p>Using backward-selection and adjusted <span class="math inline">\(R^2\)</span> as the selection criterion, determine the best model. You do not need to show all steps in your answer, just the output for the final model. Also, write out the linear model for predicting score based on the final model you settle on.</p></li>
 <li><p>Verify that the conditions for this model are reasonable using diagnostic plots.</p></li>
 <li><p>The original paper describes how these data were gathered by taking a sample of professors from the University of Texas at Austin and including all courses that they have taught. Considering that each row represents a course, could this new information have an impact on any of the conditions of linear regression?</p></li>
