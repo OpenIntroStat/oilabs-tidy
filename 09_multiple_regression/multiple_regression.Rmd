@@ -169,7 +169,7 @@ $$
 &= \hat{\beta}_0 + \hat{\beta}_1 \times bty\_avg\end{aligned}
 $$
 
-9.  What is the equation of the line corresponding to those with color pictures? (*Hint:* For those with color pictures, the parameter estimate is multiplied by 1.) For two professors who received the same beauty rating, which color picture tends to have the higher course evaluation score?
+9.  What is the equation of the line corresponding to male professors? (*Hint:* For male professors, the parameter estimate is multiplied by 1.) For two professors who received the same beauty rating, which gender tends to have the higher course evaluation score?
 
 The decision to call the indicator variable `gendermale` instead of `genderfemale` has no deeper meaning.
 R simply codes the category that comes first alphabetically as a $0$.
