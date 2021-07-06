@@ -204,7 +204,7 @@ Because the sample proportion is an unbiased estimator, the sampling distributio
 
 In the remainder of this section, you will work on getting a sense of the effect that sample size has on your sampling distribution.
 
-1.  Use the app below to create sampling distributions of proportions of *Doesn't benefit* from samples of size 10, 50, and 100. Use 5,000 simulations. What does each observation in the sampling distribution represent? How does the mean, standar error, and shape of the sampling distribution change as the sample size increases? How (if at all) do these values change if you increase the number of simulations? (You do not need to include plots in your answer.)
+1.  Use the app below to create sampling distributions of proportions of *Doesn't benefit* from samples of size 10, 50, and 100. Use 5,000 simulations. What does each observation in the sampling distribution represent? How does the mean, standard error, and shape of the sampling distribution change as the sample size increases? How (if at all) do these values change if you increase the number of simulations? (You do not need to include plots in your answer.)
 
 ```{r shiny, echo=FALSE, eval=TRUE, results = TRUE}
 shinyApp(
