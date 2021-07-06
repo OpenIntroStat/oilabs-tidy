@@ -309,7 +309,7 @@ Note that while you might be able to answer some of these questions using the ap
 You are welcome to use the app for exploration.
 
 1.  Take a sample of size 15 from the population and calculate the proportion of people in this sample who think the work scientists do enchances their lives.
-    Using this sample, what is your best point estimate of the population proportion of people who think the work scientists do enchances their lives?
+    Using this sample, what is your best point estimate of the population proportion of people who think the work scientists do enhances their lives?
 
 2.  Since you have access to the population, simulate the sampling distribution of proportion of those who think the work scientists do enchances their lives for samples of size 15 by taking 2000 samples from the population of size 15 and computing 2000 sample proportions.
     Store these proportions in as `sample_props15`.
