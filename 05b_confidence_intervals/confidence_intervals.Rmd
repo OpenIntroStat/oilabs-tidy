@@ -299,7 +299,7 @@ shinyApp(
     Would you expect a confidence interval at this level to me wider or narrower than the confidence interval you calculated at the 95% confidence level?
     Explain your reasoning.
 
-2.  Using code from the **infer** package and data fromt the one sample you have (`samp`), find a confidence interval for the proportion of US Adults who think climate change is affecting their local community with a confidence level of your choosing (other than 95%) and interpret it.
+2.  Using code from the **infer** package and data from the one sample you have (`samp`), find a confidence interval for the proportion of US Adults who think climate change is affecting their local community with a confidence level of your choosing (other than 95%) and interpret it.
 
 3.  Using the app, calculate 50 confidence intervals at the confidence level you chose in the previous question, and plot all intervals on one plot, and calculate the proportion of intervals that include the true population proportion.
     How does this percentage compare to the confidence level selected for the intervals?
