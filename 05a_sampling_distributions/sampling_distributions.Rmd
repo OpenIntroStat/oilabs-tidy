@@ -314,7 +314,7 @@ You are welcome to use the app for exploration.
 2.  Since you have access to the population, simulate the sampling distribution of proportion of those who think the work scientists do enchances their lives for samples of size 15 by taking 2000 samples from the population of size 15 and computing 2000 sample proportions.
     Store these proportions in as `sample_props15`.
     Plot the data, then describe the shape of this sampling distribution.
-    Based on this sampling distribution, what would you guess the true proportion of those who think the work scientists do enchances their lives to be?
+    Based on this sampling distribution, what would you guess the true proportion of those who think the work scientists do enhances their lives to be?
     Finally, calculate and report the population proportion.
 
 3.  Change your sample size from 15 to 150, then compute the sampling distribution using the same method as above, and store these proportions in a new object called `sample_props150`.
