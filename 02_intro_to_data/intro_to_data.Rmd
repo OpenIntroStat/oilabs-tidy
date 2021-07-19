@@ -138,7 +138,7 @@ ggplot(data = nycflights, aes(x = dep_delay)) +
 
 1.  Look carefully at these three histograms. How do they compare? Are features revealed in one that are obscured in another?
 
-If you want to visualize only on delays of flights headed to Los Angeles, you need to first `filter` the data for flights with that destination (`dest == "LAX"`) and then make a histogram of the departure delays of only those flights.
+If you want to visualize only delays of flights headed to Los Angeles, you need to first `filter` the data for flights with that destination (`dest == "LAX"`) and then make a histogram of the departure delays of only those flights.
 
 ```{r lax-flights-hist}
 lax_flights <- nycflights %>%
