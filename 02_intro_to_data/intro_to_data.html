@@ -1736,7 +1736,7 @@ div.tocify {
 <ol style="list-style-type: decimal">
 <li>Look carefully at these three histograms. How do they compare? Are features revealed in one that are obscured in another?</li>
 </ol>
-<p>If you want to visualize only on delays of flights headed to Los Angeles, you need to first <code>filter</code> the data for flights with that destination (<code>dest == &quot;LAX&quot;</code>) and then make a histogram of the departure delays of only those flights.</p>
+<p>If you want to visualize only delays of flights headed to Los Angeles, you need to first <code>filter</code> the data for flights with that destination (<code>dest == &quot;LAX&quot;</code>) and then make a histogram of the departure delays of only those flights.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>lax_flights &lt;-<span class="st"> </span>nycflights <span class="op">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span><span class="kw">filter</span>(dest <span class="op">==</span><span class="st"> &quot;LAX&quot;</span>)</span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> lax_flights, <span class="kw">aes</span>(<span class="dt">x =</span> dep_delay)) <span class="op">+</span></span>
