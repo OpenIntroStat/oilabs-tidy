@@ -309,9 +309,9 @@ Note that while you might be able to answer some of these questions using the ap
 You are welcome to use the app for exploration.
 
 1.  Take a sample of size 15 from the population and calculate the proportion of people in this sample who think the work scientists do enchances their lives.
-    Using this sample, what is your best point estimate of the population proportion of people who think the work scientists do enhances their lives?
+    Using this sample, what is your best point estimate of the population proportion of people who think the work scientists do enchances their lives?
 
-2.  Since you have access to the population, simulate the sampling distribution of proportion of those who think the work scientists do enchances their lives for samples of size 15 by taking 2000 samples from the population of size 15 and computing 2000 sample proportions.
+2.  Since you have access to the population, simulate the sampling distribution of proportion of those who think the work scientists do enhances their lives for samples of size 15 by taking 2000 samples from the population of size 15 and computing 2000 sample proportions.
     Store these proportions in as `sample_props15`.
     Plot the data, then describe the shape of this sampling distribution.
     Based on this sampling distribution, what would you guess the true proportion of those who think the work scientists do enhances their lives to be?
@@ -319,7 +319,7 @@ You are welcome to use the app for exploration.
 
 3.  Change your sample size from 15 to 150, then compute the sampling distribution using the same method as above, and store these proportions in a new object called `sample_props150`.
     Describe the shape of this sampling distribution and compare it to the sampling distribution for a sample size of 15.
-    Based on this sampling distribution, what would you guess to be the true proportion of those who think the work scientists do enchances their lives?
+    Based on this sampling distribution, what would you guess to be the true proportion of those who think the work scientists do enhances their lives?
 
 4.  Of the sampling distributions from 2 and 3, which has a smaller spread?
     If you're concerned with making estimates that are more often close to the true value, would you prefer a sampling distribution with a large or small spread?
