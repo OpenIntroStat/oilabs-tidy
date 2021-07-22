@@ -121,7 +121,7 @@ The bootstrapping scheme is as follows:
 -   **Step 1.** Take a bootstrap sample - a random sample taken **with replacement** from the original sample, of the same size as the original sample.
 -   **Step 2.** Calculate the bootstrap statistic - a statistic such as mean, median, proportion, slope, etc. computed on the bootstrap samples.
 -   **Step 3.** Repeat steps (1) and (2) many times to create a bootstrap distribution - a distribution of bootstrap statistics.
--   **Step 4.** Calculate the bounds of the XX% confidence interval as the middle XX% j knof the bootstrap distribution.
+-   **Step 4.** Calculate the bounds of the XX% confidence interval as the middle XX% of the bootstrap distribution.
 
 Instead of coding up each of these steps, we will construct confidence intervals using the **infer** package.
 
