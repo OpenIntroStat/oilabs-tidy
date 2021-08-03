@@ -133,7 +133,7 @@ However, when $np$ and $n(1-p)$ reaches 10 the sampling distribution is sufficie
 You can investigate the interplay between $n$ and $p$ and the shape of the sampling distribution by using simulations.
 Play around with the following app to investigate how the shape, center, and spread of the distribution of $\hat{p}$ changes as $n$ and $p$ changes.
 
-```{r sf-app, echo=FALSE, eval=TRUE}
+```{r sf-app, echo=FALSE, eval=TRUE, results=TRUE}
 inputPanel(
   numericInput("n", label = "Sample size:", value = 300),
   
