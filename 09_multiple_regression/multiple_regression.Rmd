@@ -154,7 +154,7 @@ tidy(m_bty_gen)
     Verify that the conditions for this model are reasonable using diagnostic plots.
 
 8.  Is `bty_avg` still a significant predictor of `score`?
-    Has the addition of `gender` to the model changed the parameter estimate for `gender`?
+    Has the addition of `gender` to the model changed the parameter estimate for `bty_avg`?
 
 Note that the estimate for `gender` is now called `gendermale`.
 You'll see this name change whenever you introduce a categorical variable.
