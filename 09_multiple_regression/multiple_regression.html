@@ -591,7 +591,7 @@ pre code {
 <span id="cb11-2"><a href="#cb11-2"></a><span class="kw">tidy</span>(m_bty_gen)</span></code></pre></div>
 <ol start="7" style="list-style-type: decimal">
 <li><p>p-values and parameter estimates should only be trusted if the conditions for the regression are reasonable. Verify that the conditions for this model are reasonable using diagnostic plots.</p></li>
-<li><p>Is <code>bty_avg</code> still a significant predictor of <code>score</code>? Has the addition of <code>gender</code> to the model changed the parameter estimate for <code>gender</code>?</p></li>
+<li><p>Is <code>bty_avg</code> still a significant predictor of <code>score</code>? Has the addition of <code>gender</code> to the model changed the parameter estimate for <code>bty_avg</code>?</p></li>
 </ol>
 <p>Note that the estimate for <code>gender</code> is now called <code>gendermale</code>. You’ll see this name change whenever you introduce a categorical variable. The reason is that R recodes <code>gender</code> from having the values of <code>male</code> and <code>female</code> to being an indicator variable called <code>gendermale</code> that takes a value of <span class="math inline">\(0\)</span> for female professors and a value of <span class="math inline">\(1\)</span> for male professors. (Such variables are often referred to as “dummy” variables.)</p>
 <p>As a result, for female professors, the parameter estimate is multiplied by zero, leaving the intercept and slope form familiar from simple regression.</p>
