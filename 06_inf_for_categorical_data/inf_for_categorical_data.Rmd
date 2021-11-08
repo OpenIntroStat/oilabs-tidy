@@ -12,6 +12,7 @@ output:
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
+library(ggplot2)
 ```
 
 ## Getting Started
