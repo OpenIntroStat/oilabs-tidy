@@ -311,9 +311,9 @@ In this course we will be using the suite of R packages from the **tidyverse**. 
 
 These may come in handy throughout the semester:
 
--   [RMarkdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
--   [Data transformation cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
--   [Data visualization cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf)
+-   [RMarkdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/main/rmarkdown-2.0.pdf)
+-   [Data transformation cheatsheet](https://github.com/rstudio/cheatsheets/raw/main/data-transformation.pdf)
+-   [Data visualization cheatsheet](https://github.com/rstudio/cheatsheets/raw/main/data-visualization-2.1.pdf)
 
 Note that some of the code on these cheatsheets may be too advanced for this course. However the majority of it will become useful throughout the semester.
 
