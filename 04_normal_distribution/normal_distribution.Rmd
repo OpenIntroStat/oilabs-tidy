@@ -74,7 +74,7 @@ You'll be focusing on calories from fat from Dairy Queen products, so let's stor
 
 ```{r female-hgt-mean-sd}
 dqmean <- mean(dairy_queen$cal_fat)
-dqsd   <- sd(dairy_queen$cal_fat)
+dqsd <- sd(dairy_queen$cal_fat)
 ```
 
 Next, you make a density histogram to use as the backdrop and use the `lines` function to overlay a normal probability curve.
@@ -86,9 +86,9 @@ You can verify this by comparing the frequency histogram you constructed earlier
 
 ```{r hist-height}
 ggplot(data = dairy_queen, aes(x = cal_fat)) +
-        geom_blank() +
-        geom_histogram(aes(y = ..density..)) +
-        stat_function(fun = dnorm, args = c(mean = dqmean, sd = dqsd), col = "tomato")
+  geom_blank() +
+  geom_histogram(aes(y = ..density..)) +
+  stat_function(fun = dnorm, args = c(mean = dqmean, sd = dqsd), col = "tomato")
 ```
 
 After initializing a blank plot with `geom_blank()`, the `ggplot2` package (within the `tidyverse`) allows us to add additional layers.
@@ -106,7 +106,7 @@ Eyeballing the shape of the histogram is one way to determine if the data appear
 An alternative approach involves constructing a normal probability plot, also called a normal Q-Q plot for "quantile-quantile".
 
 ```{r qq}
-ggplot(data = dairy_queen, aes(sample = cal_fat)) + 
+ggplot(data = dairy_queen, aes(sample = cal_fat)) +
   geom_line(stat = "qq")
 ```
 
@@ -171,7 +171,7 @@ Assuming a normal distribution has allowed us to calculate a theoretical probabi
 If we want to calculate the probability empirically, we simply need to determine how many observations fall above 600 then divide this number by the total sample size.
 
 ```{r probability}
-dairy_queen %>% 
+dairy_queen %>%
   filter(cal_fat > 600) %>%
   summarise(percent = n() / nrow(dairy_queen))
 ```
