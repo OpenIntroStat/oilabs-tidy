@@ -56,7 +56,7 @@ Let's first focus on just products from McDonalds and Dairy Queen.
 
 ```{r male-female}
 mcdonalds <- fastfood %>%
-  filter(restaurant == "McDonalds")
+  filter(restaurant == "Mcdonalds")
 dairy_queen <- fastfood %>%
   filter(restaurant == "Dairy Queen")
 ```
@@ -94,7 +94,7 @@ ggplot(data = dairy_queen, aes(x = cal_fat)) +
 After initializing a blank plot with `geom_blank()`, the `ggplot2` package (within the `tidyverse`) allows us to add additional layers.
 The first layer is a density histogram.
 The second layer is a statistical function -- the density of the normal curve, `dnorm`.
-We specify that we want the curve to have the same mean and standard deviation as the column of female heights.
+We specify that we want the curve to have the same mean and standard deviation as the column of calories from fat.
 The argument `col` simply sets the color for the line to be drawn.
 If we left it out, the line would be drawn in black.
 
@@ -144,7 +144,7 @@ qqnormsim(sample = cal_fat, data = dairy_queen)
 ```
 
 4.  Does the normal probability plot for the calories from fat look similar to the plots created for the simulated data?
-    That is, do the plots provide evidence that the female heights are nearly normal?
+    That is, do the plots provide evidence that the calories from fat are nearly normal?
 
 5.  Using the same technique, determine whether or not the calories from McDonald's menu appear to come from a normal distribution.
 

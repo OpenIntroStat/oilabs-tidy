@@ -121,7 +121,7 @@ The bootstrapping scheme is as follows:
 -   **Step 1.** Take a bootstrap sample - a random sample taken **with replacement** from the original sample, of the same size as the original sample.
 -   **Step 2.** Calculate the bootstrap statistic - a statistic such as mean, median, proportion, slope, etc. computed on the bootstrap samples.
 -   **Step 3.** Repeat steps (1) and (2) many times to create a bootstrap distribution - a distribution of bootstrap statistics.
--   **Step 4.** Calculate the bounds of the XX% confidence interval as the middle XX% j knof the bootstrap distribution.
+-   **Step 4.** Calculate the bounds of the XX% confidence interval as the middle XX% of the bootstrap distribution.
 
 Instead of coding up each of these steps, we will construct confidence intervals using the **infer** package.
 
@@ -296,10 +296,10 @@ shinyApp(
 ## More Practice
 
 1.  Choose a different confidence level than 95%.
-    Would you expect a confidence interval at this level to me wider or narrower than the confidence interval you calculated at the 95% confidence level?
+    Would you expect a confidence interval at this level to be wider or narrower than the confidence interval you calculated at the 95% confidence level?
     Explain your reasoning.
 
-2.  Using code from the **infer** package and data fromt the one sample you have (`samp`), find a confidence interval for the proportion of US Adults who think climate change is affecting their local community with a confidence level of your choosing (other than 95%) and interpret it.
+2.  Using code from the **infer** package and data from the one sample you have (`samp`), find a confidence interval for the proportion of US Adults who think climate change is affecting their local community with a confidence level of your choosing (other than 95%) and interpret it.
 
 3.  Using the app, calculate 50 confidence intervals at the confidence level you chose in the previous question, and plot all intervals on one plot, and calculate the proportion of intervals that include the true population proportion.
     How does this percentage compare to the confidence level selected for the intervals?
@@ -312,7 +312,7 @@ shinyApp(
 5.  Using the app, experiment with different sample sizes and comment on how the widths of intervals change as sample size changes (increases and decreases).
 
 6.  Finally, given a sample size (say, 60), how does the width of the interval change as you increase the number of bootstrap samples.
-    **Hint:** Does changing the number of bootstap samples affect the standard error?
+    **Hint:** Does changing the number of bootstrap samples affect the standard error?
 
 ------------------------------------------------------------------------
 

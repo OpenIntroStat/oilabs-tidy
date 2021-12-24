@@ -103,7 +103,7 @@ Working with these 50 names is considerably simpler than working with all 100,00
 
 1.  Describe the distribution of responses in this sample. How does it compare to the distribution of responses in the population. **Hint:** Although the `sample_n` function takes a random sample of observations (i.e. rows) from the dataset, you can still refer to the variables in the dataset with the same names. Code you presented earlier for visualizing and summarising the population data will still be useful for the sample, however be careful to not label your proportion `p` since you're now calculating a sample statistic, not a population parameters. You can customize the label of the statistics to indicate that it comes from the sample.
 
-If you're interested in estimating the proportion of all people who do not believe that the work scientists do benefits them, but you do not have access to the population data, your best single guess is the sample mean.
+If you're interested in estimating the proportion of all people who do not believe that the work scientists do benefits them, but you do not have access to the population data, your best single guess is the sample proportion.
 
 ```{r phat-samp1}
 samp1 %>%
@@ -204,7 +204,7 @@ Because the sample proportion is an unbiased estimator, the sampling distributio
 
 In the remainder of this section, you will work on getting a sense of the effect that sample size has on your sampling distribution.
 
-1.  Use the app below to create sampling distributions of proportions of *Doesn't benefit* from samples of size 10, 50, and 100. Use 5,000 simulations. What does each observation in the sampling distribution represent? How does the mean, standar error, and shape of the sampling distribution change as the sample size increases? How (if at all) do these values change if you increase the number of simulations? (You do not need to include plots in your answer.)
+1.  Use the app below to create sampling distributions of proportions of *Doesn't benefit* from samples of size 10, 50, and 100. Use 5,000 simulations. What does each observation in the sampling distribution represent? How does the mean, standard error, and shape of the sampling distribution change as the sample size increases? How (if at all) do these values change if you increase the number of simulations? (You do not need to include plots in your answer.)
 
 ```{r shiny, echo=FALSE, eval=TRUE, results = TRUE}
 shinyApp(
@@ -311,15 +311,15 @@ You are welcome to use the app for exploration.
 1.  Take a sample of size 15 from the population and calculate the proportion of people in this sample who think the work scientists do enchances their lives.
     Using this sample, what is your best point estimate of the population proportion of people who think the work scientists do enchances their lives?
 
-2.  Since you have access to the population, simulate the sampling distribution of proportion of those who think the work scientists do enchances their lives for samples of size 15 by taking 2000 samples from the population of size 15 and computing 2000 sample proportions.
+2.  Since you have access to the population, simulate the sampling distribution of proportion of those who think the work scientists do enhances their lives for samples of size 15 by taking 2000 samples from the population of size 15 and computing 2000 sample proportions.
     Store these proportions in as `sample_props15`.
     Plot the data, then describe the shape of this sampling distribution.
-    Based on this sampling distribution, what would you guess the true proportion of those who think the work scientists do enchances their lives to be?
+    Based on this sampling distribution, what would you guess the true proportion of those who think the work scientists do enhances their lives to be?
     Finally, calculate and report the population proportion.
 
 3.  Change your sample size from 15 to 150, then compute the sampling distribution using the same method as above, and store these proportions in a new object called `sample_props150`.
     Describe the shape of this sampling distribution and compare it to the sampling distribution for a sample size of 15.
-    Based on this sampling distribution, what would you guess to be the true proportion of those who think the work scientists do enchances their lives?
+    Based on this sampling distribution, what would you guess to be the true proportion of those who think the work scientists do enhances their lives?
 
 4.  Of the sampling distributions from 2 and 3, which has a smaller spread?
     If you're concerned with making estimates that are more often close to the true value, would you prefer a sampling distribution with a large or small spread?

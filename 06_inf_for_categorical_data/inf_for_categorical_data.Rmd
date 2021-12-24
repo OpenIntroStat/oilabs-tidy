@@ -12,6 +12,7 @@ output:
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(eval = TRUE, results = FALSE, fig.show = "hide", message = FALSE)
+library(ggplot2)
 ```
 
 ## Getting Started
@@ -77,7 +78,7 @@ Note that since the goal is to construct an interval estimate for a proportion, 
 
 1.  What is the margin of error for the estimate of the proportion of non-helmet wearers that have texted while driving each day for the past 30 days based on this survey?
 
-2.  Using the `infer` package, calculate confidence intervals for two other categorical variables (you'll need to decide which level to call "success", and report the associated margins of error. Interpet the interval in context of the data. It may be helpful to create new data sets for each of the two countries first, and then use these data sets to construct the confidence intervals.
+2.  Using the `infer` package, calculate confidence intervals for two other categorical variables (you'll need to decide which level to call "success", and report the associated margins of error. Interpret the interval in context of the data. It may be helpful to create new data sets for each of the two countries first, and then use these data sets to construct the confidence intervals.
 
 ## How does the proportion affect the margin of error?
 
@@ -133,7 +134,7 @@ However, when $np$ and $n(1-p)$ reaches 10 the sampling distribution is sufficie
 You can investigate the interplay between $n$ and $p$ and the shape of the sampling distribution by using simulations.
 Play around with the following app to investigate how the shape, center, and spread of the distribution of $\hat{p}$ changes as $n$ and $p$ changes.
 
-```{r sf-app, echo=FALSE, eval=TRUE}
+```{r sf-app, echo=FALSE, eval=TRUE, results=TRUE}
 inputPanel(
   numericInput("n", label = "Sample size:", value = 300),
   
@@ -182,7 +183,7 @@ This means that when using `infer`, you need to include both variables within `s
     If you find a significant difference, also quantify this difference with a confidence interval.
 
 2.  Let's say there has been no difference in likeliness to strength train every day of the week for those who sleep 10+ hours.
-    What is the probablity that you could detect a change (at a significance level of 0.05) simply by chance?
+    What is the probability that you could detect a change (at a significance level of 0.05) simply by chance?
     *Hint:* Review the definition of the Type 1 error.
 
 3.  Suppose you're hired by the local government to estimate the proportion of residents that attend a religious service on a weekly basis.
