@@ -251,9 +251,8 @@ shinyApp(
     sampling_dist <- reactive({
       global_monitor %>%
         rep_sample_n(size = input$n_samp, reps = input$n_rep, replace = TRUE) %>%
-        count(scientist_work) %>%
-        mutate(p_hat = n /sum(n)) %>%
-        filter(scientist_work == input$outcome)
+        group_by(replicate)%>%
+        summarize(p_hat = mean(scientist_work==input$outcome))
     })
     
     # plot sampling distribution
