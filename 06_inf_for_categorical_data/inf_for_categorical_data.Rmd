@@ -68,6 +68,7 @@ The inferential tools for estimating population proportion are analogous to thos
 
 ```{r nohelmet-text-ci}
 no_helmet %>%
+	filter(complete.cases(text_ind)) %>% 
   specify(response = text_ind, success = "yes") %>%
   generate(reps = 1000, type = "bootstrap") %>%
   calculate(stat = "prop") %>%
