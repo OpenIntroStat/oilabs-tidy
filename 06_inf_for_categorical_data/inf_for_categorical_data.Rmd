@@ -41,7 +41,7 @@ The dataset is called `yrbss`.
 
 1.  What are the counts within each category for the amount of days these students have texted while driving within the past 30 days?
 
-2.  What is the proportion of people who have texted while driving every day in the past 30 days and never wear helmets?
+2.  What is the proportion of people who have texted while driving every day in the past 30 days among those who never wear helmets?
 
 Remember that you can use `filter` to limit the dataset to just non-helmet wearers.
 Here, we will name the dataset `no_helmet`.
@@ -179,7 +179,7 @@ For some of the exercises below, you will conduct inference comparing two propor
 In such cases, you have a response variable that is categorical, and an explanatory variable that is also categorical, and you are comparing the proportions of success of the response variable across the levels of the explanatory variable.
 This means that when using `infer`, you need to include both variables within `specify`.
 
-1.  Is there convincing evidence that those who sleep 10+ hours per day are more likely to strength train every day of the week?
+1.  Is there convincing evidence that those who sleep 10+ hours per day are more likely to strength train every day of the week than those who don't sleep 10+ hours per day?
     As always, write out the hypotheses for any tests you conduct and outline the status of the conditions for inference.
     If you find a significant difference, also quantify this difference with a confidence interval.
 
