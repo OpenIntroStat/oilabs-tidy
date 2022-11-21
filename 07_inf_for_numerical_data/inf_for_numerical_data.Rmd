@@ -110,6 +110,7 @@ But first, we need to initialize the test, which we will save as `obs_diff`.
 
 ```{r inf-weight-habit-ht-initial, tidy=FALSE, warning = FALSE}
 obs_diff <- yrbss %>%
+	filter(complete.cases(physical_3plus)) %>% 
   specify(weight ~ physical_3plus) %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
@@ -124,6 +125,7 @@ We will save the permutation distribution as `null_dist`.
 
 ```{r inf-weight-habit-ht-null, tidy=FALSE, warning = FALSE}
 null_dist <- yrbss %>%
+	filter(complete.cases(physical_3plus)) %>% 
   specify(weight ~ physical_3plus) %>%
   hypothesize(null = "independence") %>%
   generate(reps = 1000, type = "permute") %>%
