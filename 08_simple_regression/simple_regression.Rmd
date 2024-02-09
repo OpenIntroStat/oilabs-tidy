@@ -252,9 +252,9 @@ ggplot(data = m1_aug, aes(x = .resid)) +
     Does your independent variable seem to predict `pf_score` better?
     Why or why not?
 
--   Check the model diagnostics using appropriate visualisations and evaluate if the model conditions have been met.
+-   Check the model diagnostics using appropriate visualizations and evaluate if the model conditions have been met.
 
--   Pick another pair of variables of interest and visualise the relationship between them.
+-   Pick another pair of variables of interest and visualize the relationship between them.
     Do you find the relationship surprising or is it what you expected.
     Discuss why you were interested in these variables and why you were/were not surprised by the relationship you observed.
 
