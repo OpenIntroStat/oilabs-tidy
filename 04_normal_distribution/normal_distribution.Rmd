@@ -189,7 +189,7 @@ The closer that your distribution is to being normal, the more accurate the theo
     Out of all the different restaurants, which ones' distribution is the closest to normal for sodium?
 
 8.  Note that some of the normal probability plots for sodium distributions seem to have a stepwise pattern.
-    why do you think this might be the case?
+    Why do you think this might be the case?
 
 9.  As you can see, normal probability plots can be used both to assess normality and visualize skewness.
     Make a normal probability plot for the total carbohydrates from a restaurant of your choice.
