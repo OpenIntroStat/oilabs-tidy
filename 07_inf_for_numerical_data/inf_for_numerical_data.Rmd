@@ -114,11 +114,11 @@ obs_diff <- yrbss %>%
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
-Recall that the `specify()` function is used to specify the variables you are considering (notated `y ~x`), and you can use the `calculate()` function to specify the `stat`istic you want to calculate and the `order` of subtraction you want to use.
+Recall that the `specify()` function is used to specify the variables you are considering (notated `y ~ x`), and you can use the `calculate()` function to specify the `stat`istic you want to calculate and the `order` of subtraction you want to use.
 For this hypothesis, the statistic you are searching for is the difference in means, with the order being `yes - no`.
 
 After you have calculated your observed statistic, you need to create a permutation distribution.
-This is the distribution that is created by shuffling the observed weights into new `physical_3plus` groups, labeled "yes" and "no"
+This is the distribution that is created by shuffling the observed weights into new `physical_3plus` groups, labeled "yes" and "no".
 
 We will save the permutation distribution as `null_dist`.
 
