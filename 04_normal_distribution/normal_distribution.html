@@ -1295,6 +1295,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -1376,13 +1377,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -1495,6 +1503,9 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
 pre code {
   padding: 0;
 }
@@ -1514,8 +1525,8 @@ pre code {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -1523,16 +1534,9 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -1677,17 +1681,18 @@ div.tocify {
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">library</span>(openintro)</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="kw">head</span>(fastfood)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 17
-##   restaurant item       calories cal_fat total_fat sat_fat trans_fat cholesterol
-##   &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
-## 1 Mcdonalds  Artisan G…      380      60         7       2       0            95
-## 2 Mcdonalds  Single Ba…      840     410        45      17       1.5         130
-## 3 Mcdonalds  Double Ba…     1130     600        67      27       3           220
-## 4 Mcdonalds  Grilled B…      750     280        31      10       0.5         155
-## 5 Mcdonalds  Crispy Ba…      920     410        45      12       0.5         120
-## 6 Mcdonalds  Big Mac         540     250        28      10       1            80
-## # … with 9 more variables: sodium &lt;dbl&gt;, total_carb &lt;dbl&gt;, fiber &lt;dbl&gt;,
-## #   sugar &lt;dbl&gt;, protein &lt;dbl&gt;, vit_a &lt;dbl&gt;, vit_c &lt;dbl&gt;, calcium &lt;dbl&gt;,
-## #   salad &lt;chr&gt;</code></pre>
+##   restaur…¹ item  calor…² cal_fat total…³ sat_fat trans…⁴ chole…⁵ sodium total…⁶
+##   &lt;chr&gt;     &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Mcdonalds Arti…     380      60       7       2     0        95   1110      44
+## 2 Mcdonalds Sing…     840     410      45      17     1.5     130   1580      62
+## 3 Mcdonalds Doub…    1130     600      67      27     3       220   1920      63
+## 4 Mcdonalds Gril…     750     280      31      10     0.5     155   1940      62
+## 5 Mcdonalds Cris…     920     410      45      12     0.5     120   1980      81
+## 6 Mcdonalds Big …     540     250      28      10     1        80    950      46
+## # … with 7 more variables: fiber &lt;dbl&gt;, sugar &lt;dbl&gt;, protein &lt;dbl&gt;,
+## #   vit_a &lt;dbl&gt;, vit_c &lt;dbl&gt;, calcium &lt;dbl&gt;, salad &lt;chr&gt;, and abbreviated
+## #   variable names ¹​restaurant, ²​calories, ³​total_fat, ⁴​trans_fat,
+## #   ⁵​cholesterol, ⁶​total_carb</code></pre>
 <p>You’ll see that for every observation there are 17 measurements, many of which are nutritional facts.</p>
 <p>You’ll be focusing on just three columns to get started: restaurant, calories, calories from fat.</p>
 <p>Let’s first focus on just products from McDonalds and Dairy Queen.</p>
@@ -1711,6 +1716,8 @@ div.tocify {
 <span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">geom_blank</span>() <span class="op">+</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..)) <span class="op">+</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">args =</span> <span class="kw">c</span>(<span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd), <span class="dt">col =</span> <span class="st">&quot;tomato&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+## ℹ Please use `after_stat(density)` instead.</code></pre>
 <p>After initializing a blank plot with <code>geom_blank()</code>, the <code>ggplot2</code> package (within the <code>tidyverse</code>) allows us to add additional layers. The first layer is a density histogram. The second layer is a statistical function – the density of the normal curve, <code>dnorm</code>. We specify that we want the curve to have the same mean and standard deviation as the column of calories from fat. The argument <code>col</code> simply sets the color for the line to be drawn. If we left it out, the line would be drawn in black.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Based on the this plot, does it appear that the data follow a nearly normal distribution?</li>
@@ -1719,19 +1726,19 @@ div.tocify {
 <div id="evaluating-the-normal-distribution" class="section level2">
 <h2>Evaluating the normal distribution</h2>
 <p>Eyeballing the shape of the histogram is one way to determine if the data appear to be nearly normally distributed, but it can be frustrating to decide just how close the histogram is to the curve. An alternative approach involves constructing a normal probability plot, also called a normal Q-Q plot for “quantile-quantile”.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dairy_queen, <span class="kw">aes</span>(<span class="dt">sample =</span> cal_fat)) <span class="op">+</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;qq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dairy_queen, <span class="kw">aes</span>(<span class="dt">sample =</span> cal_fat)) <span class="op">+</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;qq&quot;</span>)</span></code></pre></div>
 <p>This time, you can use the <code>geom_line()</code> layer, while specifying that you will be creating a Q-Q plot with the <code>stat</code> argument. It’s important to note that here, instead of using <code>x</code> instead <code>aes()</code>, you need to use <code>sample</code>.</p>
 <p>The x-axis values correspond to the quantiles of a theoretically normal curve with mean 0 and standard deviation 1 (i.e., the standard normal distribution). The y-axis values correspond to the quantiles of the original unstandardized sample data. However, even if we were to standardize the sample data values, the Q-Q plot would look identical. A data set that is nearly normal will result in a probability plot where the points closely follow a diagonal line. Any deviations from normality leads to deviations of these points from that line.</p>
 <p>The plot for Dairy Queen’s calories from fat shows points that tend to follow the line but with some errant points towards the upper tail. You’re left with the same problem that we encountered with the histogram above: how close is close enough?</p>
 <p>A useful way to address this question is to rephrase it as: what do probability plots look like for data that I <em>know</em> came from a normal distribution? We can answer this by simulating data from a normal distribution using <code>rnorm</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>sim_norm &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="kw">nrow</span>(dairy_queen), <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>sim_norm &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="kw">nrow</span>(dairy_queen), <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</span></code></pre></div>
 <p>The first argument indicates how many numbers you’d like to generate, which we specify to be the same number of menu items in the <code>dairy_queen</code> data set using the <code>nrow()</code> function. The last two arguments determine the mean and standard deviation of the normal distribution from which the simulated sample will be generated. You can take a look at the shape of our simulated data set, <code>sim_norm</code>, as well as its normal probability plot.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Make a normal probability plot of <code>sim_norm</code>. Do all of the points fall on the line? How does this plot compare to the probability plot for the real data? (Since <code>sim_norm</code> is not a dataframe, it can be put directly into the <code>sample</code> argument and the <code>data</code> argument can be dropped.)</li>
 </ol>
 <p>Even better than comparing the original plot to a single plot generated from a normal distribution is to compare it to many more plots using the following function. It shows the Q-Q plot corresponding to the original data in the top left corner, and the Q-Q plots of 8 different simulated normal data. It may be helpful to click the zoom button in the plot window.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">qqnormsim</span>(<span class="dt">sample =</span> cal_fat, <span class="dt">data =</span> dairy_queen)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">qqnormsim</span>(<span class="dt">sample =</span> cal_fat, <span class="dt">data =</span> dairy_queen)</span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Does the normal probability plot for the calories from fat look similar to the plots created for the simulated data? That is, do the plots provide evidence that the calories from fat are nearly normal?</p></li>
 <li><p>Using the same technique, determine whether or not the calories from McDonald’s menu appear to come from a normal distribution.</p></li>
@@ -1742,12 +1749,12 @@ div.tocify {
 <p>Okay, so now you have a slew of tools to judge whether or not a variable is normally distributed. Why should you care?</p>
 <p>It turns out that statisticians know a lot about the normal distribution. Once you decide that a random variable is approximately normal, you can answer all sorts of questions about that variable related to probability. Take, for example, the question of, “What is the probability that a randomly chosen Dairy Queen product has more than 600 calories from fat?”</p>
 <p>If we assume that the calories from fat from Dairy Queen’s menu are normally distributed (a very close approximation is also okay), we can find this probability by calculating a Z score and consulting a Z table (also called a normal probability table). In R, this is done in one step with the function <code>pnorm()</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="dv">600</span>, <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="dv">600</span>, <span class="dt">mean =</span> dqmean, <span class="dt">sd =</span> dqsd)</span></code></pre></div>
 <p>Note that the function <code>pnorm()</code> gives the area under the normal curve below a given value, <code>q</code>, with a given mean and standard deviation. Since we’re interested in the probability that a Dairy Queen item has more than 600 calories from fat, we have to take one minus that probability.</p>
 <p>Assuming a normal distribution has allowed us to calculate a theoretical probability. If we want to calculate the probability empirically, we simply need to determine how many observations fall above 600 then divide this number by the total sample size.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>dairy_queen <span class="op">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="st">  </span><span class="kw">filter</span>(cal_fat <span class="op">&gt;</span><span class="st"> </span><span class="dv">600</span>) <span class="op">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">percent =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(dairy_queen))</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>dairy_queen <span class="op">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw">filter</span>(cal_fat <span class="op">&gt;</span><span class="st"> </span><span class="dv">600</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">percent =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(dairy_queen))</span></code></pre></div>
 <p>Although the probabilities are not exactly the same, they are reasonably close. The closer that your distribution is to being normal, the more accurate the theoretical probabilities will be.</p>
 <ol start="6" style="list-style-type: decimal">
 <li>Write out two probability questions that you would like to answer about any of the restaurants in this dataset. Calculate those probabilities using both the theoretical normal distribution as well as the empirical distribution (four probabilities in all). Which one had a closer agreement between the two methods?</li>
