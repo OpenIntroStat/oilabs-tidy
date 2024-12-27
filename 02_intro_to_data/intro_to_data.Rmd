@@ -236,7 +236,7 @@ Let's think about how you could answer this question:
     -   `group_by` months, then
     -   `summarise` mean departure delays.
 
--   Then, you could to `arrange` these average delays in `desc`ending order
+-   Then, you could to `arrange` these average delays in `desc`ending order.
 
 ```{r mean-dep-delay-months}
 nycflights %>%
@@ -258,7 +258,7 @@ Which month has the highest average departure delay from an NYC airport? What
 ### On time departure rate for NYC airports
 
 Suppose you will be flying out of NYC and want to know which of the three major NYC airports has the best on time departure rate of departing flights.
-Also supposed that for you, a flight that is delayed for less than 5 minutes is basically "on time."" You consider any flight delayed for 5 minutes of more to be "delayed".
+Also supposed that for you, a flight that is delayed for less than 5 minutes is basically "on time". You consider any flight delayed for 5 minutes of more to be "delayed".
 
 In order to determine which airport has the best on time departure rate, you can
 
@@ -290,7 +290,7 @@ nycflights %>%
 
 1.  If you were selecting an airport simply based on on time departure percentage, which NYC airport would you choose to fly out of?
 
-You can also visualize the distribution of on on time departure rate across the three airports using a segmented bar plot.
+You can also visualize the distribution of on-time departure rate across the three airports using a segmented bar plot.
 
 ```{r viz-origin-dep-type}
 ggplot(data = nycflights, aes(x = origin, fill = dep_type)) +
