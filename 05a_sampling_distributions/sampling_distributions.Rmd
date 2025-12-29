@@ -79,8 +79,8 @@ ggplot(global_monitor, aes(x = scientist_work)) +
 We can also obtain summary statistics to confirm we constructed the data frame correctly.
 
 ```{r summ-stat-pop, results = TRUE}
-global_monitor %>%
-  count(scientist_work) %>%
+global_monitor |>
+  count(scientist_work) |>
   mutate(p = n /sum(n))
 ```
 
@@ -93,7 +93,7 @@ Because of this, we often take a sample of the population and use that to unders
 If you are interested in estimating the proportion of people who don't think the work scientists do benefits them, you can use the `sample_n` command to survey the population.
 
 ```{r samp1}
-samp1 <- global_monitor %>%
+samp1 <- global_monitor |>
   sample_n(50)
 ```
 
@@ -101,23 +101,23 @@ This command collects a simple random sample of size 50 from the `global_monitor
 This is similar to randomly drawing names from a hat that contains the names of all in the population.
 Working with these 50 names is considerably simpler than working with all 100,000 people in the population.
 
-1.  Describe the distribution of responses in this sample. How does it compare to the distribution of responses in the population. **Hint:** Although the `sample_n` function takes a random sample of observations (i.e. rows) from the dataset, you can still refer to the variables in the dataset with the same names. Code you presented earlier for visualizing and summarising the population data will still be useful for the sample, however be careful to not label your proportion `p` since you're now calculating a sample statistic, not a population parameters. You can customize the label of the statistics to indicate that it comes from the sample.
+1.  Describe the distribution of responses in this sample. How does it compare to the distribution of responses in the population. **Hint:** Although the `sample_n` function takes a random sample of observations (i.e. rows) from the dataset, you can still refer to the variables in the dataset with the same names. Code you presented earlier for visualizing and summarizing the population data will still be useful for the sample, however be careful to not label your proportion `p` since you're now calculating a sample statistic, not a population parameters. You can customize the label of the statistics to indicate that it comes from the sample.
 
 If you're interested in estimating the proportion of all people who do not believe that the work scientists do benefits them, but you do not have access to the population data, your best single guess is the sample proportion.
 
 ```{r phat-samp1}
-samp1 %>%
-  count(scientist_work) %>%
+samp1 |>
+  count(scientist_work) |>
   mutate(p_hat = n /sum(n))
 ```
 
 ```{r inline-calc, include=FALSE}
 # For use inline below
-samp1_p_hat <- samp1 %>% 
-  count(scientist_work) %>% 
-  mutate(p_hat = n /sum(n)) %>% 
-  filter(scientist_work == "Doesn't benefit") %>% 
-  pull(p_hat) %>% 
+samp1_p_hat <- samp1 |>
+  count(scientist_work) |>
+  mutate(p_hat = n /sum(n)) |>
+  filter(scientist_work == "Doesn't benefit") |>
+  pull(p_hat) |>
   round(2)
 ```
 
@@ -142,11 +142,11 @@ Here, we use R to take 15,000 different samples of size 50 from the population, 
 Note that we specify that `replace = TRUE` since sampling distributions are constructed by sampling with replacement.
 
 ```{r iterate}
-sample_props50 <- global_monitor %>%
-                    rep_sample_n(size = 50, reps = 15000, replace = TRUE) %>%
-                    count(scientist_work) %>%
-                    mutate(p_hat = n /sum(n)) %>%
-                    filter(scientist_work == "Doesn't benefit")
+sample_props50 <- global_monitor |>
+  rep_sample_n(size = 50, reps = 15000, replace = TRUE) |>
+  count(scientist_work) |>
+  mutate(p_hat = n / sum(n)) |>
+  filter(scientist_work == "Doesn't benefit")
 ```
 
 And we can visualize the distribution of these proportions with a histogram.
@@ -177,10 +177,10 @@ Without the `rep_sample_n` function, this would be painful.
 We would have to manually run the following code 15,000 times
 
 ```{r sample-code}
-global_monitor %>%
-  sample_n(size = 50, replace = TRUE) %>%
-  count(scientist_work) %>%
-  mutate(p_hat = n /sum(n)) %>%
+global_monitor |>
+  sample_n(size = 50, replace = TRUE) |>
+  count(scientist_work) |>
+  mutate(p_hat = n /sum(n)) |>
   filter(scientist_work == "Doesn't benefit")
 ```
 
@@ -254,10 +254,10 @@ shinyApp(
     
     # create sampling distribution
     sampling_dist <- reactive({
-      global_monitor %>%
-        rep_sample_n(size = input$n_samp, reps = input$n_rep, replace = TRUE) %>%
-        count(scientist_work) %>%
-        mutate(p_hat = n /sum(n)) %>%
+      global_monitor |>
+        rep_sample_n(size = input$n_samp, reps = input$n_rep, replace = TRUE) |>
+        count(scientist_work) |>
+        mutate(p_hat = n /sum(n)) |>
         filter(scientist_work == input$outcome)
     })
     
@@ -308,8 +308,8 @@ Now, you'll try to estimate the proportion of those who think it does.
 Note that while you might be able to answer some of these questions using the app, you are expected to write the required code and produce the necessary plots and summary statistics.
 You are welcome to use the app for exploration.
 
-1.  Take a sample of size 15 from the population and calculate the proportion of people in this sample who think the work scientists do enchances their lives.
-    Using this sample, what is your best point estimate of the population proportion of people who think the work scientists do enchances their lives?
+1.  Take a sample of size 15 from the population and calculate the proportion of people in this sample who think the work scientists do enhances their lives.
+    Using this sample, what is your best point estimate of the population proportion of people who think the work scientists do enhances their lives?
 
 2.  Since you have access to the population, simulate the sampling distribution of proportion of those who think the work scientists do enhances their lives for samples of size 15 by taking 2000 samples from the population of size 15 and computing 2000 sample proportions.
     Store these proportions in as `sample_props15`.

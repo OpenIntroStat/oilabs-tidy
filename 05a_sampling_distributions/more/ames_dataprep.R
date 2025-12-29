@@ -8,25 +8,27 @@ price <- ames$SalePrice
 
 ###############
 
-sample.means50 <- rep(0, 5000)
+num_sim <- 5000
 
-for(i in 1:5000){
+sample.means50 <- rep(0, num_sim)
+
+for(i in 1:num_sim){
   samp <- sample(area, 50)
   sample.means50[i] <- mean(samp)
 }
 
 
-sample.means10 <- rep(0, 5000)
+sample.means10 <- rep(0, num_sim)
 
-for(i in 1:5000){
+for(i in 1:num_sim){
   samp <- sample(area, 10)
   sample.means10[i] <- mean(samp)
 }
 
 
-sample.means100 <- rep(0, 5000)
+sample.means100 <- rep(0, num_sim)
 
-for(i in 1:5000){
+for(i in 1:num_sim){
   samp <- sample(area, 150)
   sample.means100[i] <- mean(samp)
 }
@@ -37,23 +39,23 @@ hist(sample.means50, breaks = 20, xlim = range(sample.means10))
 hist(sample.means100, breaks = 20, xlim = range(sample.means10))
 
 
-sample.means10 <- rep(0, 5000)
+sample.means10 <- rep(0, num_sim)
 
-for(i in 1:5000){
+for(i in 1:num_sim){
   samp <- sample(price, 10)
   sample.means10[i] <- mean(samp)
 }
 
-sample.means50 <- rep(0, 5000)
+sample.means50 <- rep(0, num_sim)
 
-for(i in 1:5000){
+for(i in 1:num_sim){
   samp <- sample(price, 50)
   sample.means50[i] <- mean(samp)
 }
 
-sample.means150 <- rep(0, 5000)
+sample.means150 <- rep(0, num_sim)
 
-for(i in 1:5000){
+for(i in 1:num_sim){
   samp <- sample(price, 150)
   sample.means150[i] <- mean(samp)
 }
