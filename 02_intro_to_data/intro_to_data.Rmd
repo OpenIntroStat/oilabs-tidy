@@ -103,7 +103,7 @@ glimpse(nycflights)
 The `nycflights` data frame is a massive trove of information.
 Let's think about some questions we might want to answer with these data:
 
--   How delayed were flights that were headed to Los Angeles?
+-   How delayed were flights that were headed to Los Angeles International Airport?
 -   How do departure delays vary by month?
 -   Which of the three major NYC airports has the best on time percentage for departing flights?
 
@@ -141,13 +141,13 @@ ggplot(data = nycflights, aes(x = dep_delay)) +
 If you want to visualize only delays of flights headed to Los Angeles, you need to first `filter` the data for flights with that destination (`dest == "LAX"`) and then make a histogram of the departure delays of only those flights.
 
 ```{r lax-flights-hist}
-lax_flights <- nycflights %>%
+lax_flights <- nycflights |>
   filter(dest == "LAX")
 ggplot(data = lax_flights, aes(x = dep_delay)) +
   geom_histogram()
 ```
 
-Let's decipher these two commands (OK, so it might look like four lines, but the first two physical lines of code are actually part of the same command. It's common to add a break to a new line after `%>%` to help readability).
+Let's decipher these two commands (OK, so it might look like four lines, but the first two physical lines of code are actually part of the same command. It's common to add a break to a new line after `|>` to help readability).
 
 -   Command 1: Take the `nycflights` data frame, `filter` for flights headed to LAX, and save the result as a new data frame called `lax_flights`.
 
@@ -170,7 +170,7 @@ The most commonly used logical operators for data analysis are as follows:
 You can also obtain numerical summaries for these flights:
 
 ```{r lax-flights-summ}
-lax_flights %>%
+lax_flights |>
   summarise(mean_dd   = mean(dep_delay), 
             median_dd = median(dep_delay), 
             n         = n())
@@ -199,7 +199,7 @@ You can also filter based on multiple criteria.
 Suppose you are interested in flights headed to San Francisco (SFO) in February:
 
 ```{r sfo-feb-flights}
-sfo_feb_flights <- nycflights %>%
+sfo_feb_flights <- nycflights |>
   filter(dest == "SFO", month == 2)
 ```
 
@@ -216,8 +216,8 @@ Another useful technique is quickly calculating summary statistics for various g
 For example, we can modify the above command using the `group_by` function to get the same summary stats for each origin airport:
 
 ```{r summary-custom-list-origin}
-sfo_feb_flights %>%
-  group_by(origin) %>%
+sfo_feb_flights |>
+  group_by(origin) |>
   summarise(median_dd = median(dep_delay), iqr_dd = IQR(dep_delay), n_flights = n())
 ```
 
@@ -239,9 +239,9 @@ Let's think about how you could answer this question:
 -   Then, you could to `arrange` these average delays in `desc`ending order.
 
 ```{r mean-dep-delay-months}
-nycflights %>%
-  group_by(month) %>%
-  summarise(mean_dd = mean(dep_delay)) %>%
+nycflights |>
+  group_by(month) |>
+  summarise(mean_dd = mean(dep_delay)) |>
   arrange(desc(mean_dd))
 ```
 
@@ -270,7 +270,7 @@ In order to determine which airport has the best on time departure rate, you can
 Let's start with classifying each flight as "on time" or "delayed" by creating a new variable with the `mutate` function.
 
 ```{r dep-type}
-nycflights <- nycflights %>%
+nycflights <- nycflights |>
   mutate(dep_type = ifelse(dep_delay < 5, "on time", "delayed"))
 ```
 
@@ -282,9 +282,9 @@ Note that we are also overwriting the `nycflights` data frame with the new versi
 We can handle all of the remaining steps in one code chunk:
 
 ```{r ot-dep-rate}
-nycflights %>%
-  group_by(origin) %>%
-  summarise(ot_dep_rate = sum(dep_type == "on time") / n()) %>%
+nycflights |>
+  group_by(origin) |>
+  summarise(ot_dep_rate = sum(dep_type == "on time") / n()) |>
   arrange(desc(ot_dep_rate))
 ```
 
@@ -313,7 +313,7 @@ ggplot(data = nycflights, aes(x = origin, fill = dep_type)) +
     Once you replicate the plot, determine (roughly) what the cutoff point is for departure delays where you can still expect to get to your destination on time.
 
 ```{r plot-to-replicate, echo=FALSE, fig.show="asis", fig.width=7, fig.height=4}
-dl_aa_ua <- nycflights %>%
+dl_aa_ua <- nycflights |>
   filter(carrier == "AA" | carrier == "DL" | carrier == "UA")
 ggplot(data = dl_aa_ua, aes(x = dep_delay, y = arr_delay, color = carrier)) +
   geom_point()

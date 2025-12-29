@@ -56,7 +56,7 @@ The data we're working with is in the openintro package and it's called `hfi`, s
     Filter the data `hfi` data frame for year 2016, select the six variables, and assign the result to a data frame named `hfi_2016`.
 
 ```{r include = FALSE}
-hfi_2016 <- hfi %>% 
+hfi_2016 <- hfi |>
   filter(year == 2016)
 ```
 
@@ -65,7 +65,7 @@ hfi_2016 <- hfi %>%
 If the relationship looks linear, we can quantify the strength of the relationship with the correlation coefficient.
 
 ```{r cor}
-hfi_2016 %>%
+hfi_2016 |>
   summarise(cor(pf_expression_control, pf_score))
 ```
 

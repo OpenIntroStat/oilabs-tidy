@@ -175,7 +175,7 @@ You can set a seed like this:
 set.seed(35797)                 # make sure to change the seed
 ```
 
-The number above is completely arbitraty.
+The number above is completely arbitrary.
 If you need inspiration, you can use your ID, birthday, or just a random string of numbers.
 The important thing is that you use each seed only once in a document.
 Remember to do this **before** you sample in the exercise above.

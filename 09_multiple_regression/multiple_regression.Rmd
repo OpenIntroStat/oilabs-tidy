@@ -127,7 +127,7 @@ Let's take a look at the relationship between one of these scores and the averag
 ggplot(data = evals, aes(x = bty_f1lower, y = bty_avg)) +
   geom_point()
 
-evals %>% 
+evals |>
   summarise(cor(bty_avg, bty_f1lower))
 ```
 
@@ -135,8 +135,8 @@ As expected, the relationship is quite strong---after all, the average score is 
 You can actually look at the relationships between all beauty variables (columns 13 through 19) using the following command:
 
 ```{r bty-rels}
-evals %>%
-  select(contains("bty")) %>%
+evals |>
+  select(contains("bty")) |>
   ggpairs()
 ```
 

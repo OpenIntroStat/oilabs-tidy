@@ -80,8 +80,8 @@ ggplot(us_adults, aes(x = climate_change_affects)) +
 We can also obtain summary statistics to confirm we constructed the data frame correctly.
 
 ```{r summ-stat-pop, results = TRUE}
-us_adults %>%
-  count(climate_change_affects) %>%
+us_adults |>
+  count(climate_change_affects) |>
   mutate(p = n /sum(n))
 ```
 
@@ -89,7 +89,7 @@ In this lab, you'll start with a simple random sample of size 60 from the popula
 
 ```{r sample}
 n <- 60
-samp <- us_adults %>%
+samp <- us_adults |>
   sample_n(size = n)
 ```
 
@@ -142,10 +142,10 @@ Below is an overview of the functions we will use to construct this confidence i
 This code will find the 95 percent confidence interval for proportion of US adults who think climate change affects their local community.
 
 ```{r confidence interval infer}
-samp %>%
-  specify(response = climate_change_affects, success = "Yes") %>%
-  generate(reps = 1000, type = "bootstrap") %>%
-  calculate(stat = "prop") %>%
+samp |>
+  specify(response = climate_change_affects, success = "Yes") |>
+  generate(reps = 1000, type = "bootstrap") |>
+  calculate(stat = "prop") |>
   get_ci(level = 0.95)
 ```
 
@@ -182,12 +182,12 @@ In order to keep the programming simpler, we are providing the interactive app b
 
 ```{r shiny, echo=FALSE, eval=TRUE, results = TRUE}
 store_ci <- function(i, n, reps, conf_level, success) {
-  us_adults %>%
-    sample_n(size = n) %>%
-    specify(response = climate_change_affects, success = success) %>%
-    generate(reps, type = "bootstrap") %>%
-    calculate(stat = "prop") %>%
-    get_ci(level = conf_level) %>%
+  us_adults |>
+    sample_n(size = n) |>
+    specify(response = climate_change_affects, success = success) |>
+    generate(reps, type = "bootstrap") |>
+    calculate(stat = "prop") |>
+    get_ci(level = conf_level) |>
     rename(
       x_lower = names(.)[1],
       x_upper = names(.)[2]
@@ -263,7 +263,7 @@ shinyApp(
         n = input$n_samp,
         reps = input$n_rep, conf_level = input$conf_level,
         success = input$success
-      ) %>%
+      ) |>
         mutate(
           y_lower = 1:input$n_ci,
           y_upper = 1:input$n_ci,

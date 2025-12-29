@@ -195,13 +195,14 @@ What you will see is a list of 82 numbers. These numbers appear as a list, becau
 We are interested in using this new vector of the total number of baptisms to generate some plots, so we'll want to save it as a permanent column in our data frame. We can do this using the following code:
 
 ```{r calc-total-bapt-vars-save}
-arbuthnot <- arbuthnot %>%
+arbuthnot <- arbuthnot |>
   mutate(total = boys + girls)
 ```
 
-This code has a lot of new pieces to it, so let's break it down. In the first line we are doing two things, (1) adding a new `total` column to this updated data frame, and (2) overwriting the existing `arbuthnot` data frame with an updated data frame that includes the new `total` column. We are able to chain these two processes together using the **piping** (`%>%`) operator. The piping operator takes the output of the previous expression and "pipes it" into the first argument of the next expression.
+This code has a lot of new pieces to it, so let's break it down. In the first line we are doing two things, (1) adding a new `total` column to this updated data frame, and (2) overwriting the existing `arbuthnot` data frame with an updated data frame that includes the new `total` column. We are able to chain these two processes together using the **piping** (`|>`) operator. The piping operator takes the output of the previous expression and "pipes it" into the first argument of the next expression.
+(Note that here we are using the pipe that is built into R: there is another pipe operator (`%>%`) has similar functionality.)
 
-To continue our analogy with mathematical functions, `x %>% f(y)` is equivalent to `f(x, y)`. Connecting `arbuthnot` and `mutate(total = boys + girls)` with the pipe operator is the same as typing `mutate(arbuthnot, total = boys + girls)`, where `arbuthnot` becomes the first argument included in the `mutate()` function.
+To continue our analogy with mathematical functions, `x |> f(y)` is equivalent to `f(x, y)`. Connecting `arbuthnot` and `mutate(total = boys + girls)` with the pipe operator is the same as typing `mutate(arbuthnot, total = boys + girls)`, where `arbuthnot` becomes the first argument included in the `mutate()` function.
 
 ::: {#boxedtext}
 **A note on piping:** Note that we can read these two lines of code as the following:
@@ -235,7 +236,7 @@ In an similar fashion, once you know the total number of baptisms for boys and g
 Alternatively, you could calculate this ratio for every year by acting on the complete `boys` and `girls` columns, and then save those calculations into a new variable named `boy_to_girl_ratio`:
 
 ```{r calc-prop-boys-to-girls-vars}
-arbuthnot <- arbuthnot %>%
+arbuthnot <- arbuthnot |>
   mutate(boy_to_girl_ratio = boys / girls)
 ```
 
@@ -248,7 +249,7 @@ You can also compute the proportion of newborns that are boys in 1629 with the f
 Or you can compute this for all years simultaneously and add it as a new variable named `boy_ratio` to the dataset:
 
 ```{r calc-prop-boys-vars}
-arbuthnot <- arbuthnot %>%
+arbuthnot <- arbuthnot |>
   mutate(boy_ratio = boys / total)
 ```
 
@@ -265,7 +266,7 @@ Notice that rather than dividing by `boys + girls` we are using the `total` vari
 Finally, in addition to simple mathematical operators like subtraction and division, you can ask R to make comparisons like greater than, `>`, less than, `<`, and equality, `==`. For example, we can create a new variable called `more_boys` that tells us whether the number of births of boys outnumbered that of girls in each year with the following code:
 
 ```{r boys-more-than-girls}
-arbuthnot <- arbuthnot %>%
+arbuthnot <- arbuthnot |>
   mutate(more_boys = boys > girls)
 ```
 
@@ -280,7 +281,7 @@ To find the minimum and maximum values of columns, you can use the functions `mi
 Here's an example of how to find the minimum and maximum amount of boy births in a year:
 
 ```{r summarize min and max}
-arbuthnot %>%
+arbuthnot |>
   summarize(min = min(boys),
             max = max(boys)
             )
@@ -297,7 +298,7 @@ Answer the following questions with the `present` data frame:
 4.  In what year did we see the most total number of births in the U.S.? *Hint:* First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the `total` column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions. First we use `arrange()` to sorting the variable. Then we can arrange the data in a descending order with another function, `desc()`, for descending order. The sample code is provided below.
 
 ```{r sample-arrange, eval=FALSE}
-present %>%
+present |>
   arrange(desc(total))
 ```
 

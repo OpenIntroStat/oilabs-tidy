@@ -67,7 +67,7 @@ Using visualization and summary statistics, describe the distribution of weights
 The `skim()` function from the **skimr** package produces nice summaries of the variables in the dataset, separating categorical (character) variables from quantitative variables.
 
 ```{r summary}
-yrbss %>% 
+yrbss |>
   skim()
 ```
 
@@ -79,7 +79,7 @@ Plotting the data is a useful first step because it helps us quickly visualize t
 First, let's create a new variable `physical_3plus`, which will be coded as either "yes" if the student is physically active for *at least* 3 days a week, and "no" if not.
 
 ```{r create new var}
-yrbss <- yrbss %>% 
+yrbss <- yrbss |>
   mutate(physical_3plus = if_else(physically_active_7d > 2, "yes", "no"))
 ```
 
@@ -88,8 +88,8 @@ yrbss <- yrbss %>%
 The box plots show how the medians of the two distributions compare, but we can also compare the means of the distributions using the following to first group the data by the `physical_3plus` variable, and then calculate the mean `weight` in these groups using the `mean` function while ignoring missing values by setting the `na.rm` argument to `TRUE`.
 
 ```{r by-means}
-yrbss %>%
-  group_by(physical_3plus) %>%
+yrbss |>
+  group_by(physical_3plus) |>
   summarise(mean_weight = mean(weight, na.rm = TRUE))
 ```
 
@@ -109,13 +109,17 @@ Next, we will work through creating a permutation distribution using tools from 
 But first, we need to initialize the test, which we will save as `obs_diff`.
 
 ```{r inf-weight-habit-ht-initial, tidy=FALSE, warning = FALSE}
-obs_diff <- yrbss %>%
-  specify(weight ~ physical_3plus) %>%
+obs_diff <- yrbss |>
+  select(weight, physical_3plus) |>
+  drop_na() |>
+  specify(weight ~ physical_3plus) |>
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
 Recall that the `specify()` function is used to specify the variables you are considering (notated `y ~ x`), and you can use the `calculate()` function to specify the `stat`istic you want to calculate and the `order` of subtraction you want to use.
 For this hypothesis, the statistic you are searching for is the difference in means, with the order being `yes - no`.
+
+Here we need to ensure that there are no missing values, so we `select()` a subset of variables that are needed and then run `drop_na()`.
 
 After you have calculated your observed statistic, you need to create a permutation distribution.
 This is the distribution that is created by shuffling the observed weights into new `physical_3plus` groups, labeled "yes" and "no".
@@ -123,10 +127,12 @@ This is the distribution that is created by shuffling the observed weights into 
 We will save the permutation distribution as `null_dist`.
 
 ```{r inf-weight-habit-ht-null, tidy=FALSE, warning = FALSE}
-null_dist <- yrbss %>%
-  specify(weight ~ physical_3plus) %>%
-  hypothesize(null = "independence") %>%
-  generate(reps = 1000, type = "permute") %>%
+null_dist <- yrbss |>
+  select(weight, physical_3plus) |>
+  drop_na() |>
+  specify(weight ~ physical_3plus) |>
+  hypothesize(null = "independence") |>
+  generate(reps = 1000, type = "permute") |>
   calculate(stat = "diff in means", order = c("yes", "no"))
 ```
 
@@ -151,7 +157,7 @@ ggplot(data = null_dist, aes(x = stat)) +
 Now that you have calculated the observed statistic and generated a permutation distribution, you can calculate the p-value for your hypothesis test using the function `get_p_value()` from the infer package.
 
 ```{r inf-weight-habit-ht-pvalue}
-null_dist %>%
+null_dist |>
   get_p_value(obs_stat = obs_diff, direction = "two_sided")
 ```
 

@@ -46,8 +46,8 @@ The dataset is called `yrbss`.
 Remember that you can use `filter` to limit the dataset to just non-helmet wearers.
 Here, we will name the dataset `no_helmet`.
 
-```{r no helmet}
-no_helmet <- yrbss %>%
+```{r nohelmet}
+no_helmet <- yrbss |>
   filter(helmet_12m == "never")
 ```
 
@@ -55,7 +55,7 @@ Also, it may be easier to calculate the proportion if you create a new variable 
 We will call this variable `text_ind`.
 
 ```{r indicator-texting}
-no_helmet <- no_helmet %>%
+no_helmet <- no_helmet |>
   mutate(text_ind = ifelse(text_while_driving_30d == "30", "yes", "no"))
 ```
 
@@ -67,18 +67,22 @@ To do this, you can answer the question, "What proportion of people in your samp
 The inferential tools for estimating population proportion are analogous to those used for means in the last chapter: the confidence interval and the hypothesis test.
 
 ```{r nohelmet-text-ci}
-no_helmet %>%
-  specify(response = text_ind, success = "yes") %>%
-  generate(reps = 1000, type = "bootstrap") %>%
-  calculate(stat = "prop") %>%
+no_helmet |>
+  select(text_ind) |>
+  drop_na() |>
+  specify(response = text_ind, success = "yes") |>
+  generate(reps = 1000, type = "bootstrap") |>
+  calculate(stat = "prop") |>
   get_ci(level = 0.95)
 ```
 
 Note that since the goal is to construct an interval estimate for a proportion, it's necessary to both include the `success` argument within `specify`, which accounts for the proportion of non-helmet wearers than have consistently texted while driving the past 30 days, in this example, and that `stat` within `calculate` is here "prop", signaling that you are trying to do some sort of inference on a proportion.
 
+Here we needed to include only those observations that were either "no" or "yes" and drop those that were missing.
+
 1.  What is the margin of error for the estimate of the proportion of non-helmet wearers that have texted while driving each day for the past 30 days based on this survey?
 
-2.  Using the `infer` package, calculate confidence intervals for two other categorical variables (you'll need to decide which level to call "success", and report the associated margins of error. Interpret the interval in context of the data. It may be helpful to create new data sets for each of the two countries first, and then use these data sets to construct the confidence intervals.
+2.  Using the `infer` package, calculate confidence intervals for two other categorical variables (you'll need to decide which level to call "success"), and report the associated margins of error. Interpret the interval in context of the data. It may be helpful to create new data sets for each of the two countries first, and then use these data sets to construct the confidence intervals.
 
 ## How does the proportion affect the margin of error?
 

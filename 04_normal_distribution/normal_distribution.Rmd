@@ -52,12 +52,12 @@ You'll see that for every observation there are 17 measurements, many of which a
 
 You'll be focusing on just three columns to get started: restaurant, calories, calories from fat.
 
-Let's first focus on just products from McDonalds and Dairy Queen.
+Let's first focus on just products from McDonald's and Dairy Queen.
 
 ```{r male-female}
-mcdonalds <- fastfood %>%
+mcdonalds <- fastfood |>
   filter(restaurant == "Mcdonalds")
-dairy_queen <- fastfood %>%
+dairy_queen <- fastfood |>
   filter(restaurant == "Dairy Queen")
 ```
 
@@ -171,8 +171,8 @@ Assuming a normal distribution has allowed us to calculate a theoretical probabi
 If we want to calculate the probability empirically, we simply need to determine how many observations fall above 600 then divide this number by the total sample size.
 
 ```{r probability}
-dairy_queen %>%
-  filter(cal_fat > 600) %>%
+dairy_queen |>
+  filter(cal_fat > 600) |>
   summarise(percent = n() / nrow(dairy_queen))
 ```
 
